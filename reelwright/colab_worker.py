@@ -55,6 +55,7 @@ def rw_setup(model_id: str) -> dict:
 def _setup_locked(model_id: str) -> dict:
     if RW.get("model_id") == model_id and RW.get("pipe") is not None:
         return {"status": "ready", "cached": True, "mode": RW["mode"]}
+    _stop_spaces()  # Space apps would hold GPU memory that Wan needs
     import importlib.util
     # Check without importing: diffusers decides at import time whether ftfy exists,
     # so missing packages must be installed before diffusers is imported.
@@ -218,6 +219,178 @@ def rw_poll(job_id: str) -> dict:
     return {"status": "running", "stage": entry["stage"], "elapsed_s": round(time.time() - entry["started"])}
 
 
+# ---------------------------------------------------------------- Hugging Face Spaces on Colab
+# Any Gradio Space can run here: its code is downloaded, its requirements go into
+# its own virtualenv (Spaces pin versions that clash with Colab), its app.py is
+# started on a local port, and calls go to it through gradio_client on this machine.
+# @spaces.GPU is a no-op outside Hugging Face, so the code runs unchanged.
+
+SPACES_DIR = "/content/rw_spaces"
+
+
+def _space_slug(space_id: str) -> str:
+    return space_id.replace("/", "__")
+
+
+def _free_wan():
+    """Wan 2.2 takes ~69 GB of the GPU: unload it before a Space needs the GPU."""
+    if RW.get("pipe") is not None:
+        import torch
+        RW["pipe"] = None
+        RW["model_id"] = None
+        gc.collect()
+        torch.cuda.empty_cache()
+
+
+def _stop_spaces():
+    for sid, s in list(RW.get("spaces", {}).items()):
+        proc = s.get("proc")
+        if proc is not None and proc.poll() is None:
+            proc.terminate()
+            try:
+                proc.wait(timeout=30)
+            except Exception:
+                proc.kill()
+        RW["spaces"].pop(sid, None)
+
+
+def _space_boot(space_id: str, port: int, entry: dict):
+    import urllib.request
+    from huggingface_hub import snapshot_download
+    slug = _space_slug(space_id)
+    root = f"{SPACES_DIR}/{slug}"
+    venv = f"{SPACES_DIR}/{slug}-venv"
+    try:
+        entry["stage"] = "downloading the Space"
+        snapshot_download(space_id, repo_type="space", local_dir=root)
+        if not os.path.exists(f"{venv}/bin/python"):
+            entry["stage"] = "installing its requirements (own virtualenv)"
+            _pip("uv")
+            subprocess.run([sys.executable, "-m", "uv", "venv", "--python", sys.executable, venv], check=True,
+                           capture_output=True)
+            req = f"{root}/requirements.txt"
+            args = [sys.executable, "-m", "uv", "pip", "install", "--python", f"{venv}/bin/python", "gradio", "spaces"]
+            if os.path.exists(req):
+                args += ["-r", req]
+            out = subprocess.run(args, capture_output=True, text=True)
+            if out.returncode != 0:
+                raise RuntimeError("requirements failed: " + out.stderr[-1200:])
+        entry["stage"] = "starting the app (loads its models)"
+        _free_wan()
+        env = dict(os.environ, GRADIO_SERVER_NAME="127.0.0.1", GRADIO_SERVER_PORT=str(port),
+                   GRADIO_ANALYTICS_ENABLED="False", PYTHONUNBUFFERED="1")
+        log = open(f"{SPACES_DIR}/{slug}.log", "w")
+        entry["proc"] = subprocess.Popen([f"{venv}/bin/python", "app.py"], cwd=root, env=env, stdout=log,
+                                         stderr=subprocess.STDOUT)
+        deadline = time.time() + 1800
+        while time.time() < deadline:
+            if entry["proc"].poll() is not None:
+                raise RuntimeError("app.py exited: " + open(f"{SPACES_DIR}/{slug}.log").read()[-1500:])
+            try:
+                urllib.request.urlopen(f"http://127.0.0.1:{port}/gradio_api/info", timeout=5)
+                entry.update(status="ready", stage="ready", url=f"http://127.0.0.1:{port}")
+                return
+            except Exception:
+                time.sleep(5)
+        raise RuntimeError("the app did not start within 30 minutes")
+    except Exception as e:  # noqa: BLE001
+        entry.update(status="error", error=f"{type(e).__name__}: {e}")
+
+
+def rw_space_up(space_id: str) -> dict:
+    """Start a Space on this runtime in the background (idempotent)."""
+    import threading
+    spaces = RW.setdefault("spaces", {})
+    s = spaces.get(space_id)
+    if s and s["status"] in ("ready", "starting"):
+        if s["status"] == "ready" and s["proc"].poll() is not None:
+            spaces.pop(space_id)
+        else:
+            return {"status": s["status"], "stage": s["stage"]}
+    port = 7870 + len(spaces)
+    entry = {"status": "starting", "stage": "queued", "started": time.time(), "port": port}
+    spaces[space_id] = entry
+
+    def run():
+        _space_boot(space_id, port, entry)
+        if entry["status"] == "starting":
+            entry["status"] = "error"
+
+    threading.Thread(target=run, daemon=True).start()
+    return {"status": "starting", "stage": entry["stage"]}
+
+
+def rw_space_status(space_id: str) -> dict:
+    s = RW.get("spaces", {}).get(space_id)
+    if not s:
+        return {"status": "down"}
+    out = {"status": s["status"], "stage": s["stage"], "elapsed_s": round(time.time() - s["started"])}
+    if s["status"] == "error":
+        out["error"] = s.get("error", "")
+    return out
+
+
+def _space_predict(job_id: str, space_id: str, api_name: str, kwargs: dict):
+    import shutil
+    entry = RW["jobs"][job_id]
+    try:
+        try:
+            from gradio_client import Client, handle_file
+        except ImportError:
+            _pip("gradio_client")
+            from gradio_client import Client, handle_file
+        in_dir = f"/content/rw_in/{job_id}"
+        os.makedirs(in_dir, exist_ok=True)
+
+        def inputs(v):  # {"__file_b64__": ..., "name": ...} -> uploaded file
+            if isinstance(v, dict) and "__file_b64__" in v:
+                p = f"{in_dir}/{v.get('name') or 'file'}"
+                with open(p, "wb") as f:
+                    f.write(base64.b64decode(v["__file_b64__"]))
+                return handle_file(p)
+            if isinstance(v, dict):
+                return {k: inputs(x) for k, x in v.items()}
+            if isinstance(v, list):
+                return [inputs(x) for x in v]
+            return v
+
+        entry["stage"] = "running"
+        client = Client(RW["spaces"][space_id]["url"], verbose=False)
+        result = client.predict(api_name=api_name, **inputs(kwargs))
+        os.makedirs(OUT_DIR, exist_ok=True)
+        files = []
+
+        def outputs(v):  # copy every result file to OUT_DIR and point the result there
+            if isinstance(v, str) and os.path.isfile(v):
+                dst = f"{OUT_DIR}/{uuid.uuid4().hex[:8]}-{os.path.basename(v)}"
+                shutil.copy(v, dst)
+                files.append(dst)
+                return {"path": dst, "meta": {"_type": "gradio.FileData"}}
+            if isinstance(v, dict):
+                return {k: outputs(x) for k, x in v.items()}
+            if isinstance(v, (list, tuple)):
+                return [outputs(x) for x in v]
+            return v
+
+        entry["result"] = {"result": outputs(result), "files": files}
+        entry["status"] = "done"
+    except Exception as e:  # noqa: BLE001
+        entry.update(status="error", error=f"{type(e).__name__}: {e}", trace=traceback.format_exc()[-1500:])
+
+
+def rw_space_call(job_id: str, space_id: str, api_name: str, kwargs: dict) -> dict:
+    import threading
+    jobs = RW.setdefault("jobs", {})
+    if job_id in jobs:
+        return {"status": "started", "id": job_id, "duplicate": True}
+    s = RW.get("spaces", {}).get(space_id)
+    if not s or s["status"] != "ready":
+        return {"status": "error", "error": f"{space_id} is not running on this runtime"}
+    jobs[job_id] = {"status": "running", "stage": "starting", "started": time.time()}
+    threading.Thread(target=_space_predict, args=(job_id, space_id, api_name, kwargs), daemon=True).start()
+    return {"status": "started", "id": job_id}
+
+
 def rw_call(action: str, **kw):
     """Entry point: one call per `colab exec`; always prints exactly one RW_RESULT line."""
     try:
@@ -225,6 +398,15 @@ def rw_call(action: str, **kw):
             _emit(**rw_start(kw["job_id"], kw["model_id"], kw["job"]))
         elif action == "warm":
             _emit(**rw_warm(kw["model_id"]))
+        elif action == "space_up":
+            _emit(**rw_space_up(kw["space_id"]))
+        elif action == "space_status":
+            _emit(**rw_space_status(kw["space_id"]))
+        elif action == "space_call":
+            _emit(**rw_space_call(kw["job_id"], kw["space_id"], kw["api_name"], kw["kwargs"]))
+        elif action == "space_stop":
+            _stop_spaces()
+            _emit(status="stopped")
         elif action == "poll":
             _emit(**rw_poll(kw["job_id"]))
         elif action == "setup":

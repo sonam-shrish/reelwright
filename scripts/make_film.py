@@ -185,17 +185,25 @@ class Film:
     # ---------------------------------------------------------------- run
     def run(self) -> Path:
         clip_queue: queue.Queue = queue.Queue()
-        tracks = [threading.Thread(target=self.guard, args=("stills", lambda: self.stills_track(clip_queue))),
-                  threading.Thread(target=self.guard, args=("colab", lambda: self.colab_track(clip_queue))),
-                  threading.Thread(target=self.guard, args=("sound", self.sound_track))]
+        stills = threading.Thread(target=self.guard, args=("stills", lambda: self.stills_track(clip_queue)))
+        colab = threading.Thread(target=self.guard, args=("colab", lambda: self.colab_track(clip_queue)))
+        sound = threading.Thread(target=self.guard, args=("sound", self.sound_track))
+        # With Spaces on Colab, stills/voices and Wan share one GPU: do them first, then the video.
+        sequential = bool(self.studio.colab_space_keys)
         try:
-            for t in tracks:
-                t.start()
-            tracks[0].join()
+            stills.start()
+            sound.start()
+            if sequential:
+                stills.join()
+                sound.join()
+                if self.errors:
+                    raise SystemExit("Not finished (re-run to resume):\n  " + "\n  ".join(self.errors))
+            colab.start()
+            stills.join()
             if self.errors:  # stills failed: let the Colab track finish what it has, then stop
                 clip_queue.put(None)
-            for t in tracks[1:]:
-                t.join()
+            colab.join()
+            sound.join()
         finally:
             if not self.keep_colab:
                 try:
@@ -218,8 +226,16 @@ def main():
     ap.add_argument("storyboard")
     ap.add_argument("--draft", action="store_true", help="Standard quality (about twice as fast)")
     ap.add_argument("--keep-colab", action="store_true", help="leave the Colab runtime running afterwards")
+    ap.add_argument("--colab-spaces", default="",
+                    help='also run these Spaces on Colab instead of ZeroGPU, e.g. "edit,voice_design,image" or "all"')
     a = ap.parse_args()
-    Film(json.loads(Path(a.storyboard).read_text()), a.draft, a.keep_colab).run()
+    import logging
+    logging.basicConfig(level=logging.WARNING, format="%(message)s")
+    logging.getLogger("reelwright.colab").setLevel(logging.INFO)  # show Colab Space progress
+    film = Film(json.loads(Path(a.storyboard).read_text()), a.draft, a.keep_colab)
+    if a.colab_spaces:
+        film.studio.colab_space_keys = {k.strip() for k in a.colab_spaces.split(",") if k.strip()}
+    film.run()
 
 
 if __name__ == "__main__":

@@ -169,3 +169,31 @@ def test_hung_poll_is_retried(tmp_path, signed_in, media_files):
 
     out = runner(run, tmp_path).generate_video(media_files["img"], "x", 2, 1)
     assert out.is_file() and hung["n"] == 1
+
+
+def test_run_space_starts_calls_and_downloads(tmp_path, signed_in, media_files):
+    from reelwright.spaces import LocalFile
+    fake = FakeCLI(media_files["wav"], running=True, results=[
+        {"status": "starting", "stage": "queued"},
+        {"status": "starting", "stage": "installing its requirements (own virtualenv)"},
+        {"status": "ready", "stage": "ready"},
+        {"status": "started", "id": "j"},
+        {"status": "done", "result": [{"path": "/content/rw_out/ab-audio.wav", "meta": {"_type": "gradio.FileData"}}, "ok"],
+         "files": ["/content/rw_out/ab-audio.wav"]}])
+    r = runner(fake, tmp_path)
+    logs = []
+    out = r.run_space("Qwen/Qwen3-TTS", "/generate_voice_clone", {"ref_audio": LocalFile(media_files["wav"]),
+                                                                  "target_text": "hi"}, logs.append)
+    assert isinstance(out, tuple) and out[1] == "ok"
+    assert Path(out[0]["path"]).is_file() and str(tmp_path) in out[0]["path"]  # downloaded locally
+    sent = [Path(c[c.index("-f") + 1]) for c in fake.cmds if c[0] == "exec"]
+    assert any("installing" in m for m in logs)
+
+
+def test_studio_can_route_a_space_to_colab(tmp_path):
+    from reelwright.colab import ColabSpaceCaller
+    from reelwright.studio import Studio
+    s = Studio(data_dir=tmp_path / "d", token="t", spaces={"voice_design": "Qwen/Qwen3-TTS", "image": "x/y"},
+               caller_factory=lambda space: f"hf:{space}", colab=object())
+    s.colab_space_keys = {"voice_design"}
+    assert isinstance(s.caller("voice_design"), ColabSpaceCaller) and s.caller("image") == "hf:x/y"

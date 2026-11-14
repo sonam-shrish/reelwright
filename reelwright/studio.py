@@ -39,6 +39,8 @@ class Studio:
         self.spaces = spaces or config.SPACES
         self._handle = handle
         self._colab = colab
+        # Spaces (by key) that run on the Colab GPU instead of ZeroGPU
+        self.colab_space_keys = set(config.COLAB_SPACE_KEYS)
         self._callers: dict[str, Any] = {}
         self._factory = caller_factory or (
             lambda space: SpaceCaller(space, self.token, on_timing=self.usage.record))
@@ -46,7 +48,11 @@ class Studio:
     # ------------------------------------------------------------ plumbing
     def caller(self, key: str):
         if key not in self._callers:
-            self._callers[key] = self._factory(self.spaces[key])
+            if self.colab_space_keys and (key in self.colab_space_keys or "all" in self.colab_space_keys):
+                from .colab import ColabSpaceCaller
+                self._callers[key] = ColabSpaceCaller(self.colab, self.spaces[key])
+            else:
+                self._callers[key] = self._factory(self.spaces[key])
         return self._callers[key]
 
     def _fetch_first(self, result: Any, ext: str, key: str, last: bool = False) -> Path:

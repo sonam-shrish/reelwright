@@ -47,6 +47,22 @@ def find_cli() -> str | None:
     return None
 
 
+class ColabSpaceCaller:
+    """Same interface as spaces.SpaceCaller, but runs the Space on your Colab GPU."""
+
+    def __init__(self, runner: "ColabRunner", space_id: str):
+        self.runner, self.space_id = runner, space_id
+
+    def call(self, api_name: str, **kwargs):
+        return self.runner.run_space(self.space_id, api_name, kwargs, lambda m: log.info("%s", m))
+
+    def client(self):  # for code that calls client().predict(...)
+        return self
+
+    def predict(self, api_name: str, **kwargs):
+        return self.call(api_name, **kwargs)
+
+
 class ColabRunner:
     def __init__(self, session: str | None = None, gpu: str | None = None, high_mem: bool = True,
                  model_id: str | None = None, idle_stop_minutes: float | None = None,
@@ -185,6 +201,67 @@ class ColabRunner:
         if not dest.is_file() or dest.stat().st_size == 0:
             raise ColabError(f"download of {remote} failed")
         return dest
+
+    # ---------------------------------------------------------------- any HF Space on Colab
+    def _wait(self, check: Callable[[], dict], deadline_s: float, say, label: str) -> dict:
+        deadline, last = time.time() + deadline_s, None
+        while time.time() < deadline:
+            res = check()
+            if res["status"] in ("ready", "done"):
+                return res
+            if res["status"] == "error":
+                raise ColabError(f"{label}: {res.get('error', 'failed')}")
+            if res.get("stage") != last:
+                last = res.get("stage")
+                say(f"Colab {label}: {last}")
+            time.sleep(self.poll_every)
+        raise ColabError(f"{label} did not finish in time")
+
+    def run_space(self, space_id: str, api_name: str, kwargs: dict,
+                  say: Callable[[str], None] = lambda m: None) -> object:
+        """Run a Hugging Face Space's endpoint on the Colab GPU instead of on ZeroGPU.
+        LocalFile arguments are sent along; result files are downloaded and returned
+        as local paths in the same result structure."""
+        import base64
+        from .spaces import LocalFile
+
+        def pack(v):
+            if isinstance(v, LocalFile):
+                return {"__file_b64__": base64.b64encode(Path(v.path).read_bytes()).decode(), "name": Path(v.path).name}
+            if isinstance(v, dict):
+                return {k: pack(x) for k, x in v.items()}
+            if isinstance(v, (list, tuple)):
+                return [pack(x) for x in v]
+            return v
+
+        with self._lock:
+            self.start(say)
+            up = self.call("space_up", timeout=50, retries=6, space_id=space_id)
+            if up["status"] != "ready":
+                say(f"Starting {space_id} on Colab (first time per runtime: downloads, installs, loads)")
+                self._wait(lambda: self.call("space_status", timeout=40, retries=6, space_id=space_id),
+                           2400, say, space_id)
+            job_id = uuid.uuid4().hex[:12]
+            self.call("space_call", timeout=50, retries=6, job_id=job_id, space_id=space_id, api_name=api_name,
+                      kwargs=pack(kwargs))
+            res = self._wait(lambda: self.call("poll", timeout=40, retries=6, job_id=job_id), 1800, say,
+                             f"{space_id} {api_name}")
+            local = {}
+            for remote in res.get("files", []):
+                local[remote] = str(self.download(remote, self.workdir / Path(remote).name))
+            self.last_used = time.time()
+
+        def unpack(v):
+            if isinstance(v, dict):
+                if v.get("path") in local:
+                    return {**v, "path": local[v["path"]]}
+                return {k: unpack(x) for k, x in v.items()}
+            if isinstance(v, list):
+                return [unpack(x) for x in v]
+            return v
+
+        result = unpack(res.get("result"))
+        return tuple(result) if isinstance(result, list) else result
 
     def prewarm(self, say: Callable[[str], None] = lambda m: None) -> None:
         """Start the runtime and begin loading the model in the background, so the

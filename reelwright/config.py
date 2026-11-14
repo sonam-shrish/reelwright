@@ -35,6 +35,9 @@ COLAB_GPU = os.environ.get("REELWRIGHT_COLAB_GPU", "A100")
 COLAB_SESSION = os.environ.get("REELWRIGHT_COLAB_SESSION", "reelwright")
 COLAB_WAN_MODEL = os.environ.get("REELWRIGHT_COLAB_WAN_MODEL", "TestOrganizationPleaseIgnore/WAMU_v3_WAN2.2_I2V_LIGHTNING")
 COLAB_IDLE_STOP_MIN = float(os.environ.get("REELWRIGHT_COLAB_IDLE_STOP_MIN", "15"))
+# Which Spaces to run on your Colab GPU instead of Hugging Face ZeroGPU, by key
+# (e.g. "edit,voice_design" or "all"). Only works where Colab is signed in.
+COLAB_SPACE_KEYS = {k.strip() for k in os.environ.get("REELWRIGHT_COLAB_SPACES", "").split(",") if k.strip()}
 
 # Spaces that need the official gradio_client (per-session state); all others use REST.
 GRADIO_CLIENT_SPACES = {SPACES["avatar"]}
