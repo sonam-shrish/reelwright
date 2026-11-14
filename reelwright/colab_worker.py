@@ -44,7 +44,15 @@ def _patch_ftfy():
 
 
 def rw_setup(model_id: str) -> dict:
-    """Install what is missing, download the model and load it on the GPU (once)."""
+    """Install what is missing, download the model and load it on the GPU (once).
+    Guarded by a lock: a warm-up and a job can both ask for the model at once."""
+    import threading
+    lock = RW.setdefault("setup_lock", threading.Lock())
+    with lock:
+        return _setup_locked(model_id)
+
+
+def _setup_locked(model_id: str) -> dict:
     if RW.get("model_id") == model_id and RW.get("pipe") is not None:
         return {"status": "ready", "cached": True, "mode": RW["mode"]}
     import importlib.util
@@ -170,11 +178,33 @@ def rw_start(job_id: str, model_id: str, job: dict) -> dict:
     jobs = RW.setdefault("jobs", {})
     if job_id in jobs:  # a retried start must not run the job twice
         return {"status": "started", "id": job_id, "duplicate": True}
-    if any(j["status"] == "running" for j in jobs.values()):
+    if any(j["status"] == "running" for k, j in jobs.items() if k != "warm"):
         return {"status": "error", "error": "another job is still running on this runtime"}
     jobs[job_id] = {"status": "running", "stage": "starting", "started": time.time()}
     threading.Thread(target=_background, args=(job_id, model_id, job), daemon=True).start()
     return {"status": "started", "id": job_id}
+
+
+def rw_warm(model_id: str) -> dict:
+    """Start loading the model in the background and return at once (pre-warming)."""
+    import threading
+    if RW.get("pipe") is not None and RW.get("model_id") == model_id:
+        return {"status": "ready"}
+    warm = RW.setdefault("jobs", {}).get("warm")
+    if warm and warm["status"] == "running":
+        return {"status": "warming", "elapsed_s": round(time.time() - warm["started"])}
+    entry = {"status": "running", "stage": "loading model", "started": time.time()}
+    RW["jobs"]["warm"] = entry
+
+    def run():
+        try:
+            entry["setup"] = rw_setup(model_id)
+            entry["status"] = "done"
+        except Exception as e:  # noqa: BLE001
+            entry.update(status="error", error=f"{type(e).__name__}: {e}")
+
+    threading.Thread(target=run, daemon=True).start()
+    return {"status": "warming", "elapsed_s": 0}
 
 
 def rw_poll(job_id: str) -> dict:
@@ -193,6 +223,8 @@ def rw_call(action: str, **kw):
     try:
         if action == "start":
             _emit(**rw_start(kw["job_id"], kw["model_id"], kw["job"]))
+        elif action == "warm":
+            _emit(**rw_warm(kw["model_id"]))
         elif action == "poll":
             _emit(**rw_poll(kw["job_id"]))
         elif action == "setup":

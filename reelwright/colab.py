@@ -186,6 +186,16 @@ class ColabRunner:
             raise ColabError(f"download of {remote} failed")
         return dest
 
+    def prewarm(self, say: Callable[[str], None] = lambda m: None) -> None:
+        """Start the runtime and begin loading the model in the background, so the
+        first clip doesn't wait for the 69 GB download. Returns in about a minute."""
+        with self._lock:
+            self.start(say)
+            res = self.call("warm", timeout=50, retries=6, model_id=self.model_id)
+            say("Colab model already loaded" if res.get("status") == "ready"
+                else "Colab is loading the model in the background")
+            self.last_used = time.time()
+
     def generate_video(self, image: str, prompt: str, seconds: float, seed: int, steps: int = 4,
                        negative_prompt: str = "", say: Callable[[str], None] = lambda m: None) -> Path:
         import base64
@@ -196,14 +206,15 @@ class ColabRunner:
             job_id = uuid.uuid4().hex[:12]
             job = {"image_b64": base64.b64encode(Path(image).read_bytes()).decode(), "prompt": prompt,
                    "negative_prompt": negative_prompt, "seconds": seconds, "seed": seed, "steps": steps}
-            self.call("start", timeout=120, retries=3, job_id=job_id, model_id=self.model_id, job=job)
+            # Short limits: a hung connection is dropped after ~1 min and retried; the job keeps going on Colab.
+            self.call("start", timeout=50, retries=6, job_id=job_id, model_id=self.model_id, job=job)
             say(f"Started on Colab: {seconds:.1f}s, {steps} steps, seed {seed}")
             # first clip per runtime also downloads the 69 GB model (~4 min); a clip is ~85 s at 8 steps
             deadline = time.time() + 2400 + 60 * seconds * steps / 4
             last_stage, res = None, None
             while time.time() < deadline:
                 time.sleep(self.poll_every)
-                res = self.call("poll", timeout=90, retries=3, job_id=job_id)
+                res = self.call("poll", timeout=40, retries=6, job_id=job_id)
                 if res["status"] == "done":
                     break
                 if res.get("stage") != last_stage:

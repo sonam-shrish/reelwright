@@ -31,6 +31,8 @@ class FakeCaller:
             ("edit", "/infer"): ([{"image": {"path": f["img"]}, "caption": None}], 1),
             ("edit_lora", "/edit_image"): {"image": to_data_uri(f["img"]), "seed": 1, "status": "success"},
             ("tts", "/generate_tts_audio"): {"path": f["wav"]},
+            ("voice_design", "/generate_voice_design"): {"path": f["wav"]},
+            ("voice_design", "/generate_voice_clone"): {"path": f["wav"]},
             ("sound", "/generate_audio"): {"path": f["wav"]},
             # MiniMax returns a player-status dict with a relative url first, then the real FileData
             ("music", "/simple_generate"): ({"cmd": "done", "url": "/gradio_api/file=/tmp/x.wav"}, "done",
@@ -48,8 +50,8 @@ class FakeCaller:
 @pytest.fixture
 def studio(tmp_path, media_files):
     calls, overrides = [], {}
-    spaces = {k: k for k in ["image", "wan", "ltx", "edit", "edit_lora", "tts", "sound", "music", "avatar",
-                             "avatar_fast", "lipsync"]}
+    spaces = {k: k for k in ["image", "wan", "ltx", "edit", "edit_lora", "tts", "voice_design", "sound", "music",
+                             "avatar", "avatar_fast", "lipsync"]}
     s = Studio(data_dir=tmp_path / "data", token="t", spaces=spaces,
                caller_factory=lambda key: FakeCaller(key, media_files, calls, overrides),
                handle=lambda p: {"path": str(p)})
@@ -137,6 +139,16 @@ def test_lora_refusal_is_reported(studio, media_files):
     with pytest.raises(SpaceError) as e:
         studio.change_angle(job(), media_files["img"], "Close-up")
     assert e.value.kind == "blocked"
+
+
+def test_designed_voice_then_clone_for_more_lines(studio, media_files):
+    first = studio.designed_speech_file(job(), "Look up.", "a warm young woman, gentle, hopeful")
+    studio.cloned_speech_file(job(), "Someone is right there.", str(first), "Look up.")
+    design = next(kw for k, a, kw in studio.calls if a == "/generate_voice_design")
+    clone = next(kw for k, a, kw in studio.calls if a == "/generate_voice_clone")
+    assert design["voice_description"].startswith("a warm") and design["language"] == "English"
+    assert clone["ref_text"] == "Look up." and clone["target_text"] == "Someone is right there."
+    assert clone["ref_audio"]["path"] == str(first)
 
 
 def test_long_script_is_split_and_joined(studio):

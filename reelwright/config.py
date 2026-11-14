@@ -20,6 +20,7 @@ _DEFAULT_SPACES = {
     "edit": "Qwen/Qwen-Image-Edit-2511",
     "edit_lora": "prithivMLmods/Qwen-Image-Edit-2511-LoRAs-Fast",
     "tts": "ResembleAI/Chatterbox",
+    "voice_design": "Qwen/Qwen3-TTS",  # open Qwen3-TTS: voice design from a description, and voice cloning
     "sound": "OpenSound/EzAudio",
     "music": "MiniMaxAI/MiniMax-Music3",
     "avatar": "alexnasa/OmniAvatar",

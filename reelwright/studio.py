@@ -234,6 +234,24 @@ class Studio:
             parts.append(self._fetch_first(r, ".wav", "tts"))
         return media.concat_audio(parts, self._tmp(".wav")) if len(parts) > 1 else parts[0]
 
+    def designed_speech_file(self, job, text: str, voice_description: str, language: str = "English") -> Path:
+        """Speech in a voice described in words, incl. emotion and delivery (Qwen3-TTS VoiceDesign).
+        Each call designs a new voice: use cloned_speech_file for more lines in the same voice."""
+        if not text.strip():
+            raise SpaceError("invalid", "Write the words to speak.")
+        job.log(f"Qwen3-TTS voice design: {voice_description[:60]}")
+        r = self.caller("voice_design").call("/generate_voice_design", text=text, language=language,
+                                             voice_description=voice_description)
+        return self._fetch_first(r, ".wav", "voice_design")
+
+    def cloned_speech_file(self, job, text: str, reference: str, reference_text: str, language: str = "English") -> Path:
+        """Speech in the voice of a reference clip (Qwen3-TTS voice clone)."""
+        job.log("Qwen3-TTS voice clone")
+        r = self.caller("voice_design").call("/generate_voice_clone", ref_audio=self._handle(reference),
+                                             ref_text=reference_text, target_text=text, language=language,
+                                             use_xvector_only=False, model_size="1.7B")
+        return self._fetch_first(r, ".wav", "voice_design")
+
     def speech(self, job, script: str, voice: str | None = None, expressiveness: float = 0.5) -> list[Item]:
         path = self.speech_file(job, script, voice, expressiveness)
         return [self.library.add(path, "Voice", script, {"cloned": bool(voice)})]
