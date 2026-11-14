@@ -13,7 +13,7 @@ mkdir -p "$HOME/.config/colab-cli"
 SETTINGS="$HOME/.config/colab-cli/settings.json"
 [ -f "$SETTINGS" ] || echo '{"enable_update_check": false}' > "$SETTINGS"
 echo "Colab CLI ready: $VENV/bin/colab"
-if [ -f "$HOME/.config/colab-cli/token.json" ]; then
+if [ -f "$HOME/.config/colab-cli/token.json" ] || [ -f "$HOME/.local/share/python_keyring/keyring_pass.cfg" ]; then
   echo "Already signed in."
 else
   echo "Not signed in yet: run  bash scripts/colab_signin.sh"

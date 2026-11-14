@@ -41,39 +41,69 @@ def signed_in(tmp_path, monkeypatch):
     tok = tmp_path / "token.json"
     tok.write_text("{}")
     monkeypatch.setattr(colab, "TOKEN_PATH", tok)
+    monkeypatch.setattr(colab, "KEYRING_PATH", tmp_path / "no-keyring.cfg")
     monkeypatch.setattr(colab, "find_cli", lambda: "/fake/colab")
 
 
-def test_generate_starts_runtime_sets_up_and_downloads(tmp_path, signed_in, media_files):
+def runner(fake, tmp_path, **kw):
+    r = ColabRunner(run=fake, workdir=tmp_path, **kw)
+    r.poll_every = 0
+    return r
+
+
+def test_generate_starts_runtime_polls_and_downloads(tmp_path, signed_in, media_files):
     fake = FakeCLI(media_files["vid_silent"], results=[
-        {"status": "ready", "cached": False, "mode": "gpu", "download_s": 300, "load_s": 60},
-        {"status": "done", "path": "/content/rw_out/a.mp4", "gen_s": 20.5, "size": "832x480", "frames": 65}])
-    r = ColabRunner(run=fake, workdir=tmp_path, gpu="A100")
+        {"status": "started", "id": "x"},
+        {"status": "running", "stage": "loading model"},
+        {"status": "done", "path": "/content/rw_out/a.mp4", "gen_s": 20.5, "size": "832x480", "frames": 65,
+         "setup": {"cached": False, "mode": "gpu", "download_s": 300, "load_s": 60}}])
+    r = runner(fake, tmp_path, gpu="A100")
     logs = []
     out = r.generate_video(media_files["img"], "a fox", 4, 7, say=logs.append)
     assert out.is_file() and out.stat().st_size > 0
-    assert [c[0] for c in fake.cmds] == ["sessions", "new", "exec", "exec", "download"]
+    assert [c[0] for c in fake.cmds] == ["sessions", "new", "exec", "exec", "exec", "download"]
     assert fake.cmds[1][-3:] == ["--gpu", "A100", "--high-mem"]
-    assert any("Model ready" in m for m in logs) and r.last_used > 0
+    assert any("loading model" in m for m in logs) and any("Model loaded" in m for m in logs) and r.last_used > 0
 
 
 def test_reuses_running_runtime(tmp_path, signed_in, media_files):
     fake = FakeCLI(media_files["vid_silent"], running=True, results=[
-        {"status": "ready", "cached": True}, {"status": "done", "path": "/content/rw_out/b.mp4"}])
-    ColabRunner(run=fake, workdir=tmp_path).generate_video(media_files["img"], "x", 2, 1)
+        {"status": "started", "id": "x"}, {"status": "done", "path": "/content/rw_out/b.mp4"}])
+    runner(fake, tmp_path).generate_video(media_files["img"], "x", 2, 1)
     assert "new" not in [c[0] for c in fake.cmds]
+    assert [c[0] for c in fake.cmds].count("exec") == 2  # start + one poll
 
 
 def test_worker_error_is_reported(tmp_path, signed_in, media_files):
     fake = FakeCLI(media_files["vid_silent"], running=True, results=[
+        {"status": "started", "id": "x"},
         {"status": "error", "error": "OutOfMemoryError: CUDA out of memory", "trace": "..."}])
     with pytest.raises(ColabError) as e:
-        ColabRunner(run=fake, workdir=tmp_path).generate_video(media_files["img"], "x", 2, 1)
+        runner(fake, tmp_path).generate_video(media_files["img"], "x", 2, 1)
     assert "out of memory" in e.value.user_message()
+
+
+def test_worker_background_jobs_start_once_and_report(monkeypatch):
+    import time as _t
+    ns: dict = {}
+    exec(colab.WORKER_SRC, ns)
+    ns["RW"].clear()
+    ns["RW"].update(pipe=object(), model_id="m/x")
+    ns["rw_generate"] = lambda job: {"status": "done", "path": "/content/rw_out/z.mp4", "gen_s": 1.0}
+    ns["_background"].__globals__["rw_generate"] = ns["rw_generate"]
+    assert ns["rw_start"]("j1", "m/x", {"seed": 1})["status"] == "started"
+    assert ns["rw_start"]("j1", "m/x", {"seed": 1}).get("duplicate") is True  # a retried start is ignored
+    for _ in range(50):
+        if ns["rw_poll"]("j1")["status"] == "done":
+            break
+        _t.sleep(0.02)
+    assert ns["rw_poll"]("j1")["path"].endswith("z.mp4")
+    assert ns["rw_poll"]("nope")["status"] == "error"
 
 
 def test_not_signed_in_gives_clear_message(tmp_path, monkeypatch):
     monkeypatch.setattr(colab, "TOKEN_PATH", tmp_path / "missing.json")
+    monkeypatch.setattr(colab, "KEYRING_PATH", tmp_path / "missing.cfg")
     monkeypatch.setattr(colab, "find_cli", lambda: "/fake/colab")
     with pytest.raises(ColabError) as e:
         ColabRunner(run=lambda *a, **k: None, workdir=tmp_path).is_running()
@@ -107,3 +137,35 @@ def test_studio_routes_colab_model(tmp_path, media_files):
                           4, 1, 3, quality="High")[0]
     assert runner.calls[0][2:] == (4.0, 3, 8) and "dolly-in" in runner.calls[0][1]
     assert item.title.startswith("Video · Wan 2.2 · Colab")
+
+
+def test_sign_in_kept_in_keyring_counts(tmp_path, monkeypatch, media_files):
+    monkeypatch.setattr(colab, "TOKEN_PATH", tmp_path / "gone.json")  # the CLI deletes it after moving it
+    kr = tmp_path / "keyring_pass.cfg"
+    kr.write_text("x")
+    monkeypatch.setattr(colab, "KEYRING_PATH", kr)
+    monkeypatch.setattr(colab, "find_cli", lambda: "/fake/colab")
+    assert ColabRunner(run=FakeCLI(media_files["vid_silent"]), workdir=tmp_path).is_running() is False
+
+
+def test_expired_sign_in_is_reported(tmp_path, signed_in):
+    def ask_for_code(args, **kw):
+        return subprocess.CompletedProcess(args, 1, "To authorize colab-cli, visit ...\nEnter the authorization code: ", "")
+    with pytest.raises(ColabError) as e:
+        ColabRunner(run=ask_for_code, workdir=tmp_path).is_running()
+    assert "expired" in str(e.value)
+
+
+def test_hung_poll_is_retried(tmp_path, signed_in, media_files):
+    fake = FakeCLI(media_files["vid_silent"], running=True, results=[
+        {"status": "started", "id": "x"}, {"status": "done", "path": "/content/rw_out/c.mp4"}])
+    hung = {"n": 0}
+
+    def run(args, **kw):
+        if args[3] == "exec" and "poll" in Path(args[args.index("-f") + 1]).read_text().splitlines()[-1] and hung["n"] == 0:
+            hung["n"] += 1
+            raise subprocess.TimeoutExpired(args, kw["timeout"])
+        return fake(args, **kw)
+
+    out = runner(run, tmp_path).generate_video(media_files["img"], "x", 2, 1)
+    assert out.is_file() and hung["n"] == 1

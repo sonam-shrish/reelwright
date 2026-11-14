@@ -151,10 +151,51 @@ def rw_generate(job: dict) -> dict:
             "gen_s": round(gen_s, 1), "mode": RW["mode"]}
 
 
+def _background(job_id: str, model_id: str, job: dict):
+    """Runs in a thread inside the kernel, so the caller only needs short polling calls."""
+    entry = RW["jobs"][job_id]
+    try:
+        if RW.get("pipe") is None or RW.get("model_id") != model_id:
+            entry["stage"] = "loading model"
+            entry["setup"] = rw_setup(model_id)
+        entry["stage"] = "generating"
+        entry["result"] = rw_generate(job)
+        entry["status"] = "done"
+    except Exception as e:  # noqa: BLE001
+        entry.update(status="error", error=f"{type(e).__name__}: {e}", trace=traceback.format_exc()[-1500:])
+
+
+def rw_start(job_id: str, model_id: str, job: dict) -> dict:
+    import threading
+    jobs = RW.setdefault("jobs", {})
+    if job_id in jobs:  # a retried start must not run the job twice
+        return {"status": "started", "id": job_id, "duplicate": True}
+    if any(j["status"] == "running" for j in jobs.values()):
+        return {"status": "error", "error": "another job is still running on this runtime"}
+    jobs[job_id] = {"status": "running", "stage": "starting", "started": time.time()}
+    threading.Thread(target=_background, args=(job_id, model_id, job), daemon=True).start()
+    return {"status": "started", "id": job_id}
+
+
+def rw_poll(job_id: str) -> dict:
+    entry = RW.get("jobs", {}).get(job_id)
+    if entry is None:
+        return {"status": "error", "error": f"unknown job {job_id} (the runtime may have restarted)"}
+    if entry["status"] == "done":
+        return {"status": "done", **entry["result"], "setup": entry.get("setup")}
+    if entry["status"] == "error":
+        return {"status": "error", "error": entry["error"], "trace": entry.get("trace", "")}
+    return {"status": "running", "stage": entry["stage"], "elapsed_s": round(time.time() - entry["started"])}
+
+
 def rw_call(action: str, **kw):
     """Entry point: one call per `colab exec`; always prints exactly one RW_RESULT line."""
     try:
-        if action == "setup":
+        if action == "start":
+            _emit(**rw_start(kw["job_id"], kw["model_id"], kw["job"]))
+        elif action == "poll":
+            _emit(**rw_poll(kw["job_id"]))
+        elif action == "setup":
             _emit(**rw_setup(kw["model_id"]))
         elif action == "generate":
             if RW.get("pipe") is None or RW.get("model_id") != kw["model_id"]:

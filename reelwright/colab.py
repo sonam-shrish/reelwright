@@ -26,6 +26,12 @@ log = logging.getLogger("reelwright.colab")
 
 WORKER_SRC = (Path(__file__).parent / "colab_worker.py").read_text()
 TOKEN_PATH = Path.home() / ".config" / "colab-cli" / "token.json"
+# With keyrings.alt installed, the CLI moves the sign-in into this file and deletes token.json.
+KEYRING_PATH = Path.home() / ".local" / "share" / "python_keyring" / "keyring_pass.cfg"
+
+
+def signed_in() -> bool:
+    return TOKEN_PATH.exists() or KEYRING_PATH.exists()
 
 
 class ColabError(RuntimeError):
@@ -57,13 +63,14 @@ class ColabRunner:
         self.last_used = 0.0
         self.started_at = 0.0
         self._watchdog: threading.Thread | None = None
+        self.poll_every = 15.0
 
     # ---------------------------------------------------------------- CLI
     def _cli(self, args: list[str], timeout: float = 600) -> str:
         cli = find_cli()
         if not cli:
             raise ColabError("the Colab CLI is not installed here. Run: bash scripts/colab_setup.sh")
-        if not TOKEN_PATH.exists():
+        if not signed_in():
             raise ColabError("not signed in to Google Colab in this session. Run: bash scripts/colab_signin.sh")
         try:
             proc = self._run([cli, "--auth", "oauth2", *args], capture_output=True, text=True,
@@ -71,6 +78,8 @@ class ColabRunner:
         except subprocess.TimeoutExpired as e:
             raise ColabError(f"'colab {args[0]}' took longer than {int(timeout)} s") from e
         out = (proc.stdout or "") + (proc.stderr or "")
+        if "authorization code" in out.lower():  # the stored sign-in was rejected or expired
+            raise ColabError("the Colab sign-in has expired. Run: bash scripts/colab_signin.sh")
         if proc.returncode != 0:
             raise ColabError(f"'colab {args[0]}' failed: {out.strip()[-600:]}")
         return out
@@ -102,7 +111,7 @@ class ColabRunner:
     def status(self) -> str:
         if not find_cli():
             return "Colab: not set up in this session (run scripts/colab_setup.sh)."
-        if not TOKEN_PATH.exists():
+        if not signed_in():
             return "Colab: not signed in (run scripts/colab_signin.sh)."
         try:
             running = self.is_running()
@@ -135,14 +144,25 @@ class ColabRunner:
         self._watchdog.start()
 
     # ---------------------------------------------------------------- worker
-    def call(self, action: str, timeout: float, **kwargs) -> dict:
+    def call(self, action: str, timeout: float, retries: int = 0, **kwargs) -> dict:
+        """Run one worker action. The CLI's connection to the runtime sometimes hangs
+        (the kernel never receives the code), so a timed-out call is retried."""
+        for attempt in range(retries + 1):
+            try:
+                return self._call_once(action, timeout, **kwargs)
+            except ColabError as e:
+                if "took longer than" not in str(e) or attempt == retries:
+                    raise
+                log.warning("Colab %s call hung; retrying (%d/%d)", action, attempt + 1, retries)
+
+    def _call_once(self, action: str, timeout: float, **kwargs) -> dict:
         script = self.workdir / f"call-{uuid.uuid4().hex[:8]}.py"
         script.write_text(WORKER_SRC + "\n\nimport json as _j\n"
                           f"rw_call({action!r}, **_j.loads({json.dumps(json.dumps(kwargs))}))\n")
         env = ["--env", f"HF_TOKEN={config.HF_TOKEN}"] if config.HF_TOKEN else []  # faster model downloads
         try:
             out = self._cli(["exec", "-s", self.session, "--timeout", str(int(timeout)), *env, "-f", str(script)],
-                            timeout=timeout + 120)
+                            timeout=timeout + 30)
         finally:
             script.unlink(missing_ok=True)
         lines = [ln for ln in out.splitlines() if ln.startswith("RW_RESULT ")]
@@ -153,9 +173,15 @@ class ColabRunner:
             raise ColabError(result.get("error", "unknown error") + ("\n" + result.get("trace", "")[-600:]))
         return result
 
-    def download(self, remote: str, dest: Path) -> Path:
+    def download(self, remote: str, dest: Path, retries: int = 3) -> Path:
         dest.parent.mkdir(parents=True, exist_ok=True)
-        self._cli(["download", "-s", self.session, remote, str(dest)], timeout=600)
+        for attempt in range(retries + 1):
+            try:
+                self._cli(["download", "-s", self.session, remote, str(dest)], timeout=180)
+                break
+            except ColabError as e:
+                if "took longer than" not in str(e) or attempt == retries:
+                    raise
         if not dest.is_file() or dest.stat().st_size == 0:
             raise ColabError(f"download of {remote} failed")
         return dest
@@ -165,15 +191,30 @@ class ColabRunner:
         import base64
         with self._lock:
             self.start(say)
-            say("Loading Wan 2.2 on Colab (first clip per runtime downloads ~69 GB: several minutes)")
-            setup = self.call("setup", timeout=3600, model_id=self.model_id)
-            if not setup.get("cached"):
-                say(f"Model ready on Colab ({setup.get('mode')} mode; download {setup.get('download_s')} s, "
-                    f"load {setup.get('load_s')} s)")
-            say(f"Generating on Colab: {seconds:.1f}s, {steps} steps, seed {seed}")
+            # The job runs in a thread on the runtime; we only make short start/poll calls,
+            # because one long `colab exec` connection can hang through the sandbox proxy.
+            job_id = uuid.uuid4().hex[:12]
             job = {"image_b64": base64.b64encode(Path(image).read_bytes()).decode(), "prompt": prompt,
                    "negative_prompt": negative_prompt, "seconds": seconds, "seed": seed, "steps": steps}
-            res = self.call("generate", timeout=1800, model_id=self.model_id, job=job)
+            self.call("start", timeout=120, retries=3, job_id=job_id, model_id=self.model_id, job=job)
+            say(f"Started on Colab: {seconds:.1f}s, {steps} steps, seed {seed}")
+            # first clip per runtime also downloads the 69 GB model (~4 min); a clip is ~85 s at 8 steps
+            deadline = time.time() + 2400 + 60 * seconds * steps / 4
+            last_stage, res = None, None
+            while time.time() < deadline:
+                time.sleep(self.poll_every)
+                res = self.call("poll", timeout=90, retries=3, job_id=job_id)
+                if res["status"] == "done":
+                    break
+                if res.get("stage") != last_stage:
+                    last_stage = res.get("stage")
+                    say(f"Colab: {last_stage}" + (" (first clip per runtime downloads ~69 GB: several minutes)"
+                                                  if last_stage == "loading model" else ""))
+            else:
+                raise ColabError("the Colab job did not finish in time")
+            if res.get("setup") and not res["setup"].get("cached"):
+                say(f"Model loaded on Colab ({res['setup'].get('mode')} mode; download "
+                    f"{res['setup'].get('download_s')} s, load {res['setup'].get('load_s')} s)")
             say(f"Colab finished in {res.get('gen_s')} s ({res.get('size')}, {res.get('frames')} frames)")
             local = self.download(res["path"], self.workdir / f"{uuid.uuid4().hex[:12]}.mp4")
             self.last_used = time.time()
