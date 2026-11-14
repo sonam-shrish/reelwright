@@ -9,6 +9,8 @@ python_version: "3.12"
 app_file: app.py
 pinned: false
 short_description: Personal AI film studio on open models
+tags:
+  - mcp-server
 ---
 
 # Reelwright
@@ -54,6 +56,14 @@ python scripts/colab_video.py stop          # stop the runtime (it also stops af
 In the app, pick the model "Wan 2.2 on my Colab GPU" in the Video tab. Results go to the Library like any other clip.
 Tested 2026-11-14 on an A100 80 GB: first clip per runtime downloads the 69 GB model (about 3.5 min) and loads it (25 s); each 4 s clip (832x480, 65 frames) then takes about 40 s. Settings: `REELWRIGHT_COLAB_GPU` (default A100), `REELWRIGHT_COLAB_WAN_MODEL`, `REELWRIGHT_COLAB_IDLE_STOP_MIN`.
 It only works where the Colab sign-in lives (a Claude session or your own machine), not from a hosted Space.
+
+## Use it from Claude (MCP)
+The app is also an MCP server with 11 tools: `create_image`, `create_video`, `extend_video`, `edit_image`, `change_camera_angle`, `apply_effect`, `character_scene`, `talking_video`, `text_to_speech`, `generate_sound`, `add_sound_to_video`. Files go in as URLs or files and come back as files with a link. Each call also appears in the Jobs tab and the Library.
+
+- Endpoint (hosted): `https://sonam-shrish-reelwright.hf.space/gradio_api/mcp/` (Streamable HTTP). The Space is private, so clients must send `Authorization: Bearer <your HF token>`.
+- Claude Code: `claude mcp add --transport http reelwright https://sonam-shrish-reelwright.hf.space/gradio_api/mcp/ --header "Authorization: Bearer hf_..."`
+- Locally: `http://localhost:7860/gradio_api/mcp/`
+- Long tools (talking videos take minutes) need a client that allows long tool calls.
 
 ## Deploy as a private Space
 Create a private Gradio Space on free CPU hardware, push this repo to it, and add `HF_TOKEN` as a Space secret. The UI itself uses no GPU; only the model calls use your ZeroGPU quota. A Space's disk is temporary, so download what you want to keep.

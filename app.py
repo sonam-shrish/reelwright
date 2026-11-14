@@ -271,6 +271,194 @@ def jobs_table():
     return rows or [["(no jobs yet)", "", "", ""]], _usage_md()
 
 
+# ------------------------------------------------------------------ MCP tools
+# These are the only public API endpoints, so they are what MCP clients see as
+# tools. Each one runs as a normal background job (visible in the Jobs tab) and
+# waits for it. Files can be passed as URLs or base64 and come back as files.
+
+MCP_TOOLS: set[str] = set()
+
+
+def _wait(title: str, fn) -> str:
+    """Run as a background job, wait, and return the result file (one output, so MCP
+    clients get a proper file/image back rather than a text dump)."""
+    job = queue.submit(f"MCP · {title}", fn)
+    while job.active:
+        time.sleep(1.0)
+    if job.status != "done" or not job.items:
+        raise gr.Error(job.error or "Nothing was produced.")
+    return job.items[0].path
+
+
+def _moves(text: str) -> list[str]:
+    moves = [m.strip() for m in (text or "").split(",") if m.strip()]
+    bad = [m for m in moves if m not in presets.CAMERA_MOVES]
+    if bad:
+        raise gr.Error(f"Unknown camera moves {bad}. Choose up to 3 of: {', '.join(presets.CAMERA_MOVES)}")
+    return moves[:3]
+
+
+def create_image(prompt: str, look: str = "Cinematic", aspect: str = "16:9", quality: str = "Standard",
+                 seed: int = -1):
+    """Create an image from a text prompt with Z-Image-Turbo.
+
+    Args:
+        prompt: What the image shows.
+        look: Visual style. One of: None, Cinematic, Photoreal, Fashion Editorial, Vintage Film, Film Noir, Anime, 3D Animation, Product Shot, Fantasy, Cyberpunk.
+        aspect: Aspect ratio: 16:9, 9:16, 1:1, 4:3, 3:4 or 21:9.
+        quality: Standard (about 1.3 megapixels) or High (up to 2K).
+        seed: Random seed; -1 for random.
+    """
+    return _wait(f"Image · {prompt[:30]}", lambda j: studio.create_images(j, prompt, look, aspect, 1, _seed(seed), quality))
+
+
+def create_video(prompt: str, start_image: str | None = None, camera_moves: str = "Dolly In",
+                 model: str = "wan", seconds: float = 4.0, quality: str = "Standard", sound: str = "",
+                 seed: int = -1):
+    """Create a short video. Animates start_image, or first creates a start frame from the prompt.
+
+    Args:
+        prompt: What happens in the shot.
+        start_image: Optional start frame (URL or file). Without it, a first frame is generated from the prompt.
+        camera_moves: Up to 3 camera moves, comma separated, applied in order, e.g. "Dolly In, Orbit Left". Options: Static, Dolly In, Dolly Out, Push-in Close-up, Crash Zoom In, Crash Zoom Out, Orbit Left, Orbit Right, 360 Orbit, Crane Up, Crane Down, Tilt Up, Tilt Down, Pan Left, Pan Right, Whip Pan, Tracking Shot, Handheld, FPV Drone, Aerial Pullback, Bullet Time, Dutch Roll, Low Angle Hero, Snorricam, Rack Focus.
+        model: "wan" (Wan 2.2, best consistency), "ltx" (LTX-2.3, adds its own audio) or "wan_colab" (Wan 2.2 on your Colab GPU; only when the app runs in a signed-in Claude session).
+        seconds: Length, 1 to 10 seconds.
+        quality: Standard or High (more steps, slower).
+        sound: Optional description of sound or music to add.
+        seed: Random seed; -1 for random.
+    """
+    if model not in presets.MODEL_LABELS:
+        raise gr.Error("model must be wan, ltx or wan_colab")
+    moves = _moves(camera_moves)
+    return _wait(f"Video · {prompt[:30]}", lambda j: studio.create_video(
+        j, start_image, prompt, moves, model, float(seconds), 1, _seed(seed), quality, sound=sound or ""))
+
+
+def extend_video(video: str, prompt: str, camera_moves: str = "", model: str = "wan", seconds: float = 4.0):
+    """Continue a video from its last frame and return the joined, longer clip.
+
+    Args:
+        video: The video to continue (URL or file).
+        prompt: What happens next.
+        camera_moves: Optional camera moves, comma separated (see create_video).
+        model: "wan", "ltx" or "wan_colab".
+        seconds: Length of the new part, 1 to 10 seconds.
+    """
+    moves = _moves(camera_moves)
+    return _wait("Extend video", lambda j: studio.extend_video(j, video, prompt, moves, model, float(seconds)))
+
+
+def edit_image(image: str, instruction: str, reference_image: str | None = None, aspect: str = "Keep",
+               quality: str = "Standard"):
+    """Edit an image with words (Qwen-Image-Edit-2511). An optional second image can be referenced, e.g. an outfit or product.
+
+    Args:
+        image: The image to edit (URL or file).
+        instruction: The change to make, e.g. "make it night with neon signs".
+        reference_image: Optional second image to use in the edit.
+        aspect: Keep, 16:9, 9:16, 1:1, 4:3, 3:4 or 21:9.
+        quality: Standard or High.
+    """
+    images = [image] + ([reference_image] if reference_image else [])
+    return _wait(f"Edit · {instruction[:30]}", lambda j: studio.edit_image(j, images, instruction, aspect, quality))
+
+
+def change_camera_angle(image: str, angle: str = "Rotate left 45°"):
+    """Show the same scene from a different camera angle.
+
+    Args:
+        image: The image (URL or file).
+        angle: One of: Rotate left 45°, Rotate right 45°, Top-down view, Wide-angle, Close-up, Move forward, Move left, Move right, Move down.
+    """
+    if angle not in presets.ANGLES:
+        raise gr.Error(f"angle must be one of: {', '.join(presets.ANGLES)}")
+    return _wait(f"Angle · {angle}", lambda j: studio.change_angle(j, image, angle))
+
+
+def apply_effect(image: str, effect: str = "Upscale to 2K", instruction: str = ""):
+    """Apply a one-click effect to an image.
+
+    Args:
+        image: The image (URL or file).
+        effect: One of: Upscale to 2K, Relight, Flat light (de-light), Unblur, Ultra-realistic portrait, Anything to real, Anime, Polaroid, Noir comic, Cinematic flat log.
+        instruction: Optional instruction; a sensible default is used if empty.
+    """
+    if effect not in presets.EFFECTS:
+        raise gr.Error(f"effect must be one of: {', '.join(presets.EFFECTS)}")
+    return _wait(f"Effect · {effect}", lambda j: studio.apply_effect(j, image, effect, instruction or ""))
+
+
+def character_scene(reference_image: str, scene: str, aspect: str = "9:16", consent_confirmed: bool = False,
+                    reference_image_2: str | None = None):
+    """Put the same character into a new scene, keeping face, hair, body and outfit consistent.
+
+    Args:
+        reference_image: A clear image of the character (URL or file).
+        scene: The new scene, e.g. "walking on a rainy street at night".
+        aspect: 16:9, 9:16, 1:1, 4:3, 3:4 or 21:9.
+        consent_confirmed: Must be true: every real person shown has consented (or the person is fictional).
+        reference_image_2: Optional second reference of the same character.
+    """
+    if not consent_confirmed:
+        raise gr.Error("Set consent_confirmed=true: every real person shown must have consented (or be fictional).")
+    refs = [reference_image] + ([reference_image_2] if reference_image_2 else [])
+    return _wait(f"Character · {scene[:30]}", lambda j: studio.character_scene(j, refs, scene, aspect))
+
+
+def talking_video(portrait: str, script: str, consent_confirmed: bool = False, engine: str = "omni",
+                  voice_sample: str | None = None, body_language: str = ""):
+    """Make a portrait speak a script (text-to-speech plus talking-head video).
+
+    Args:
+        portrait: Image with a clearly visible face (URL or file).
+        script: The words to speak.
+        consent_confirmed: Must be true: the person has consented (or is fictional).
+        engine: "omni" (OmniAvatar: best, slower; long speech is split into parts under 5 s) or "moda" (MoDA: fast).
+        voice_sample: Optional 5-15 s audio sample of a voice to clone.
+        body_language: Optional, OmniAvatar only, e.g. "nods, small hand gestures".
+    """
+    if not consent_confirmed:
+        raise gr.Error("Set consent_confirmed=true: the person must have consented (or be fictional).")
+    if engine not in ("omni", "moda"):
+        raise gr.Error("engine must be omni or moda")
+    return _wait(f"Talking · {script[:30]}", lambda j: studio.talk(j, portrait, script, None, voice_sample, engine,
+                                                                  body_language or ""))
+
+
+def text_to_speech(script: str, voice_sample: str | None = None, expressiveness: float = 0.5):
+    """Turn text into speech with Chatterbox, optionally cloning a voice.
+
+    Args:
+        script: The words to speak (long scripts are split and joined).
+        voice_sample: Optional 5-15 s audio sample of a voice to clone.
+        expressiveness: 0.25 (flat) to 2.0 (very expressive); 0.5 is neutral.
+    """
+    return _wait(f"Voice · {script[:30]}", lambda j: studio.speech(j, script, voice_sample, float(expressiveness)))
+
+
+def generate_sound(prompt: str, seconds: float = 10):
+    """Generate sound effects, ambience or music with EzAudio (any length; made in 10 s parts).
+
+    Args:
+        prompt: Describe the sound or music, e.g. "calm cinematic piano with soft strings".
+        seconds: Length in seconds.
+    """
+    return _wait(f"Sound · {prompt[:30]}", lambda j: studio.sound(j, prompt, float(seconds)))
+
+
+def add_sound_to_video(video: str, prompt: str, mode: str = "replace", volume: float = 1.0):
+    """Generate sound or music that fits a video and put it on the video.
+
+    Args:
+        video: The video (URL or file).
+        prompt: Describe the sound or music.
+        mode: "replace" (drop existing sound) or "mix" (blend with existing sound).
+        volume: Volume of the new sound, 0.1 to 2.0.
+    """
+    return _wait(f"Add sound · {prompt[:30]}", lambda j: studio.add_sound(
+        j, video, prompt, "mix" if mode == "mix" else "replace", float(volume)))
+
+
 # ------------------------------------------------------------------ UI
 
 CSS = """
@@ -568,6 +756,39 @@ with gr.Blocks(title="Reelwright") as demo:
     demo.load(library_view, [lib_kind], lib_outputs)
     demo.load(jobs_table, None, [jobs_df, jobs_usage])
 
+    # ------------------------------------------------------------- MCP / API endpoints (no UI)
+    with gr.Column(visible=False):
+        quality = lambda: gr.Dropdown(["Standard", "High"], value="Standard")  # noqa: E731
+        models = lambda: gr.Dropdown(list(presets.MODEL_LABELS), value="wan")  # noqa: E731
+        img = lambda: gr.Image(type="filepath")  # noqa: E731
+        vid = lambda: gr.Video()  # noqa: E731
+        aud = lambda: gr.Audio(type="filepath")  # noqa: E731
+        endpoints = [
+            (create_image, [gr.Textbox(), gr.Dropdown(list(presets.LOOKS), value="Cinematic"),
+                            gr.Dropdown(presets.ASPECTS, value="16:9"), quality(), gr.Number(-1, precision=0)], img()),
+            (create_video, [gr.Textbox(), img(), gr.Textbox("Dolly In"), models(), gr.Number(4.0), quality(),
+                            gr.Textbox(""), gr.Number(-1, precision=0)], vid()),
+            (extend_video, [vid(), gr.Textbox(), gr.Textbox(""), models(), gr.Number(4.0)], vid()),
+            (edit_image, [img(), gr.Textbox(), img(), gr.Dropdown(["Keep"] + presets.ASPECTS, value="Keep"), quality()], img()),
+            (change_camera_angle, [img(), gr.Dropdown(list(presets.ANGLES), value="Rotate left 45°")], img()),
+            (apply_effect, [img(), gr.Dropdown(list(presets.EFFECTS), value="Upscale to 2K"), gr.Textbox("")], img()),
+            (character_scene, [img(), gr.Textbox(), gr.Dropdown(presets.ASPECTS, value="9:16"), gr.Checkbox(False), img()], img()),
+            (talking_video, [img(), gr.Textbox(), gr.Checkbox(False), gr.Dropdown(["omni", "moda"], value="omni"), aud(),
+                             gr.Textbox("")], vid()),
+            (text_to_speech, [gr.Textbox(), aud(), gr.Number(0.5)], aud()),
+            (generate_sound, [gr.Textbox(), gr.Number(10)], aud()),
+            (add_sound_to_video, [vid(), gr.Textbox(), gr.Dropdown(["replace", "mix"], value="replace"), gr.Number(1.0)], vid()),
+        ]
+        for fn, inputs, output in endpoints:
+            trigger = gr.Button(visible=False)
+            trigger.click(fn, inputs, output, api_name=fn.__name__)
+            MCP_TOOLS.add(fn.__name__)
+
+    # Only the tools above are public; the UI's own events stay private (not MCP tools).
+    for block_fn in demo.fns.values():
+        if (block_fn.api_name or "").lstrip("/") not in MCP_TOOLS:
+            block_fn.api_visibility = "private"
+
 
 if __name__ == "__main__":
     demo.queue(default_concurrency_limit=8).launch(
@@ -577,4 +798,5 @@ if __name__ == "__main__":
         theme=gr.themes.Soft(primary_hue="amber", neutral_hue="zinc"),
         css=CSS,
         auth=("reelwright", config.APP_PASSWORD) if config.APP_PASSWORD else None,
+        mcp_server=True,  # tools at /gradio_api/mcp/ (see README)
     )
