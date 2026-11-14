@@ -1,0 +1,97 @@
+{
+  "title": "Look Up",
+  "slug": "look-up-voice-2",
+  "look": "Cinematic",
+  "character": {
+    "description": "a fictional young woman in her twenties with short curly dark hair and a kind, thoughtful face, wearing a mustard-yellow raincoat and white wireless earbuds",
+    "seed": 4101
+  },
+  "shots": [
+    {
+      "still": "A crowded city crosswalk at dusk in the rain, dozens of people all staring down at glowing phone screens, neon signs reflecting on wet asphalt, nobody looking at each other, cold blue tones",
+      "motion": "People cross the street staring at their phones, rain falls, traffic lights change, nobody looks up",
+      "moves": [
+        "Crane Down"
+      ],
+      "character": false,
+      "seed": 4201,
+      "seconds": 5
+    },
+    {
+      "still": "walking through a crowded subway platform staring at her glowing phone, her face lit blue by the screen, everyone around her also on their phones, cold light",
+      "motion": "She walks while scrolling on her phone, people around her stare at their own screens",
+      "moves": [
+        "Tracking Shot"
+      ],
+      "character": true,
+      "seed": 4202,
+      "seconds": 5
+    },
+    {
+      "still": "Extreme close-up of a thumb scrolling an endless social media feed on a smartphone screen, notifications popping up, raindrops on the glass, shallow depth of field",
+      "motion": "A thumb scrolls the feed endlessly, notifications keep popping up, raindrops slide down the screen",
+      "moves": [
+        "Dolly In"
+      ],
+      "character": false,
+      "seed": 4203,
+      "seconds": 5
+    },
+    {
+      "still": "standing at a rainy bus stop at night, she slowly lowers her phone and looks up at the city around her for the first time, soft neon light on her face, a moment of quiet realization",
+      "motion": "She lowers her phone and looks up, her expression softens with wonder as she takes in the world around her",
+      "moves": [
+        "Push-in Close-up"
+      ],
+      "character": true,
+      "seed": 4204,
+      "seconds": 5
+    },
+    {
+      "still": "at the rainy bus stop she has started a friendly conversation with a stranger, a different young woman of the same age with long straight blond hair and a green coat; both are laughing, standing side by side about an arm's length apart, each holding her own umbrella, no touching, warm street light, a wholesome everyday moment",
+      "motion": "The two young women chat and laugh together at the bus stop, each under her own umbrella, rain falls around them",
+      "moves": [
+        "Orbit Right"
+      ],
+      "character": true,
+      "seed": 4215,
+      "seconds": 5
+    },
+    {
+      "still": "The rain has stopped and golden sunset light breaks over a city street, people have put their phones away and are talking and laughing together, children splashing in puddles, warm and hopeful",
+      "motion": "Golden light spreads across the street, people talk and laugh together, children jump and splash in the puddles",
+      "moves": [
+        "Aerial Pullback"
+      ],
+      "character": false,
+      "seed": 4206,
+      "seconds": 5
+    }
+  ],
+  "music": {
+    "description": "A modern emotional cinematic score: it starts cold and repetitive with ticking electronic pulses and muffled synths that feel isolating, then a gentle solo piano enters, building into warm strings and an uplifting, hopeful swell at the end",
+    "seed": 4301
+  },
+  "ambience": "busy city street in the rain, passing traffic, footsteps on wet pavement, distant chatter",
+  "voice": {
+    "description": "A mature woman in her fifties with a soft, low, slightly husky voice. Gentle and reflective, quietly sad at first, then tender and hopeful. Intimate close-miked narration, slow, with natural pauses.",
+    "lines": [
+      {
+        "text": "We have never been this connected...",
+        "at": 2.0
+      },
+      {
+        "text": "...or this alone.",
+        "at": 7.5
+      },
+      {
+        "text": "Sometimes, what matters most... is right in front of you.",
+        "at": 20.0
+      },
+      {
+        "text": "Look up.",
+        "at": 26.5
+      }
+    ]
+  }
+}

@@ -9,7 +9,7 @@ from pathlib import Path
 HF_TOKEN = os.environ.get("HF_TOKEN")
 DATA_DIR = Path(os.environ.get("REELWRIGHT_DATA", Path.home() / "reelwright-data"))
 # Daily ZeroGPU budget shown in the app (owner's Pro plan; check the account page).
-DAILY_GPU_BUDGET_MIN = float(os.environ.get("REELWRIGHT_GPU_BUDGET_MIN", "40"))
+DAILY_GPU_BUDGET_MIN = float(os.environ.get("REELWRIGHT_GPU_BUDGET_MIN", "25"))
 # Optional password for the web app (useful if it is ever hosted publicly).
 APP_PASSWORD = os.environ.get("REELWRIGHT_PASSWORD")
 
