@@ -215,16 +215,26 @@ def run_voice(script, voice, expressiveness):
     yield from _follow_audio(job)
 
 
-def run_add_sound(video, prompt, mode, volume):
+def run_add_sound(video, engine_label, prompt, mode, volume):
     if not video:
         yield _error("Add a video.")
         return
     if not (prompt or "").strip():
         yield _error("Describe the sound or music.")
         return
-    job = queue.submit(f"Add sound · {prompt[:40]}", lambda j: studio.add_sound(
-        j, video, prompt, "mix" if mode.startswith("Mix") else "replace", float(volume)))
+    engine = "music" if engine_label.startswith("Music") else "effects"
+    job = queue.submit(f"Add {engine} · {prompt[:40]}", lambda j: studio.add_sound(
+        j, video, prompt, "mix" if mode.startswith("Mix") else "replace", float(volume), engine))
     yield from _follow(job)
+
+
+def run_music(description, instrumental, seconds, lyrics):
+    if not (description or "").strip() and not (lyrics or "").strip():
+        yield "❌ Describe the music, or give lyrics.", gr.skip()
+        return
+    job = queue.submit(f"Music · {(description or lyrics)[:40]}", lambda j: studio.music(
+        j, description or "", float(seconds), bool(instrumental), lyrics or ""))
+    yield from _follow_audio(job)
 
 
 def run_stitch(labels):
@@ -446,17 +456,34 @@ def generate_sound(prompt: str, seconds: float = 10):
     return _wait(f"Sound · {prompt[:30]}", lambda j: studio.sound(j, prompt, float(seconds)))
 
 
-def add_sound_to_video(video: str, prompt: str, mode: str = "replace", volume: float = 1.0):
-    """Generate sound or music that fits a video and put it on the video.
+def add_sound_to_video(video: str, prompt: str, mode: str = "replace", volume: float = 1.0,
+                       engine: str = "effects"):
+    """Generate sound effects or a music score that fits a video and put it on the video.
 
     Args:
         video: The video (URL or file).
         prompt: Describe the sound or music.
         mode: "replace" (drop existing sound) or "mix" (blend with existing sound).
         volume: Volume of the new sound, 0.1 to 2.0.
+        engine: "effects" (EzAudio sound effects/ambience) or "music" (instrumental score with MiniMax Music 3).
     """
-    return _wait(f"Add sound · {prompt[:30]}", lambda j: studio.add_sound(
-        j, video, prompt, "mix" if mode == "mix" else "replace", float(volume)))
+    if engine not in ("effects", "music"):
+        raise gr.Error("engine must be effects or music")
+    return _wait(f"Add {engine} · {prompt[:30]}", lambda j: studio.add_sound(
+        j, video, prompt, "mix" if mode == "mix" else "replace", float(volume), engine))
+
+
+def generate_music(description: str, seconds: float = 60, instrumental: bool = False, lyrics: str = ""):
+    """Generate a song or instrumental music with MiniMax Music 3 (open model). Without lyrics it writes them itself.
+
+    Args:
+        description: The style and mood, e.g. "a defiant punk anthem about staying up too late" or "cozy lo-fi beat for studying".
+        seconds: Maximum length, 5 to 300 seconds (rounded up to 5 s steps). GPU use is roughly this long.
+        instrumental: True for music without vocals.
+        lyrics: Optional own lyrics, with section tags alone on their own lines: [intro] [verse] [pre-chorus] [chorus] [bridge] [outro].
+    """
+    return _wait(f"Music · {(description or lyrics)[:30]}", lambda j: studio.music(
+        j, description or "", float(seconds), bool(instrumental), lyrics or ""))
 
 
 # ------------------------------------------------------------------ UI
@@ -630,8 +657,21 @@ with gr.Blocks(title="Reelwright") as demo:
         with gr.Tab("🔊 Sound", id="sound"):
             with gr.Row():
                 with gr.Column():
-                    gr.Markdown("### Sound effects and music")
-                    sd_prompt = gr.Textbox(label="Describe it", lines=2, placeholder="calm cinematic piano with soft strings")
+                    gr.Markdown("### Music and songs (MiniMax Music 3)")
+                    mu_desc = gr.Textbox(label="Describe the music", lines=2,
+                                         placeholder="a smoky late-night soul ballad about old flames, warm female voice")
+                    with gr.Row():
+                        mu_instr = gr.Checkbox(label="Instrumental (no vocals)")
+                        mu_seconds = gr.Slider(config.MUSIC_MIN_SECONDS, config.MUSIC_MAX_SECONDS, value=60, step=5,
+                                               label="Maximum length (seconds)")
+                    with gr.Accordion("Use my own lyrics", open=False):
+                        mu_lyrics = gr.Textbox(label="Lyrics (section tags on their own lines: [verse], [chorus], ...)",
+                                               lines=6, placeholder="[verse]\nYour words here\n[chorus]\n...")
+                    mu_go = gr.Button("Generate music", variant="primary")
+                    mu_status = gr.Markdown(elem_classes="rw-status")
+                    mu_audio = gr.Audio(label="Music", type="filepath")
+                    gr.Markdown("### Sound effects and ambience (EzAudio)")
+                    sd_prompt = gr.Textbox(label="Describe it", lines=2, placeholder="rain on a tin roof, distant thunder")
                     sd_seconds = gr.Slider(1, 60, value=10, step=1, label="Length (seconds)")
                     sd_go = gr.Button("Generate sound", variant="primary")
                     sd_status = gr.Markdown(elem_classes="rw-status")
@@ -647,6 +687,8 @@ with gr.Blocks(title="Reelwright") as demo:
                     gr.Markdown("### Add sound to a video")
                     as_video = gr.Video(label="Video")
                     as_prompt = gr.Textbox(label="Sound or music", placeholder="footsteps on marble, a clock ticking, quiet room tone")
+                    as_engine = gr.Radio(["Sound effects (EzAudio)", "Music score (MiniMax Music 3)"],
+                                         value="Sound effects (EzAudio)", label="What to add")
                     with gr.Row():
                         as_mode = gr.Radio(["Replace the sound", "Mix with existing sound"], value="Replace the sound", label="Mode")
                         as_volume = gr.Slider(0.1, 2.0, value=1.0, step=0.1, label="Volume of the new sound")
@@ -707,7 +749,8 @@ with gr.Blocks(title="Reelwright") as demo:
     wire(tk_go, run_talk, [tk_portrait, tk_script, tk_audio, tk_voice, tk_engine, tk_emotion, tk_motion, tk_quality,
                            tk_expr, tk_consent], tk_status, tk_gallery, tk_paths)
     wire(ls_go, run_lipsync, [ls_video, tk_script, tk_audio, tk_voice, tk_expr, tk_consent], tk_status, tk_gallery, tk_paths)
-    wire(as_go, run_add_sound, [as_video, as_prompt, as_mode, as_volume], as_status, as_gallery, as_paths)
+    wire(as_go, run_add_sound, [as_video, as_engine, as_prompt, as_mode, as_volume], as_status, as_gallery, as_paths)
+    mu_go.click(run_music, [mu_desc, mu_instr, mu_seconds, mu_lyrics], [mu_status, mu_audio])
     wire(st_go, run_stitch, [st_clips], st_status, st_gallery, st_paths)
     colab_check.click(lambda: studio.colab.status(), None, [colab_status])
     colab_stop.click(lambda: studio.colab.stop(), None, [colab_status])
@@ -777,7 +820,9 @@ with gr.Blocks(title="Reelwright") as demo:
                              gr.Textbox("")], vid()),
             (text_to_speech, [gr.Textbox(), aud(), gr.Number(0.5)], aud()),
             (generate_sound, [gr.Textbox(), gr.Number(10)], aud()),
-            (add_sound_to_video, [vid(), gr.Textbox(), gr.Dropdown(["replace", "mix"], value="replace"), gr.Number(1.0)], vid()),
+            (add_sound_to_video, [vid(), gr.Textbox(), gr.Dropdown(["replace", "mix"], value="replace"), gr.Number(1.0),
+                                  gr.Dropdown(["effects", "music"], value="effects")], vid()),
+            (generate_music, [gr.Textbox(), gr.Number(60), gr.Checkbox(False), gr.Textbox("")], aud()),
         ]
         for fn, inputs, output in endpoints:
             trigger = gr.Button(visible=False)

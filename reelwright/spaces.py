@@ -297,16 +297,24 @@ def _is_file_ref(obj: Any) -> bool:
 
 
 def file_refs(obj: Any) -> list:
-    """All file references in a Space result, in order (galleries, tuples, dicts)."""
+    """All file references in a Space result, in order (galleries, tuples, dicts).
+    If some are proper Gradio FileData objects, only those are returned (other
+    dicts with a 'url' can be status messages, e.g. MiniMax's player updates)."""
+    refs = _file_refs(obj)
+    proper = [r for r in refs if isinstance(r, dict) and (r.get("meta") or {}).get("_type") == "gradio.FileData"]
+    return proper or refs
+
+
+def _file_refs(obj: Any) -> list:
     found: list = []
     if _is_file_ref(obj):
         found.append(obj)
     elif isinstance(obj, dict):
         for v in obj.values():
-            found.extend(file_refs(v))
+            found.extend(_file_refs(v))
     elif isinstance(obj, (list, tuple)):
         for v in obj:
-            found.extend(file_refs(v))
+            found.extend(_file_refs(v))
     elif isinstance(obj, str) and (obj.startswith("http") or Path(obj).is_file()):
         found.append(obj)
     return found

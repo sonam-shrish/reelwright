@@ -21,6 +21,7 @@ _DEFAULT_SPACES = {
     "edit_lora": "prithivMLmods/Qwen-Image-Edit-2511-LoRAs-Fast",
     "tts": "ResembleAI/Chatterbox",
     "sound": "OpenSound/EzAudio",
+    "music": "MiniMaxAI/MiniMax-Music3",
     "avatar": "alexnasa/OmniAvatar",
     "avatar_fast": "multimodalart/MoDA-fast-talking-head",
     "lipsync": "fffiloni/LatentSync",
@@ -41,4 +42,5 @@ GRADIO_CLIENT_SPACES = {SPACES["avatar"]}
 OMNIAVATAR_MAX_AUDIO = 4.8  # the Space keeps only the first 5 s of audio
 VIDEO_MAX_SECONDS = 10.0
 SOUND_MAX_SECONDS = 10
+MUSIC_MIN_SECONDS, MUSIC_MAX_SECONDS = 5, 300  # MiniMax Music 3 Space slider (step 5)
 TTS_MAX_CHARS = 280

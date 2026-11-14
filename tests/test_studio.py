@@ -32,6 +32,13 @@ class FakeCaller:
             ("edit_lora", "/edit_image"): {"image": to_data_uri(f["img"]), "seed": 1, "status": "success"},
             ("tts", "/generate_tts_audio"): {"path": f["wav"]},
             ("sound", "/generate_audio"): {"path": f["wav"]},
+            # MiniMax returns a player-status dict with a relative url first, then the real FileData
+            ("music", "/simple_generate"): ({"cmd": "done", "url": "/gradio_api/file=/tmp/x.wav"}, "done",
+                                            {"path": f["long_wav"], "meta": {"_type": "gradio.FileData"}}, 7, None, None),
+            ("music", "/studio_generate"): ({"cmd": "done", "url": "/gradio_api/file=/tmp/x.wav"}, "done",
+                                            {"path": f["long_wav"], "meta": {"_type": "gradio.FileData"}}, 7, None),
+            ("music", "/compose_assist"): ({"mode": "studio", "lyrics": "model lyrics", "global_meta": "Basic Attributes: ...",
+                                            "vocals": "v", "arrangement": "a"}, "ready"),
             ("avatar", "/infer_scene"): {"path": f["vid_silent"]},
             ("avatar_fast", "/generate_motion"): {"video": {"path": f["vid_audio"]}, "subtitles": None},
             ("lipsync", "/generate_lip_sync_video"): {"path": f["vid_silent"]},
@@ -41,7 +48,8 @@ class FakeCaller:
 @pytest.fixture
 def studio(tmp_path, media_files):
     calls, overrides = [], {}
-    spaces = {k: k for k in ["image", "wan", "ltx", "edit", "edit_lora", "tts", "sound", "avatar", "avatar_fast", "lipsync"]}
+    spaces = {k: k for k in ["image", "wan", "ltx", "edit", "edit_lora", "tts", "sound", "music", "avatar",
+                             "avatar_fast", "lipsync"]}
     s = Studio(data_dir=tmp_path / "data", token="t", spaces=spaces,
                caller_factory=lambda key: FakeCaller(key, media_files, calls, overrides),
                handle=lambda p: {"path": str(p)})
@@ -143,6 +151,30 @@ def test_long_sound_is_generated_in_parts(studio):
     studio.sound(job(), "rain", seconds=25)
     lengths = [kw["length"] for k, a, kw in studio.calls if k == "sound"]
     assert lengths == [10, 10, 5]
+
+
+def test_music_from_description_picks_the_real_file(studio):
+    item = studio.music(job(), "cozy lo-fi beat", seconds=23, instrumental=True, seed=3)[0]
+    kw = next(kw for k, a, kw in studio.calls if a == "/simple_generate")
+    assert kw["state"] == {"description": "cozy lo-fi beat", "instrumental": True, "title": "", "mode": "simple"}
+    assert kw["duration"] == 25 and kw["seed"] == 3  # rounded up to the Space's 5 s steps
+    assert item.kind == "audio" and media.duration(item.path) == pytest.approx(4.0, abs=0.2)
+
+
+def test_music_with_lyrics_writes_style_then_keeps_the_lyrics(studio):
+    studio.music(job(), "warm soul ballad", seconds=60, lyrics="[verse]\nHello again")
+    assert [a for k, a in apis(studio) if k == "music"] == ["/compose_assist", "/studio_generate"]
+    compose = next(kw for k, a, kw in studio.calls if a == "/compose_assist")
+    assert compose["raw_state"]["assist"] == "prompt" and compose["raw_state"]["lyrics"] == "[verse]\nHello again"
+    gen = next(kw for k, a, kw in studio.calls if a == "/studio_generate")
+    assert gen["state"]["lyrics"] == "[verse]\nHello again" and gen["state"]["global_meta"].startswith("Basic")
+
+
+def test_add_music_to_video_is_instrumental_and_video_length(studio, media_files):
+    item = studio.add_sound(job(), media_files["vid_audio"], "tense synth score", engine="music")[0]
+    kw = next(kw for k, a, kw in studio.calls if a == "/simple_generate")
+    assert kw["state"]["instrumental"] is True and kw["duration"] == 5  # 2 s clip -> 5 s minimum
+    assert media.duration(item.path) == pytest.approx(2.0, abs=0.2) and item.title == "Video · with music"
 
 
 def test_talk_omni_adds_audio_track(studio, media_files):

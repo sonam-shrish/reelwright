@@ -26,7 +26,7 @@ A personal AI film studio built only from open models that run on Hugging Face S
 | ✏️ Edit & Angles | Edit with words (with extra reference images), 9 camera-angle changes, 10 one-click effects (upscale to 2K, relight, unblur, ...) | Qwen-Image-Edit-2511 (+ LoRAs) |
 | 🧑 Character | Keep one character consistent across new scenes from 1-3 references | Qwen-Image-Edit-2511 |
 | 🗣️ Talking | A portrait speaks a script (or your audio), optional voice cloning; lip-sync an existing video | OmniAvatar, MoDA, LatentSync, Chatterbox |
-| 🔊 Sound | Sound effects and music (any length), voice only, add sound to a video (replace or mix) | EzAudio, Chatterbox |
+| 🔊 Sound | Songs and instrumental music up to 5 min (with or without your own lyrics), sound effects (any length), voice only, add sound effects or a music score to a video (replace or mix) | MiniMax Music 3, EzAudio, Chatterbox |
 | 📚 Library | Everything you made, details, download, send to other tabs, join clips into one sequence | ffmpeg |
 | ⏱️ Jobs | Every generation runs in the background; status, errors and an estimate of today's GPU use | |
 
@@ -58,7 +58,7 @@ Tested 2026-11-14 on an A100 80 GB: first clip per runtime downloads the 69 GB m
 It only works where the Colab sign-in lives (a Claude session or your own machine), not from a hosted Space.
 
 ## Use it from Claude (MCP)
-The app is also an MCP server with 11 tools: `create_image`, `create_video`, `extend_video`, `edit_image`, `change_camera_angle`, `apply_effect`, `character_scene`, `talking_video`, `text_to_speech`, `generate_sound`, `add_sound_to_video`. Files go in as URLs or files and come back as files with a link. Each call also appears in the Jobs tab and the Library.
+The app is also an MCP server with 12 tools: `create_image`, `create_video`, `extend_video`, `edit_image`, `change_camera_angle`, `apply_effect`, `character_scene`, `talking_video`, `text_to_speech`, `generate_music`, `generate_sound`, `add_sound_to_video`. File inputs must be public URLs or base64 data (Gradio refuses local/private addresses). Files go in as URLs or files and come back as files with a link. Each call also appears in the Jobs tab and the Library.
 
 - Endpoint (hosted): `https://sonam-shrish-reelwright.hf.space/gradio_api/mcp/` (Streamable HTTP). The Space is private, so clients must send `Authorization: Bearer <your HF token>`.
 - Claude Code: `claude mcp add --transport http reelwright https://sonam-shrish-reelwright.hf.space/gradio_api/mcp/ --header "Authorization: Bearer hf_..."`

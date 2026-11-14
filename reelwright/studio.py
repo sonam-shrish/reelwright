@@ -256,17 +256,59 @@ class Studio:
     def sound(self, job, prompt: str, seconds: float = 10) -> list[Item]:
         return [self.library.add(self.sound_file(job, prompt, seconds), "Sound", prompt, {"seconds": seconds})]
 
-    def _with_sound(self, job, video: str | Path, prompt: str, mode: str = "replace", volume: float = 1.0) -> Path:
+    def music_file(self, job, description: str, seconds: float = 60, instrumental: bool = False,
+                   lyrics: str = "", seed: int | None = None) -> Path:
+        """A song from MiniMax Music 3. Without lyrics the Space writes them (or none when
+        instrumental); with lyrics it writes the style/vocals/arrangement around them."""
+        if not description.strip() and not lyrics.strip():
+            raise SpaceError("invalid", "Describe the music, or give lyrics.")
+        step = 5
+        secs = int(max(config.MUSIC_MIN_SECONDS, min(config.MUSIC_MAX_SECONDS, math.ceil(float(seconds) / step) * step)))
+        s = presets.seed_for(seed, 0)
+        base = {"description": description.strip(), "instrumental": bool(instrumental), "title": ""}
+        gen = dict(duration=secs, seed=s, randomize_seed=False, headroom=0, steps=30, guidance=1.7)
+        caller = self.caller("music")
+        if lyrics.strip():
+            job.log("MiniMax Music 3: writing the style, vocals and arrangement around your lyrics")
+            r = caller.call("/compose_assist", raw_state={**base, "mode": "studio", "lyrics": lyrics,
+                                                          "assist": "prompt", "assist_prompt": description.strip()},
+                            duration=secs)
+            state = r[0] if isinstance(r, (list, tuple)) else r
+            if not isinstance(state, dict) or not state.get("global_meta"):
+                raise SpaceError("failed", f"Could not prepare the song: {str(r)[:200]}", self.spaces["music"])
+            state["lyrics"] = lyrics
+            job.log(f"MiniMax Music 3: up to {secs}s with your lyrics, seed {s}")
+            r = caller.call("/studio_generate", state=state, **gen)
+        else:
+            job.log(f"MiniMax Music 3: up to {secs}s{' instrumental' if instrumental else ''}, seed {s} "
+                    "(it writes the lyrics first)")
+            r = caller.call("/simple_generate", state={**base, "mode": "simple"}, **gen)
+        return self._fetch_first(r, ".wav", "music")
+
+    def music(self, job, description: str, seconds: float = 60, instrumental: bool = False, lyrics: str = "",
+              seed: int | None = None) -> list[Item]:
+        path = self.music_file(job, description, seconds, instrumental, lyrics, seed)
+        title = "Music · instrumental" if instrumental else ("Song · your lyrics" if lyrics.strip() else "Song")
+        return [self.library.add(path, title, description or lyrics[:200],
+                                 {"model": "MiniMax Music 3", "seconds": seconds, "instrumental": instrumental})]
+
+    def _with_sound(self, job, video: str | Path, prompt: str, mode: str = "replace", volume: float = 1.0,
+                    engine: str = "effects") -> Path:
         dur = media.duration(video)
-        audio = self.sound_file(job, prompt, dur)
+        if engine == "music":  # score the clip: instrumental music at least as long as the video
+            audio = self.music_file(job, prompt, max(config.MUSIC_MIN_SECONDS, dur), instrumental=True)
+        else:
+            audio = self.sound_file(job, prompt, dur)
         job.log("Adding the sound to the video")
         return media.mux_audio(video, audio, self._tmp(".mp4"), mode=mode, new_volume=volume, old_volume=1.0)
 
-    def add_sound(self, job, video: str, prompt: str, mode: str = "replace", volume: float = 1.0) -> list[Item]:
+    def add_sound(self, job, video: str, prompt: str, mode: str = "replace", volume: float = 1.0,
+                  engine: str = "effects") -> list[Item]:
         if not video:
             raise SpaceError("invalid", "Pick a video.")
-        out = self._with_sound(job, video, prompt, mode, volume)
-        return [self.library.add(out, "Video · with sound", prompt, {"source": video, "mode": mode})]
+        out = self._with_sound(job, video, prompt, mode, volume, engine)
+        title = "Video · with music" if engine == "music" else "Video · with sound"
+        return [self.library.add(out, title, prompt, {"source": video, "mode": mode, "engine": engine})]
 
     # ------------------------------------------------------------ talking
     def talk(self, job, portrait: str, script: str = "", audio: str | None = None, voice: str | None = None,
