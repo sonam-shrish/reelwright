@@ -1,0 +1,65 @@
+{
+ "title": "Listen to understand",
+ "slug": "listen-to-understand",
+ "look": "Cinematic",
+ "aspect": "9:16",
+ "reel": true,
+ "character": {
+  "description": "two fictional friends in their twenties: a young woman with long curly red hair and freckles in a denim jacket, and a young woman with straight black hair in a white sweater",
+  "seed": 5401
+ },
+ "shots": [
+  {
+   "still": "in a cozy cafe, the woman with curly red hair is talking with feeling while the woman with black hair looks down at her phone, half listening, warm cafe light",
+   "motion": "The red-haired woman talks expressively while her friend keeps scrolling her phone and nods absently",
+   "moves": [
+    "Pan Right"
+   ],
+   "character": true,
+   "seed": 5411,
+   "seconds": 4
+  },
+  {
+   "still": "in the cozy cafe, the woman with black hair places her phone face down on the table and leans in, looking at her friend with full attention",
+   "motion": "She puts her phone face down and leans in, giving her friend full attention",
+   "moves": [
+    "Push-in Close-up"
+   ],
+   "character": true,
+   "seed": 5412,
+   "seconds": 4
+  },
+  {
+   "still": "in the cozy cafe, both friends laughing together across the small table, coffee cups, warm golden light, genuine joy",
+   "motion": "Both friends laugh together warmly, one covers her mouth while laughing",
+   "moves": [
+    "Orbit Right"
+   ],
+   "character": true,
+   "seed": 5413,
+   "seconds": 4
+  }
+ ],
+ "texts": [
+  {
+   "text": "Most people don't listen to understand.",
+   "start": 0,
+   "end": 3.85
+  },
+  {
+   "text": "They listen to reply.",
+   "start": 4,
+   "end": 7.85
+  },
+  {
+   "text": "Be the one who actually hears them.",
+   "start": 8,
+   "end": 11.85
+  }
+ ],
+ "music": {
+  "description": "warm upbeat acoustic folk with light hand claps and ukulele, friendly and bright",
+  "seed": 9004
+ },
+ "post_caption": "Most people don't listen to understand. They listen to reply. 👂\n\nWho's the best listener you know? Tag them.\n\n#HumanConnection #Communication #ActiveListening #Friendship #Presence #Reels\nMade with AI"
+}

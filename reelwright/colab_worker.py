@@ -93,12 +93,14 @@ def _setup_locked(model_id: str) -> dict:
             "download_s": round(t1 - t0), "load_s": round(time.time() - t1)}
 
 
-def _resize(image):
-    """Same rule as the Wan 2.2 Lightning Space: 832x480 / 480x832 / 640x640 class sizes."""
+def _resize(image, scale: float = 1.0):
+    """Same rule as the Wan 2.2 Lightning Space: 832x480 / 480x832 / 640x640 class sizes.
+    scale > 1 renders bigger (1.5 gives 720p class: 1248x720), slower but sharper."""
     from PIL import Image
     width, height = image.size
     if width == height:
-        return image.resize((SQUARE_DIM, SQUARE_DIM), Image.LANCZOS)
+        side = round(SQUARE_DIM * scale / MULTIPLE_OF) * MULTIPLE_OF
+        return image.resize((side, side), Image.LANCZOS)
     aspect = width / height
     max_ar, min_ar = MAX_DIM / MIN_DIM, MIN_DIM / MAX_DIM
     img = image
@@ -118,6 +120,8 @@ def _resize(image):
         th, tw = MAX_DIM, int(round(MAX_DIM * aspect))
     fw = max(MIN_DIM, min(MAX_DIM, round(tw / MULTIPLE_OF) * MULTIPLE_OF))
     fh = max(MIN_DIM, min(MAX_DIM, round(th / MULTIPLE_OF) * MULTIPLE_OF))
+    if scale != 1.0:
+        fw, fh = (round(v * scale / MULTIPLE_OF) * MULTIPLE_OF for v in (fw, fh))
     return img.resize((fw, fh), Image.LANCZOS)
 
 
@@ -133,7 +137,8 @@ def rw_generate(job: dict) -> dict:
 
     _patch_ftfy()
     pipe = RW["pipe"]
-    image = _resize(Image.open(io.BytesIO(base64.b64decode(job["image_b64"]))).convert("RGB"))
+    image = _resize(Image.open(io.BytesIO(base64.b64decode(job["image_b64"]))).convert("RGB"),
+                    float(job.get("scale", 1.0)))
     frames = _num_frames(float(job.get("seconds", 3.5)))
     kwargs = dict(image=image, prompt=job["prompt"], negative_prompt=job.get("negative_prompt", ""),
                   height=image.height, width=image.width, num_frames=frames,

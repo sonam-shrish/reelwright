@@ -1,0 +1,65 @@
+{
+ "title": "Say it out loud",
+ "slug": "say-it-out-loud",
+ "look": "Cinematic",
+ "aspect": "9:16",
+ "reel": true,
+ "character": {
+  "description": "a fictional young woman in her twenties with a short black pixie cut, small gold earrings and a burgundy coat",
+  "seed": 5801
+ },
+ "shots": [
+  {
+   "still": "sitting on a morning commuter train looking down, tired and a bit sad, grey morning light through the window",
+   "motion": "She stares down tiredly as the train sways, grey light passes over her face",
+   "moves": [
+    "Handheld"
+   ],
+   "character": true,
+   "seed": 5811,
+   "seconds": 4
+  },
+  {
+   "still": "A fictional kind older woman in her sixties with short white hair and a teal scarf sitting on a commuter train, leaning forward with a warm genuine smile, saying something kind, morning light",
+   "motion": "She leans forward, smiles warmly and says something kind",
+   "moves": [
+    "Push-in Close-up"
+   ],
+   "character": false,
+   "seed": 5812,
+   "seconds": 4
+  },
+  {
+   "still": "sitting on the commuter train smiling brightly, surprised and touched, sunlight breaking through the window onto her face",
+   "motion": "She breaks into a bright surprised smile as sunlight sweeps across her face",
+   "moves": [
+    "Dolly In"
+   ],
+   "character": true,
+   "seed": 5813,
+   "seconds": 4
+  }
+ ],
+ "texts": [
+  {
+   "text": "A three-second compliment...",
+   "start": 0,
+   "end": 3.85
+  },
+  {
+   "text": "...can carry someone all week.",
+   "start": 4,
+   "end": 7.85
+  },
+  {
+   "text": "Say the nice thing out loud.",
+   "start": 8,
+   "end": 11.85
+  }
+ ],
+ "music": {
+  "description": "bright gentle piano and soft glockenspiel with a warm uplifting build, morning sunlight feeling",
+  "seed": 9008
+ },
+ "post_caption": "A three-second compliment can carry someone all week. ☀️\n\nWhat's the nicest thing a stranger ever said to you?\n\n#HumanConnection #Communication #Kindness #Compliment #Strangers #GoodVibes #Reels\nMade with AI"
+}

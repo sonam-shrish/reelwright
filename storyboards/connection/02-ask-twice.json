@@ -1,0 +1,65 @@
+{
+ "title": "Ask twice",
+ "slug": "ask-twice",
+ "look": "Cinematic",
+ "aspect": "9:16",
+ "reel": true,
+ "character": {
+  "description": "two fictional coworkers in a modern office: a woman in her late twenties with a dark brown bob haircut in a cream blouse, and a woman in her thirties with braided hair in a green cardigan",
+  "seed": 5201
+ },
+ "shots": [
+  {
+   "still": "the woman with the bob haircut sits at her office desk giving a forced polite smile, tired sad eyes, late afternoon light, her colleague with braids standing nearby with a coffee",
+   "motion": "She forces a polite smile and nods, then her smile fades as she looks back at her screen",
+   "moves": [
+    "Push-in Close-up"
+   ],
+   "character": true,
+   "seed": 5211,
+   "seconds": 4
+  },
+  {
+   "still": "the woman with braids pulls a chair over and sits down beside her colleague's desk, leaning in with a caring concerned look, soft window light",
+   "motion": "She sits down beside her colleague and leans in, listening with a caring look",
+   "moves": [
+    "Dolly In"
+   ],
+   "character": true,
+   "seed": 5212,
+   "seconds": 4
+  },
+  {
+   "still": "the woman with the bob haircut finally talking openly, relieved, eyes a little teary with a small grateful smile, her colleague listening warmly beside her, golden hour light",
+   "motion": "She talks, relieved, wipes a tear and smiles; her colleague nods warmly",
+   "moves": [
+    "Orbit Left"
+   ],
+   "character": true,
+   "seed": 5213,
+   "seconds": 4
+  }
+ ],
+ "texts": [
+  {
+   "text": "\"I'm fine\" is the most common lie.",
+   "start": 0,
+   "end": 3.85
+  },
+  {
+   "text": "So ask twice.",
+   "start": 4,
+   "end": 7.85
+  },
+  {
+   "text": "\"No, really. How are you?\"",
+   "start": 8,
+   "end": 11.85
+  }
+ ],
+ "music": {
+  "description": "gentle lo-fi piano with soft warm pads and a light heartbeat-like pulse, comforting and sincere",
+  "seed": 9002
+ },
+ "post_caption": "\"I'm fine\" is the most common lie we tell. Next time, ask twice. 🫶\n\nWhen did someone last really ask how you were?\n\n#HumanConnection #Communication #MentalHealth #AskTwice #Kindness #WorkLife #Reels\nMade with AI"
+}

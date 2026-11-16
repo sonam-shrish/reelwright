@@ -34,6 +34,8 @@ SPACES = {k: os.environ.get(f"REELWRIGHT_SPACE_{k.upper()}", v) for k, v in _DEF
 COLAB_GPU = os.environ.get("REELWRIGHT_COLAB_GPU", "A100")
 COLAB_SESSION = os.environ.get("REELWRIGHT_COLAB_SESSION", "reelwright")
 COLAB_WAN_MODEL = os.environ.get("REELWRIGHT_COLAB_WAN_MODEL", "TestOrganizationPleaseIgnore/WAMU_v3_WAN2.2_I2V_LIGHTNING")
+# Wan size on Colab: 1.0 = 480p class (832x480), 1.5 = 720p class (1248x720, ~2.5x slower)
+COLAB_VIDEO_SCALE = float(os.environ.get("REELWRIGHT_COLAB_VIDEO_SCALE", "1.0"))
 COLAB_IDLE_STOP_MIN = float(os.environ.get("REELWRIGHT_COLAB_IDLE_STOP_MIN", "15"))
 # Which Spaces to run on your Colab GPU instead of Hugging Face ZeroGPU, by key
 # (e.g. "edit,voice_design" or "all"). Only works where Colab is signed in.

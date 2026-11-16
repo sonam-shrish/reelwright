@@ -1,0 +1,65 @@
+{
+ "title": "Phones down",
+ "slug": "phones-down",
+ "look": "Cinematic",
+ "aspect": "9:16",
+ "reel": true,
+ "character": {
+  "description": "a fictional warm family of four sitting at a wooden dinner table: a father in his forties with a short beard, a mother in her forties with a dark ponytail, a teenage son with messy brown hair, and a young daughter with two braids",
+  "seed": 5501
+ },
+ "shots": [
+  {
+   "still": "the family sitting at the dinner table, all four looking down at their glowing phones, food going cold, nobody talking, cold blue phone light on their faces",
+   "motion": "Everyone at the table scrolls their phone in silence, nobody looks up",
+   "moves": [
+    "Crane Down"
+   ],
+   "character": true,
+   "seed": 5511,
+   "seconds": 4
+  },
+  {
+   "still": "Close-up of a hand gently placing a smartphone face down on a wooden dinner table next to a plate of pasta, warm candlelight, shallow depth of field",
+   "motion": "A hand slowly places a phone face down on the table",
+   "moves": [
+    "Static"
+   ],
+   "character": false,
+   "seed": 5512,
+   "seconds": 4
+  },
+  {
+   "still": "the family at the dinner table with no phones, all laughing together and passing food, warm candlelight and golden lamps, joyful",
+   "motion": "The family laughs together and passes a bowl of food across the table",
+   "moves": [
+    "Orbit Left"
+   ],
+   "character": true,
+   "seed": 5513,
+   "seconds": 4
+  }
+ ],
+ "texts": [
+  {
+   "text": "Same table. Same room.",
+   "start": 0,
+   "end": 3.85
+  },
+  {
+   "text": "Nobody's actually here.",
+   "start": 4,
+   "end": 7.85
+  },
+  {
+   "text": "Be the first to put it down.",
+   "start": 8,
+   "end": 11.85
+  }
+ ],
+ "music": {
+  "description": "soft cinematic piano that starts sparse and cold then blooms into warm strings, family warmth",
+  "seed": 9005
+ },
+ "post_caption": "Same table. Same room. Nobody's actually here. 🍝\n\nTry it tonight: first phone down. Who's in?\n\n#HumanConnection #Communication #PhoneFree #FamilyTime #DigitalDetox #Presence #Reels\nMade with AI"
+}

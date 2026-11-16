@@ -1,0 +1,65 @@
+{
+ "title": "No translation needed",
+ "slug": "no-translation",
+ "look": "Cinematic",
+ "aspect": "9:16",
+ "reel": true,
+ "character": {
+  "description": "a fictional young traveler in her twenties with blonde hair in a messy bun, a big backpack and a yellow windbreaker, and a fictional elderly fruit vendor in his seventies with a white moustache and a flat cap, at a colorful street market",
+  "seed": 5901
+ },
+ "shots": [
+  {
+   "still": "at a busy colorful street market, the young traveler looks confused at a paper map, the elderly fruit vendor behind his stall watching her with curiosity",
+   "motion": "She turns the map around, confused, while the vendor watches curiously",
+   "moves": [
+    "Tracking Shot"
+   ],
+   "character": true,
+   "seed": 5911,
+   "seconds": 4
+  },
+  {
+   "still": "at the street market, the elderly fruit vendor pointing down the street and gesturing directions with big expressive hand movements, laughing, the traveler watching",
+   "motion": "He gestures directions with big expressive hand movements and laughs",
+   "moves": [
+    "Static"
+   ],
+   "character": true,
+   "seed": 5912,
+   "seconds": 4
+  },
+  {
+   "still": "at the street market, the traveler and the elderly fruit vendor laughing together and shaking hands over his fruit stall, warm golden light",
+   "motion": "They laugh and shake hands warmly, he hands her an orange",
+   "moves": [
+    "Orbit Right"
+   ],
+   "character": true,
+   "seed": 5913,
+   "seconds": 4
+  }
+ ],
+ "texts": [
+  {
+   "text": "Zero words in common.",
+   "start": 0,
+   "end": 3.85
+  },
+  {
+   "text": "Understood each other perfectly.",
+   "start": 4,
+   "end": 7.85
+  },
+  {
+   "text": "Kindness needs no translation.",
+   "start": 8,
+   "end": 11.85
+  }
+ ],
+ "music": {
+  "description": "joyful world-music inspired acoustic guitar and light percussion, warm and playful",
+  "seed": 9009
+ },
+ "post_caption": "Zero words in common. Understood each other perfectly. 🍊\n\nHave you ever connected with someone without a shared language? Tell us 👇\n\n#HumanConnection #Communication #Travel #Kindness #Language #Culture #Reels\nMade with AI"
+}

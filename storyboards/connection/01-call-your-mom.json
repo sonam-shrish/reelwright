@@ -1,0 +1,65 @@
+{
+ "title": "Call your mom",
+ "slug": "call-your-mom",
+ "look": "Cinematic",
+ "aspect": "9:16",
+ "reel": true,
+ "character": {
+  "description": "a fictional young man in his mid twenties with short dark wavy hair, light stubble and a grey hoodie, kind tired eyes",
+  "seed": 5101
+ },
+ "shots": [
+  {
+   "still": "standing alone by a dark apartment window at night holding his phone, thumb hovering, hesitant, city lights bokeh behind him, cold blue light",
+   "motion": "He looks down at his phone, hesitates, then glances out of the window",
+   "moves": [
+    "Push-in Close-up"
+   ],
+   "character": true,
+   "seed": 5111,
+   "seconds": 4
+  },
+  {
+   "still": "A warm cozy kitchen at evening, a fictional kind woman in her sixties with grey hair in a cardigan sits at the table glancing hopefully at a silent phone lying beside a cup of tea, warm lamp light",
+   "motion": "She looks at the silent phone, waits, then sighs softly and smiles to herself",
+   "moves": [
+    "Dolly In"
+   ],
+   "character": false,
+   "seed": 5112,
+   "seconds": 4
+  },
+  {
+   "still": "standing on a balcony at night talking on the phone and laughing warmly, city lights behind him, warm light on his face",
+   "motion": "He laughs while talking on the phone, relaxed and happy, a gentle breeze",
+   "moves": [
+    "Orbit Right"
+   ],
+   "character": true,
+   "seed": 5113,
+   "seconds": 4
+  }
+ ],
+ "texts": [
+  {
+   "text": "She'll never ask you to call.",
+   "start": 0,
+   "end": 3.85
+  },
+  {
+   "text": "She'll just keep checking her phone.",
+   "start": 4,
+   "end": 7.85
+  },
+  {
+   "text": "Call your mom today.",
+   "start": 8,
+   "end": 11.85
+  }
+ ],
+ "music": {
+  "description": "tender emotional solo piano with soft warm strings swelling gently, intimate and hopeful, slow tempo",
+  "seed": 9001
+ },
+ "post_caption": "She'll never ask you to call. She'll just wait. 💛\n\nWho's the first person you thought of? Call them today.\n\n#HumanConnection #Communication #CallYourMom #Family #Love #MomLove #Reels\nMade with AI"
+}

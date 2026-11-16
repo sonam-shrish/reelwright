@@ -117,6 +117,7 @@ def test_worker_resize_and_frames_match_the_space():
     assert ns["_resize"](Image.new("RGB", (1536, 864))).size == (832, 480)  # 16:9 is wider than 832:480, so cropped
     assert ns["_resize"](Image.new("RGB", (480, 640))).size == (624, 832)
     assert ns["_resize"](Image.new("RGB", (500, 500))).size == (640, 640)
+    assert ns["_resize"](Image.new("RGB", (864, 1536)), 1.5).size == (720, 1248)  # HD vertical
     assert ns["_num_frames"](4.0) == 65 and (ns["_num_frames"](3.5) - 1) % 4 == 0
 
 

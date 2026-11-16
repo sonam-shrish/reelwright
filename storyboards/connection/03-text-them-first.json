@@ -1,0 +1,65 @@
+{
+ "title": "Text them first",
+ "slug": "text-them-first",
+ "look": "Cinematic",
+ "aspect": "9:16",
+ "reel": true,
+ "character": {
+  "description": "a fictional man in his early thirties with short curly black hair, a neat beard and a navy sweater",
+  "seed": 5301
+ },
+ "shots": [
+  {
+   "still": "sitting on a sofa at night scrolling through old photos on his phone, nostalgic half smile, warm lamp and blue phone glow on his face",
+   "motion": "He scrolls slowly through old photos, smiles nostalgically, then becomes thoughtful",
+   "moves": [
+    "Push-in Close-up"
+   ],
+   "character": true,
+   "seed": 5311,
+   "seconds": 4
+  },
+  {
+   "still": "close up, sitting on the sofa typing a message on his phone with both thumbs, then pausing, deciding, determined expression, warm lamp light",
+   "motion": "He types a message, pauses, takes a breath and presses send",
+   "moves": [
+    "Static"
+   ],
+   "character": true,
+   "seed": 5312,
+   "seconds": 4
+  },
+  {
+   "still": "A fictional man in his thirties with blond hair and glasses on a sunny street in another city looks at his phone and breaks into a huge surprised smile, golden hour",
+   "motion": "He reads a message on his phone and breaks into a big happy smile, then laughs",
+   "moves": [
+    "Dolly In"
+   ],
+   "character": false,
+   "seed": 5313,
+   "seconds": 4
+  }
+ ],
+ "texts": [
+  {
+   "text": "Friendships rarely end with a fight.",
+   "start": 0,
+   "end": 3.85
+  },
+  {
+   "text": "They end with silence.",
+   "start": 4,
+   "end": 7.85
+  },
+  {
+   "text": "Text them first.",
+   "start": 8,
+   "end": 11.85
+  }
+ ],
+ "music": {
+  "description": "nostalgic indie acoustic guitar with soft piano, bittersweet then warm, gentle build",
+  "seed": 9003
+ },
+ "post_caption": "Friendships rarely end with a fight. They end with silence. 📱\n\nWho do you miss? Tag them or text them right now.\n\n#HumanConnection #Communication #Friendship #OldFriends #TextThemFirst #Reels\nMade with AI"
+}

@@ -21,7 +21,10 @@ Storyboard format (JSON):
   "music": {"description": "...", "seed": 1},               # instrumental, sized to the film
   "ambience": "city traffic, light rain",                    # optional
   "voice": {"description": "a warm young woman ...",
-            "lines": [{"text": "...", "at": 20.0}]}         # optional narration
+            "lines": [{"text": "...", "at": 20.0}]},        # optional narration
+  "aspect": "9:16",                                          # optional, default 16:9
+  "reel": true,             # export 1080x1920 30 fps, no fades (hook on frame 1, loops cleanly)
+  "texts": [{"text": "...", "start": 0, "end": 3}]           # optional on-screen captions
 }
 """
 import argparse
@@ -40,15 +43,45 @@ from reelwright.jobs import Job  # noqa: E402
 from reelwright.studio import Studio  # noqa: E402
 
 
+CAPTION_FONTS = ["/usr/share/fonts/opentype/inter/InterDisplay-Bold.otf", "/usr/share/fonts/opentype/inter/Inter-Bold.otf",
+                 "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"]
+
+
+def caption_png(text: str, out: Path, w: int, h: int):
+    """Reel-style caption: big white bold text with a dark outline and soft shadow, centred in the
+    upper-middle of the frame (clear of Instagram's top bar and bottom caption/buttons)."""
+    import textwrap
+    from PIL import Image, ImageDraw, ImageFilter, ImageFont
+    font_file = next((f for f in CAPTION_FONTS if Path(f).exists()), None)
+    size = round(w * 0.08)
+    font = ImageFont.truetype(font_file, size) if font_file else ImageFont.load_default(size=size)
+    lines = []
+    for para in text.split("\n"):
+        lines += textwrap.wrap(para, width=18) or [""]
+    line_h = round(size * 1.22)
+    y0 = round(h * 0.30) - line_h * len(lines) // 2
+    img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    shadow = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    d, ds = ImageDraw.Draw(img), ImageDraw.Draw(shadow)
+    for i, ln in enumerate(lines):
+        x = (w - d.textlength(ln, font=font)) / 2
+        y = y0 + i * line_h
+        ds.text((x, y + 6), ln, font=font, fill=(0, 0, 0, 170))
+        d.text((x, y), ln, font=font, fill=(255, 255, 255, 255), stroke_width=max(2, size // 18),
+               stroke_fill=(0, 0, 0, 230))
+    Image.alpha_composite(shadow.filter(ImageFilter.GaussianBlur(10)), img).save(out)
+
+
 class Film:
-    def __init__(self, sb: dict, draft: bool, keep_colab: bool):
+    def __init__(self, sb: dict, draft: bool, keep_colab: bool, studio: Studio | None = None):
         self.sb, self.draft, self.keep_colab = sb, draft, keep_colab
         self.out = config.DATA_DIR / "films" / sb.get("slug", "film")
         self.out.mkdir(parents=True, exist_ok=True)
         self.progress = self.out / "progress.json"
         self.state = json.loads(self.progress.read_text()) if self.progress.exists() else {}
         self.lock = threading.Lock()
-        self.studio = Studio()
+        self.studio = studio or Studio()
+        self.aspect = sb.get("aspect", "16:9")
         self.t0 = time.time()
         self.errors: list[str] = []
 
@@ -82,27 +115,40 @@ class Film:
         return sum(float(s.get("seconds", 5)) for s in self.shots)
 
     # ---------------------------------------------------------------- tracks
-    def stills_track(self, clip_queue: queue.Queue):
+    def stills(self, which: str = "all", clip_queue: queue.Queue | None = None):
+        """Make the stills. which: "plain" (character portrait + shots without the character,
+        all Z-Image), "character" (shots with the character, Qwen-Image-Edit) or "all"."""
         q = "Standard" if self.draft else "High"
         ch = self.sb.get("character")
-        if ch and any(s.get("character") for s in self.shots) and "character_ref" not in self.state:
-            item = self.studio.create_images(self.job("character"), f"Portrait of {ch['description']}, "
+        if which in ("plain", "all") and ch and any(s.get("character") for s in self.shots) \
+                and "character_ref" not in self.state:
+            item = self.studio.create_images(self.job(f"{self.slug} character"), f"Portrait of {ch['description']}, "
                                              "soft natural light, photorealistic", self.sb.get("look", "Cinematic"),
                                              "3:4", 1, ch.get("seed", 1))[0]
             self.save("character_ref", item.path)
         for i, s in enumerate(self.shots):
             key = f"shot{i + 1}_still"
-            if key not in self.state:
-                who = f"shot {i + 1} still"
+            wanted = which == "all" or (which == "character") == bool(s.get("character"))
+            if wanted and key not in self.state:
+                who = f"{self.slug} shot {i + 1} still"
                 if s.get("character"):
                     item = self.studio.character_scene(self.job(who), [self.state["character_ref"]], s["still"],
-                                                       "16:9", q, s.get("seed"))[0]
+                                                       self.aspect, q, s.get("seed"))[0]
                 else:
                     item = self.studio.create_images(self.job(who), s["still"], self.sb.get("look", "Cinematic"),
-                                                     "16:9", 1, s.get("seed"))[0]
+                                                     self.aspect, 1, s.get("seed"))[0]
                 self.save(key, item.path)
-            clip_queue.put(i)
-        clip_queue.put(None)
+            if clip_queue is not None:
+                clip_queue.put(i)
+        if clip_queue is not None:
+            clip_queue.put(None)
+
+    @property
+    def slug(self) -> str:
+        return self.sb.get("slug", "film")
+
+    def stills_track(self, clip_queue: queue.Queue):
+        self.stills("all", clip_queue)
 
     def colab_track(self, clip_queue: queue.Queue):
         colab = self.studio.colab
@@ -164,21 +210,43 @@ class Film:
             ms = int(float(line.get("at", 0)) * 1000)
             parts.append(f"[{len(inputs) - 1}:a]volume=1.5,adelay={ms}|{ms},apad,atrim=0:{dur:.2f}[v{i}]")
             labels.append(f"[v{i}]")
-        final = self.out / f"{self.sb.get('slug', 'film')}.mp4"
-        vf = f"fade=t=in:d=0.6,fade=t=out:st={dur - 1.2:.2f}:d=1.2"
-        if labels:
-            fc = (";".join(parts) + ";" + "".join(labels) +
-                  f"amix=inputs={len(labels)}:duration=first:normalize=0,afade=t=in:d=0.5,"
-                  f"afade=t=out:st={dur - 1.5:.2f}:d=1.5,alimiter=limit=0.89:level=false,"
-                  f"loudnorm=I=-16:TP=-1.5:LRA=11[out]")
-            args = ["ffmpeg", "-v", "error", "-y"]
-            for p in inputs:
-                args += ["-i", p]
-            args += ["-i", str(picture), "-filter_complex", fc + f";[{len(inputs)}:v]{vf}[vid]",
-                     "-map", "[vid]", "-map", "[out]", "-c:a", "aac", "-b:a", "192k", "-ar", "48000"]
+        final = self.out / f"{self.slug}.mp4"
+        reel = bool(self.sb.get("reel"))
+        if reel:  # no fade from black: the hook is on frame 1 and the end loops back into the start
+            vf = "scale=1080:1920:flags=lanczos,setsar=1,fps=30"
+            a_in, a_out = 0.03, 0.4
         else:
-            args = ["ffmpeg", "-v", "error", "-y", "-i", str(picture), "-vf", vf, "-an"]
-        args += ["-c:v", "libx264", "-crf", "17", "-pix_fmt", "yuv420p", "-t", f"{dur:.2f}", str(final)]
+            vf = f"fade=t=in:d=0.6,fade=t=out:st={dur - 1.2:.2f}:d=1.2"
+            a_in, a_out = 0.5, 1.5
+        texts = self.sb.get("texts", [])
+        args = ["ffmpeg", "-v", "error", "-y"]
+        for p in inputs:
+            args += ["-i", p]
+        args += ["-i", str(picture)]
+        vid_in = len(inputs)
+        for k, t in enumerate(texts):
+            png = self.out / f"text{k + 1}.png"
+            caption_png(t["text"], png, *((1080, 1920) if reel else (media.probe(picture)["width"],
+                                                                    media.probe(picture)["height"])))
+            args += ["-loop", "1", "-t", f"{dur:.2f}", "-i", str(png)]
+        vparts = [f"[{vid_in}:v]{vf}[v0]"]
+        for k, t in enumerate(texts):
+            a, b = float(t["start"]), min(float(t["end"]), dur)
+            vparts.append(f"[{vid_in + 1 + k}:v]format=rgba,fade=t=in:st={a:.2f}:d=0.2:alpha=1,"
+                          f"fade=t=out:st={max(a, b - 0.2):.2f}:d=0.2:alpha=1[t{k}]")
+            vparts.append(f"[v{k}][t{k}]overlay=0:0:enable='between(t,{a:.2f},{b:.2f})'[v{k + 1}]")
+        fc = ";".join(vparts)
+        if labels:
+            fc += (";" + ";".join(parts) + ";" + "".join(labels) +
+                   f"amix=inputs={len(labels)}:duration=first:normalize=0,afade=t=in:d={a_in},"
+                   f"afade=t=out:st={dur - a_out:.2f}:d={a_out},alimiter=limit=0.89:level=false,"
+                   f"loudnorm=I=-14:TP=-1.5:LRA=11[out]")
+            args += ["-filter_complex", fc, "-map", f"[v{len(texts)}]", "-map", "[out]",
+                     "-c:a", "aac", "-b:a", "192k", "-ar", "48000"]
+        else:
+            args += ["-filter_complex", fc, "-map", f"[v{len(texts)}]", "-an"]
+        args += ["-c:v", "libx264", "-crf", "17", "-preset", "slow", "-pix_fmt", "yuv420p",
+                 "-movflags", "+faststart", "-t", f"{dur:.2f}", str(final)]
         subprocess.run(args, check=True)
         return final
 

@@ -1,0 +1,65 @@
+{
+ "title": "Say it back",
+ "slug": "say-it-back",
+ "look": "Cinematic",
+ "aspect": "9:16",
+ "reel": true,
+ "character": {
+  "description": "a fictional father in his sixties with grey hair, a grey moustache and a checked flannel shirt, and his fictional adult son in his thirties with short brown hair and a plain dark t-shirt",
+  "seed": 6001
+ },
+ "shots": [
+  {
+   "still": "in a cluttered garage, the father quietly fixes a bicycle while his adult son stands in the doorway watching him, warm afternoon light through dusty air",
+   "motion": "The father tightens a bolt on the bicycle with care, the son watches from the doorway",
+   "moves": [
+    "Dolly In"
+   ],
+   "character": true,
+   "seed": 6011,
+   "seconds": 4
+  },
+  {
+   "still": "Close-up of weathered fatherly hands carefully wrapping a sandwich in paper and placing it into a lunch bag on a kitchen counter, early morning light",
+   "motion": "Old hands carefully wrap a sandwich and place it in the lunch bag",
+   "moves": [
+    "Static"
+   ],
+   "character": false,
+   "seed": 6012,
+   "seconds": 4
+  },
+  {
+   "still": "the father and his adult son sitting side by side on wooden porch steps at sunset holding mugs of tea, both smiling, the son saying something heartfelt",
+   "motion": "The son says something heartfelt, the father looks down, smiles and nods",
+   "moves": [
+    "Orbit Left"
+   ],
+   "character": true,
+   "seed": 6013,
+   "seconds": 4
+  }
+ ],
+ "texts": [
+  {
+   "text": "He never said \"I love you.\"",
+   "start": 0,
+   "end": 3.85
+  },
+  {
+   "text": "He said it a thousand other ways.",
+   "start": 4,
+   "end": 7.85
+  },
+  {
+   "text": "Say it back while you can.",
+   "start": 8,
+   "end": 11.85
+  }
+ ],
+ "music": {
+  "description": "emotional slow acoustic guitar and soft piano with a gentle warm string swell, nostalgic and heartfelt",
+  "seed": 9010
+ },
+ "post_caption": "He never said \"I love you.\" He said it a thousand other ways. 🧰\n\nWhat's the way your dad says it? 👇\n\n#HumanConnection #Communication #Dad #Fatherhood #Family #Love #Reels\nMade with AI"
+}
