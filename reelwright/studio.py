@@ -26,6 +26,9 @@ def _num(x: Any) -> int:
     return int(x)
 
 
+NSFW_PLACEHOLDER_SIZE = (1024, 1024)  # Z-Image Space's nsfw.png
+
+
 class Studio:
     def __init__(self, data_dir: Path | None = None, token: str | None = None,
                  spaces: dict | None = None, caller_factory: Callable[[str], Any] | None = None,
@@ -77,10 +80,22 @@ class Studio:
         items = []
         for i in range(max(1, int(count))):
             s = presets.seed_for(seed, i)
-            job.log(f"Image {i + 1}/{count}: Z-Image-Turbo, {res}, seed {s}")
-            r = self.caller("image").call("/generate", prompt=full, resolution=res, seed=s, steps=8,
-                                          shift=3.0, random_seed=False, gallery_images=[])
-            path = self._fetch_first(r[0] if isinstance(r, (list, tuple)) else r, ".png", "image", last=True)
+            want = tuple(int(v) for v in res.split(" ")[0].split("x"))
+            for attempt in range(3):
+                job.log(f"Image {i + 1}/{count}: Z-Image-Turbo, {res}, seed {s}")
+                r = self.caller("image").call("/generate", prompt=full, resolution=res, seed=s, steps=8,
+                                              shift=3.0, random_seed=False, gallery_images=[])
+                path = self._fetch_first(r[0] if isinstance(r, (list, tuple)) else r, ".png", "image", last=True)
+                with Image.open(path) as im:
+                    if im.size == want or im.size != NSFW_PLACEHOLDER_SIZE:
+                        break
+                # The Space's safety checker sometimes flags harmless prompts and returns its
+                # "maybe not safe" placeholder (1024x1024 whatever size was asked): try another seed.
+                job.log("Z-Image returned its safety placeholder; retrying with another seed")
+                s += 7919
+            else:
+                raise SpaceError("blocked", "Z-Image's safety filter rejected this prompt three times; "
+                                            "rephrase it.")
             items.append(self.library.add(path, f"Image · {look if look != 'None' else 'plain'} · {aspect}",
                                           prompt, {"seed": s, "look": look, "aspect": aspect, "model": "Z-Image-Turbo"}))
         return items
