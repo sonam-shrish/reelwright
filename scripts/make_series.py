@@ -31,7 +31,7 @@ def main():
     ap.add_argument("--draft", action="store_true")
     ap.add_argument("--keep-colab", action="store_true")
     ap.add_argument("--scale", type=float, default=1.0, help="Wan size: 1.0 = 480p class, 1.5 = 720p class")
-    ap.add_argument("--colab-spaces", default="image,edit", help='Spaces to run on Colab ("" = Hugging Face)')
+    ap.add_argument("--colab-spaces", default="edit", help='Spaces to run on Colab ("" = Hugging Face)')
     ap.add_argument("--only", default="", help="stills | clips | edit (default: everything)")
     a = ap.parse_args()
     import logging
