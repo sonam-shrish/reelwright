@@ -59,7 +59,7 @@ def caption_png(text: str, out: Path, w: int, h: int):
     for para in text.split("\n"):
         lines += textwrap.wrap(para, width=18) or [""]
     line_h = round(size * 1.22)
-    y0 = round(h * 0.30) - line_h * len(lines) // 2
+    y0 = round(h * 0.19) - line_h * len(lines) // 2
     img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
     shadow = Image.new("RGBA", (w, h), (0, 0, 0, 0))
     d, ds = ImageDraw.Draw(img), ImageDraw.Draw(shadow)
