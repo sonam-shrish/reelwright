@@ -247,6 +247,13 @@ def _free_wan():
         torch.cuda.empty_cache()
 
 
+# Settings some Spaces need off ZeroGPU (their defaults target H100/H200 hardware).
+SPACE_ENV = {
+    # flash_3 needs Hopper GPUs and is not a valid name in current diffusers; compile + warmup only slow the start
+    "Tongyi-MAI/Z-Image-Turbo": {"ATTENTION_BACKEND": "native", "ENABLE_COMPILE": "false", "ENABLE_WARMUP": "false"},
+}
+
+
 def _stop_spaces():
     for sid, s in list(RW.get("spaces", {}).items()):
         proc = s.get("proc")
@@ -284,6 +291,7 @@ def _space_boot(space_id: str, port: int, entry: dict):
         _free_wan()
         env = dict(os.environ, GRADIO_SERVER_NAME="127.0.0.1", GRADIO_SERVER_PORT=str(port),
                    GRADIO_ANALYTICS_ENABLED="False", PYTHONUNBUFFERED="1")
+        env.update(SPACE_ENV.get(space_id, {}))
         log = open(f"{SPACES_DIR}/{slug}.log", "w")
         entry["proc"] = subprocess.Popen([f"{venv}/bin/python", "app.py"], cwd=root, env=env, stdout=log,
                                          stderr=subprocess.STDOUT)
