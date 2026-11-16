@@ -198,3 +198,19 @@ def test_studio_can_route_a_space_to_colab(tmp_path):
                caller_factory=lambda space: f"hf:{space}", colab=object())
     s.colab_space_keys = {"voice_design"}
     assert isinstance(s.caller("voice_design"), ColabSpaceCaller) and s.caller("image") == "hf:x/y"
+
+
+def test_connection_error_is_retried(tmp_path, signed_in, media_files, monkeypatch):
+    monkeypatch.setattr(colab.time, "sleep", lambda s: None)
+    fake = FakeCLI(media_files["vid_silent"], running=True, results=[
+        {"status": "started", "id": "x"}, {"status": "done", "path": "/content/rw_out/d.mp4"}])
+    failed = {"n": 0}
+
+    def run(args, **kw):
+        if args[3] == "exec" and failed["n"] == 0:
+            failed["n"] += 1
+            return subprocess.CompletedProcess(args, 1, "", "requests.exceptions.ReadTimeout: read timed out")
+        return fake(args, **kw)
+
+    out = runner(run, tmp_path).generate_video(media_files["img"], "x", 2, 1)
+    assert out.is_file() and failed["n"] == 1

@@ -34,6 +34,11 @@ def signed_in() -> bool:
     return TOKEN_PATH.exists() or KEYRING_PATH.exists()
 
 
+# Network hiccups between this sandbox and the runtime (worth retrying; jobs are idempotent)
+TRANSIENT_HINTS = ("Timeout", "ConnectionError", "Connection reset", "RemoteDisconnected", "ProtocolError",
+                   "502", "503", "504")
+
+
 class ColabError(RuntimeError):
     def user_message(self) -> str:
         return f"Colab: {self}"
@@ -168,9 +173,14 @@ class ColabRunner:
             try:
                 return self._call_once(action, timeout, **kwargs)
             except ColabError as e:
-                if "took longer than" not in str(e) or attempt == retries:
+                msg = str(e)
+                hung = "took longer than" in msg
+                flaky = "'colab exec' failed" in msg and any(k in msg for k in TRANSIENT_HINTS)
+                if not (hung or flaky) or attempt == retries:
                     raise
-                log.warning("Colab %s call hung; retrying (%d/%d)", action, attempt + 1, retries)
+                log.warning("Colab %s call %s; retrying (%d/%d)", action, "hung" if hung else "lost its connection",
+                            attempt + 1, retries)
+                time.sleep(min(30, 5 * (attempt + 1)))
 
     def _call_once(self, action: str, timeout: float, **kwargs) -> dict:
         script = self.workdir / f"call-{uuid.uuid4().hex[:8]}.py"
