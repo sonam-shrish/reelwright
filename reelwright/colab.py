@@ -35,7 +35,7 @@ def signed_in() -> bool:
 
 
 # Network hiccups between this sandbox and the runtime (worth retrying; jobs are idempotent)
-TRANSIENT_HINTS = ("Timeout", "ConnectionError", "Connection reset", "RemoteDisconnected", "ProtocolError",
+TRANSIENT_HINTS = ("Timeout", "ConnectionError", "Connection was lost", "Connection reset", "RemoteDisconnected", "ProtocolError",
                    "502", "503", "504")
 
 

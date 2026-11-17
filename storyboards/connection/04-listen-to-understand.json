@@ -20,13 +20,13 @@
    "seconds": 4
   },
   {
-   "still": "in the cozy cafe, the woman with black hair places her phone face down on the table and leans in, looking at her friend with full attention",
-   "motion": "She puts her phone face down and leans in, giving her friend full attention",
+   "still": "in the cozy cafe, the two friends sit on opposite sides of a small round table facing each other: the woman with curly red hair wearing her denim jacket is talking, and the woman with straight black hair wearing her white sweater has put her phone face down on the table and listens with calm full attention, warm cafe light",
+   "motion": "Both stay seated on opposite sides of the table; the black-haired woman listens attentively and nods slowly while her friend talks with small hand gestures",
    "moves": [
     "Push-in Close-up"
    ],
    "character": true,
-   "seed": 5412,
+   "seed": 5432,
    "seconds": 4
   },
   {
