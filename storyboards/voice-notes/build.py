@@ -136,7 +136,7 @@ film(3, "listen-to-the-pan", "Listen to the pan",
            sfx="hot oil sizzling, smoke alarm chirp once", vol=0.55),
       shot("in her own kitchen at home recording a voice note, gesturing at the camera with a wooden spoon like a "
            "teacher", "she lectures into the phone, pointing with a wooden spoon", ["amma"], seed=7312),
-      shot("Close-up of cumin seeds crackling and dancing in hot oil in a steel pan, no hands, warm stove light",
+      shot("Side-angle macro close-up of cumin seeds frying and popping in shimmering golden oil inside a small open steel pan, tiny bubbles, wisps of smoke, dark kitchen behind",
            "cumin seeds crackle and jump in the hot oil", None, seed=7313, trim=(0.3, 2.6), moves=["Static"],
            sfx="cumin seeds crackling and popping in hot oil", vol=0.8),
       shot("leaning over the pan, listening to it with her head tilted, a small surprised smile",
@@ -347,8 +347,8 @@ film(8, "fridge-notes", "Fridge notes",
 film(9, "stuck", "Stuck",
      {"ines": {"look": "a fictional Portuguese woman in her late twenties with long wavy dark hair, a camel "
                "coat and a large tote bag, impatient", "seed": 7901},
-      "ray": {"look": "a fictional older man in his sixties, bald with a white beard, a delivery company polo "
-              "shirt, holding a small parcel", "seed": 7902}},
+      "ray": {"look": "a fictional older man in his sixties, bald with a white beard, a plain dark grey polo "
+              "shirt with no print, holding a small brown parcel", "seed": 7902}},
      {"ines": {"voice": "a woman in her late twenties with a slight Portuguese accent, stressed then warm",
                "sample": "No, no, no. Not today."},
       "ray": {"voice": "a Londoner in his sixties, calm, funny, kind", "sample": "Happens twice a week, love."}},
