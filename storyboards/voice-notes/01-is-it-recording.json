@@ -2,7 +2,7 @@
  "title": "Is it recording?",
  "slug": "is-it-recording",
  "look": "None",
- "style": "35mm film photograph, Kodak Vision3 500T, natural available light, candid and unposed, real skin texture with pores and small imperfections, ordinary everyday person, lived-in real location, slightly off-center framing, shallow depth of field, soft film grain, muted natural colors",
+ "style": "35mm motion picture film still, tungsten film stock, natural available light, no logos, no brand names, candid and unposed, real skin texture with pores and small imperfections, ordinary everyday person, lived-in real location, slightly off-center framing, shallow depth of field, soft film grain, muted natural colors",
  "aspect": "9:16",
  "reel": true,
  "film_look": true,
@@ -34,10 +34,10 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.5,
+   "seconds": 4.25,
    "trim": [
     0.3,
-    3.3
+    3.87
    ],
    "seed": 7111,
    "with": [
@@ -52,10 +52,10 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.5,
+   "seconds": 4.25,
    "trim": [
     0.3,
-    3.3
+    3.87
    ],
    "seed": 7112,
    "with": [
@@ -70,10 +70,10 @@
    "moves": [
     "Push-in Close-up"
    ],
-   "seconds": 3.5,
+   "seconds": 4.25,
    "trim": [
     0.3,
-    3.3
+    3.87
    ],
    "seed": 7113,
    "with": [
@@ -86,10 +86,10 @@
    "moves": [
     "Static"
    ],
-   "seconds": 3.5,
+   "seconds": 3.25,
    "trim": [
     0.4,
-    2.6
+    3.02
    ],
    "seed": 7114,
    "sfx": "soft tap on a phone screen, a small beep",
@@ -101,10 +101,10 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.5,
+   "seconds": 4.25,
    "trim": [
     0.3,
-    3.3
+    3.87
    ],
    "seed": 7115,
    "with": [
@@ -117,10 +117,10 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.5,
+   "seconds": 4.25,
    "trim": [
     0.2,
-    3.4
+    4.01
    ],
    "seed": 7116,
    "with": [
@@ -146,7 +146,7 @@
   {
    "who": "grandpa",
    "text": "Your grandmother says I should use these voice things. So. Hello, Maya.",
-   "at": 3.6,
+   "at": 4.64,
    "emotion": {
     "happy": 0.35,
     "calm": 0.4
@@ -158,7 +158,7 @@
   {
    "who": "grandpa",
    "text": "I heard about the exam. I'm proud of you, kiddo. That's all.",
-   "at": 8.9,
+   "at": 10.28,
    "emotion": {
     "happy": 0.3,
     "melancholic": 0.35,
@@ -171,7 +171,7 @@
   {
    "who": "grandpa",
    "text": "Now how do I stop this-",
-   "at": 13.0,
+   "at": 15.44,
    "emotion": {
     "surprised": 0.55,
     "happy": 0.2
@@ -183,7 +183,7 @@
   {
    "who": "maya",
    "text": "Grandpa. It's still recording.",
-   "at": 15.6,
+   "at": 17.6,
    "emotion": {
     "happy": 0.55,
     "calm": 0.2

@@ -2,7 +2,7 @@
  "title": "Note to future me",
  "slug": "future-me",
  "look": "None",
- "style": "35mm film photograph, Kodak Vision3 500T, natural available light, candid and unposed, real skin texture with pores and small imperfections, ordinary everyday person, lived-in real location, slightly off-center framing, shallow depth of field, soft film grain, muted natural colors",
+ "style": "35mm motion picture film still, tungsten film stock, natural available light, no logos, no brand names, candid and unposed, real skin texture with pores and small imperfections, ordinary everyday person, lived-in real location, slightly off-center framing, shallow depth of field, soft film grain, muted natural colors",
  "aspect": "9:16",
  "reel": true,
  "film_look": true,
@@ -37,7 +37,7 @@
    "seconds": 3.5,
    "trim": [
     0.3,
-    3.3
+    3.32
    ],
    "seed": 8011,
    "with": [
@@ -55,7 +55,7 @@
    "seconds": 3.5,
    "trim": [
     0.3,
-    3.3
+    3.32
    ],
    "seed": 8012,
    "with": [
@@ -70,10 +70,10 @@
    "moves": [
     "Static"
    ],
-   "seconds": 3.5,
+   "seconds": 2.75,
    "trim": [
     0.3,
-    2.4
+    2.41
    ],
    "seed": 8013
   },
@@ -86,7 +86,7 @@
    "seconds": 3.5,
    "trim": [
     0.3,
-    3.3
+    3.32
    ],
    "seed": 8014,
    "with": [
@@ -102,7 +102,7 @@
    "seconds": 3.5,
    "trim": [
     0.3,
-    3.3
+    3.32
    ],
    "seed": 8015,
    "with": [
@@ -115,10 +115,10 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.5,
+   "seconds": 3.75,
    "trim": [
     0.2,
-    3.4
+    3.42
    ],
    "seed": 8016,
    "with": [
@@ -142,7 +142,7 @@
   {
    "who": "teen",
    "text": "Are we still scared of everything? Did we ever do the thing?",
-   "at": 3.4,
+   "at": 5.25,
    "emotion": {
     "afraid": 0.3,
     "calm": 0.3
@@ -154,7 +154,7 @@
   {
    "who": "teen",
    "text": "Please tell me we're okay.",
-   "at": 8.0,
+   "at": 9.34,
    "emotion": {
     "sad": 0.35,
     "afraid": 0.2

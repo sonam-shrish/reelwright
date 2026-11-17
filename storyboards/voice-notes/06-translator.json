@@ -2,7 +2,7 @@
  "title": "Lost in translation",
  "slug": "translator",
  "look": "None",
- "style": "35mm film photograph, Kodak Vision3 500T, natural available light, candid and unposed, real skin texture with pores and small imperfections, ordinary everyday person, lived-in real location, slightly off-center framing, shallow depth of field, soft film grain, muted natural colors",
+ "style": "35mm motion picture film still, tungsten film stock, natural available light, no logos, no brand names, candid and unposed, real skin texture with pores and small imperfections, ordinary everyday person, lived-in real location, slightly off-center framing, shallow depth of field, soft film grain, muted natural colors",
  "aspect": "9:16",
  "reel": true,
  "film_look": true,
@@ -13,7 +13,7 @@
    "seed": 7601
   },
   "claire": {
-   "look": "a fictional young white woman in her late twenties with a red bob haircut, freckles, a cream knit sweater, nervous polite smile",
+   "look": "a fictional woman in her late twenties with a short copper-red bob haircut and freckles, wearing a cream knit sweater, friendly polite smile",
    "seed": 7602
   }
  },
@@ -39,10 +39,10 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.5,
+   "seconds": 4.25,
    "trim": [
     0.3,
-    3.3
+    3.98
    ],
    "seed": 7611,
    "with": [
@@ -57,10 +57,10 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.5,
+   "seconds": 4.25,
    "trim": [
     0.3,
-    3.3
+    3.98
    ],
    "seed": 7612,
    "with": [
@@ -76,7 +76,7 @@
    "seconds": 3.5,
    "trim": [
     0.3,
-    2.6
+    3.12
    ],
    "seed": 7613,
    "sfx": "chopsticks clicking on a ceramic bowl",
@@ -88,10 +88,10 @@
    "moves": [
     "Push-in Close-up"
    ],
-   "seconds": 3.5,
+   "seconds": 4.25,
    "trim": [
     0.3,
-    3.3
+    3.98
    ],
    "seed": 7614,
    "with": [
@@ -104,10 +104,10 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.5,
+   "seconds": 4.25,
    "trim": [
     0.3,
-    3.3
+    3.98
    ],
    "seed": 7615,
    "with": [
@@ -120,10 +120,10 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.5,
+   "seconds": 4.5,
    "trim": [
     0.2,
-    3.4
+    4.13
    ],
    "seed": 7616,
    "with": [
@@ -149,7 +149,7 @@
   {
    "who": "app",
    "text": "Translation. She says: you are too skinny. Eat more.",
-   "at": 2.4,
+   "at": 6.21,
    "emotion": {
     "calm": 0.8
    },
@@ -160,7 +160,7 @@
   {
    "who": "claire",
    "text": "Oh! Okay. Tell her it's delicious.",
-   "at": 6.4,
+   "at": 10.0,
    "emotion": {
     "happy": 0.4,
     "afraid": 0.2
@@ -172,7 +172,7 @@
   {
    "who": "app",
    "text": "Translation. She says: you are now my granddaughter. Also, eat more.",
-   "at": 9.4,
+   "at": 12.8,
    "emotion": {
     "calm": 0.8
    },
@@ -183,7 +183,7 @@
   {
    "who": "halmeoni",
    "text": "Welcome. ...Family.",
-   "at": 15.4,
+   "at": 17.81,
    "emotion": {
     "happy": 0.35,
     "calm": 0.4

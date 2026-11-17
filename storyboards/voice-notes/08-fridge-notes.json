@@ -2,7 +2,7 @@
  "title": "Fridge notes",
  "slug": "fridge-notes",
  "look": "None",
- "style": "35mm film photograph, Kodak Vision3 500T, natural available light, candid and unposed, real skin texture with pores and small imperfections, ordinary everyday person, lived-in real location, slightly off-center framing, shallow depth of field, soft film grain, muted natural colors",
+ "style": "35mm motion picture film still, tungsten film stock, natural available light, no logos, no brand names, candid and unposed, real skin texture with pores and small imperfections, ordinary everyday person, lived-in real location, slightly off-center framing, shallow depth of field, soft film grain, muted natural colors",
  "aspect": "9:16",
  "reel": true,
  "film_look": true,
@@ -68,7 +68,7 @@
    "moves": [
     "Static"
    ],
-   "seconds": 3.5,
+   "seconds": 2.75,
    "trim": [
     0.3,
     2.4
@@ -116,7 +116,7 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.5,
+   "seconds": 3.75,
    "trim": [
     0.2,
     3.4
@@ -147,7 +147,7 @@
   {
    "who": "tom",
    "text": "Thanks. ...Wow. Okay. Still mad.",
-   "at": 3.1,
+   "at": 3.14,
    "emotion": {
     "sad": 0.25,
     "calm": 0.4
@@ -160,7 +160,7 @@
   {
    "who": "nadia",
    "text": "I hate that you're right about the thing.",
-   "at": 6.2,
+   "at": 6.88,
    "emotion": {
     "angry": 0.2,
     "sad": 0.25

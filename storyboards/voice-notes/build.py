@@ -1,4 +1,5 @@
-"""Writes the "Voice Notes" storyboards (run: python storyboards/voice-notes/build.py).
+"""Writes the "Voice Notes" storyboards (run: python storyboards/voice-notes/build.py, then
+scripts/retime.py on them once the voices exist, because this overwrites the timing).
 
 Ten micro-films about people reaching each other through a voice: voice notes, a phone call,
 a radio call-in, a translator app. Shot like small real films: 35mm look, ordinary people,
@@ -8,7 +9,7 @@ import json
 from pathlib import Path
 
 OUT = Path(__file__).parent
-STYLE = ("35mm film photograph, Kodak Vision3 500T, natural available light, candid and unposed, real skin "
+STYLE = ("35mm motion picture film still, tungsten film stock, natural available light, no logos, no brand names, candid and unposed, real skin "
          "texture with pores and small imperfections, ordinary everyday person, lived-in real location, "
          "slightly off-center framing, shallow depth of field, soft film grain, muted natural colors")
 HANDHELD = "handheld camera with slight natural sway, documentary feel, "
@@ -98,7 +99,7 @@ film(2, "wrong-number", "Wrong number",
       shot("in her small sunny kitchen holding a phone up to her mouth, talking with her free hand, a pot steaming "
            "on the stove", "she talks animatedly into the phone, waving her hand", ["bev"], seed=7212,
            sfx="pot simmering, radio playing very quietly in the background", vol=0.4),
-      shot("Close-up of a young man's hands holding a paper CV, slightly crumpled at the corner, in a corridor",
+      shot("Close-up of a young man's hands holding a printed CV, the text blurred and out of focus, slightly crumpled corner, shallow depth of field",
            "his thumb smooths the crumpled corner of the paper", None, seed=7213, trim=(0.3, 2.5), moves=["Static"],
            sfx="paper rustle", vol=0.6),
       shot("in the corridor, a slow smile, sitting up straighter, still holding the phone to his ear",
@@ -135,7 +136,7 @@ film(3, "listen-to-the-pan", "Listen to the pan",
            sfx="hot oil sizzling, smoke alarm chirp once", vol=0.55),
       shot("in her own kitchen at home recording a voice note, gesturing at the camera with a wooden spoon like a "
            "teacher", "she lectures into the phone, pointing with a wooden spoon", ["amma"], seed=7312),
-      shot("Close-up of cumin seeds crackling and dancing in hot oil in a steel pan, warm light",
+      shot("Close-up of cumin seeds crackling and dancing in hot oil in a steel pan, no hands, warm stove light",
            "cumin seeds crackle and jump in the hot oil", None, seed=7313, trim=(0.3, 2.6), moves=["Static"],
            sfx="cumin seeds crackling and popping in hot oil", vol=0.8),
       shot("leaning over the pan, listening to it with her head tilted, a small surprised smile",
@@ -236,8 +237,8 @@ film(5, "ten-years", "Ten years",
 film(6, "translator", "Lost in translation",
      {"halmeoni": {"look": "a fictional Korean grandmother in her seventies with short permed grey hair, a "
                    "lilac cardigan, a jade bracelet, a stern face that hides a smile", "seed": 7601},
-      "claire": {"look": "a fictional young white woman in her late twenties with a red bob haircut, freckles, "
-                 "a cream knit sweater, nervous polite smile", "seed": 7602}},
+      "claire": {"look": "a fictional woman in her late twenties with a short copper-red bob haircut and freckles, "
+                 "wearing a cream knit sweater, friendly polite smile", "seed": 7602}},
      {"halmeoni": {"voice": "an elderly Korean woman in her seventies, firm, dry, secretly warm",
                    "sample": "어서 와. 앉아.", "language": "Korean"},
       "app": {"voice": "a neutral, slightly synthetic female voice assistant, clear and flat",
@@ -291,7 +292,7 @@ film(7, "on-the-air", "On the air",
            sfx="radio volume knob click", vol=0.6),
       shot("in the parked car laughing and crying at the same time, wiping her mascara",
            "she laughs and cries, wiping her eyes", ["jess"], seed=7714, moves=["Push-in Close-up"]),
-      shot("headlights of a big truck pulling into a school parking lot at night, horn lights flashing",
+      shot("a big truck with bright headlights pulling into a dark school parking lot late at night, black sky, lamp posts",
            "a truck pulls into the parking lot, headlights sweeping", None, seed=7715, moves=["Static"],
            sfx="truck air brakes, two long horn blasts", vol=0.85),
       shot("stepping out of the car in her graduation gown, turning toward the headlights, hand over her mouth",

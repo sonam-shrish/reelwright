@@ -2,7 +2,7 @@
  "title": "The last cookie",
  "slug": "last-cookie",
  "look": "None",
- "style": "35mm film photograph, Kodak Vision3 500T, natural available light, candid and unposed, real skin texture with pores and small imperfections, ordinary everyday person, lived-in real location, slightly off-center framing, shallow depth of field, soft film grain, muted natural colors",
+ "style": "35mm motion picture film still, tungsten film stock, natural available light, no logos, no brand names, candid and unposed, real skin texture with pores and small imperfections, ordinary everyday person, lived-in real location, slightly off-center framing, shallow depth of field, soft film grain, muted natural colors",
  "aspect": "9:16",
  "reel": true,
  "film_look": true,
@@ -34,10 +34,10 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.5,
+   "seconds": 4.0,
    "trim": [
     0.3,
-    3.3
+    3.71
    ],
    "seed": 7411,
    "with": [
@@ -52,10 +52,10 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.5,
+   "seconds": 4.0,
    "trim": [
     0.3,
-    3.3
+    3.71
    ],
    "seed": 7412,
    "with": [
@@ -68,10 +68,10 @@
    "moves": [
     "Push-in Close-up"
    ],
-   "seconds": 3.5,
+   "seconds": 4.0,
    "trim": [
     0.3,
-    3.3
+    3.71
    ],
    "seed": 7413,
    "with": [
@@ -84,10 +84,10 @@
    "moves": [
     "Static"
    ],
-   "seconds": 3.5,
+   "seconds": 3.25,
    "trim": [
     0.3,
-    2.6
+    2.91
    ],
    "seed": 7414
   },
@@ -97,10 +97,10 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.5,
+   "seconds": 4.0,
    "trim": [
     0.3,
-    3.3
+    3.71
    ],
    "seed": 7415,
    "with": [
@@ -115,10 +115,10 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.5,
+   "seconds": 4.0,
    "trim": [
     0.2,
-    3.4
+    3.84
    ],
    "seed": 7416,
    "with": [
@@ -144,7 +144,7 @@
   {
    "who": "leo",
    "text": "I brushed my teeth. Both sides.",
-   "at": 3.6,
+   "at": 4.99,
    "emotion": {
     "happy": 0.4,
     "calm": 0.3
@@ -156,7 +156,7 @@
   {
    "who": "leo",
    "text": "And I saved you the last cookie. It's under the... I'm not telling.",
-   "at": 7.0,
+   "at": 8.55,
    "emotion": {
     "happy": 0.5,
     "surprised": 0.1
@@ -168,7 +168,7 @@
   {
    "who": "leo",
    "text": "Goodnight, Mama. Don't be tired.",
-   "at": 11.6,
+   "at": 13.23,
    "emotion": {
     "calm": 0.5,
     "melancholic": 0.2
