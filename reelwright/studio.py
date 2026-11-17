@@ -120,13 +120,18 @@ class Studio:
         return [self.library.add(path, title, prompt, {"seed": s, "model": "Qwen-Image-Edit-2511", "inputs": len(images)})]
 
     def character_scene(self, job, references: list[str], scene: str, aspect: str = "9:16",
-                        quality: str = "Standard", seed: int | None = None) -> list[Item]:
+                        quality: str = "Standard", seed: int | None = None,
+                        finish: str = "Photorealistic, cinematic lighting.") -> list[Item]:
         refs = [p for p in (references or []) if p]
         if not refs:
             raise SpaceError("invalid", "Add 1 to 3 reference images of the character.")
-        n = "the reference image" if len(refs) == 1 else "the reference images"
-        prompt = (f"Keep the exact same character from {n}: the same face, hair, body and outfit, "
-                  f"fully consistent identity. New scene: {scene.strip()}. Photorealistic, cinematic lighting.")
+        if len(refs) == 1:
+            keep = ("Keep the exact same character from the reference image: the same face, hair, body and "
+                    "outfit, fully consistent identity.")
+        else:
+            keep = (f"Keep the exact same {len(refs)} people from the reference images, one person per image: "
+                    "each keeps their own face, hair, body and outfit, fully consistent identities.")
+        prompt = f"{keep} New scene: {scene.strip()}. {finish}".strip()
         return self.edit_image(job, refs[:3], prompt, aspect=aspect, quality=quality, seed=seed, title="Character scene")
 
     def _lora_edit(self, job, image: str, adapter: str, prompt: str, seed: int | None, title: str) -> list[Item]:

@@ -1,0 +1,215 @@
+{
+ "title": "Stuck",
+ "slug": "stuck",
+ "look": "None",
+ "style": "35mm film photograph, Kodak Vision3 500T, natural available light, candid and unposed, real skin texture with pores and small imperfections, ordinary everyday person, lived-in real location, slightly off-center framing, shallow depth of field, soft film grain, muted natural colors",
+ "aspect": "9:16",
+ "reel": true,
+ "film_look": true,
+ "subtitles": true,
+ "people": {
+  "ines": {
+   "look": "a fictional Portuguese woman in her late twenties with long wavy dark hair, a camel coat and a large tote bag, impatient",
+   "seed": 7901
+  },
+  "ray": {
+   "look": "a fictional older man in his sixties, bald with a white beard, a delivery company polo shirt, holding a small parcel",
+   "seed": 7902
+  }
+ },
+ "cast": {
+  "ines": {
+   "voice": "a woman in her late twenties with a slight Portuguese accent, stressed then warm",
+   "sample": "No, no, no. Not today."
+  },
+  "ray": {
+   "voice": "a Londoner in his sixties, calm, funny, kind",
+   "sample": "Happens twice a week, love."
+  }
+ },
+ "shots": [
+  {
+   "still": "in a small old elevator pressing the button repeatedly, looking at her watch, stressed, harsh overhead light",
+   "motion": "handheld camera with slight natural sway, documentary feel, she jabs the elevator button again and checks her watch",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7911,
+   "with": [
+    "ines"
+   ],
+   "sfx": "elevator jolting to a stop, a clunk, faint hum",
+   "sfx_volume": 0.6
+  },
+  {
+   "still": "leaning calmly against the elevator wall holding a parcel, amused",
+   "motion": "handheld camera with slight natural sway, documentary feel, he leans back calmly, amused",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7912,
+   "with": [
+    "ray"
+   ]
+  },
+  {
+   "still": "the woman and the older delivery man sitting on the floor of the stuck elevator, a parcel between them, talking",
+   "motion": "handheld camera with slight natural sway, documentary feel, they sit on the elevator floor and talk, he gestures with his hands",
+   "moves": [
+    "Static"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7913,
+   "with": [
+    "ines",
+    "ray"
+   ]
+  },
+  {
+   "still": "Close-up of an elevator button panel with one button glowing, a single bulb flickering",
+   "motion": "handheld camera with slight natural sway, documentary feel, the bulb flickers and then steadies",
+   "moves": [
+    "Static"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    2.4
+   ],
+   "seed": 7914,
+   "sfx": "fluorescent light buzz and flicker",
+   "sfx_volume": 0.6
+  },
+  {
+   "still": "sitting on the elevator floor laughing, her head tipped back against the wall",
+   "motion": "handheld camera with slight natural sway, documentary feel, she laughs, head tipped back",
+   "moves": [
+    "Push-in Close-up"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7915,
+   "with": [
+    "ines"
+   ]
+  },
+  {
+   "still": "the elevator doors opening on the two of them getting up from the floor, shaking hands, both smiling",
+   "motion": "handheld camera with slight natural sway, documentary feel, the doors slide open as they stand up and shake hands",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.2,
+    3.4
+   ],
+   "seed": 7916,
+   "with": [
+    "ines",
+    "ray"
+   ],
+   "sfx": "elevator ding, doors sliding open",
+   "sfx_volume": 0.7
+  }
+ ],
+ "lines": [
+  {
+   "who": "ines",
+   "text": "No, no, no. Not today. I have a meeting.",
+   "at": 0.15,
+   "emotion": {
+    "angry": 0.3,
+    "afraid": 0.2
+   },
+   "fx": "room",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "ray",
+   "text": "Happens twice a week, love. Sit down.",
+   "at": 3.0,
+   "emotion": {
+    "calm": 0.6,
+    "happy": 0.2
+   },
+   "fx": "room",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "ray",
+   "text": "So what's the meeting? ...And what would you rather be doing?",
+   "at": 6.2,
+   "emotion": {
+    "calm": 0.5,
+    "happy": 0.2
+   },
+   "fx": "room",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "ines",
+   "text": "...Painting. I used to paint.",
+   "at": 9.6,
+   "emotion": {
+    "melancholic": 0.4,
+    "calm": 0.3
+   },
+   "fx": "room",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "ray",
+   "text": "Then you've got two meetings today.",
+   "at": 13.1,
+   "emotion": {
+    "happy": 0.45,
+    "calm": 0.3
+   },
+   "fx": "room",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "ines",
+   "text": "I'm Ines.",
+   "at": 16.3,
+   "emotion": {
+    "happy": 0.4
+   },
+   "fx": "room",
+   "strength": 0.8,
+   "volume": 1.4
+  }
+ ],
+ "ambience": "inside a small elevator, faint mechanical hum",
+ "music": {
+  "description": "minimal warm guitar arpeggio and soft synth pad, gentle, hopeful",
+  "start": 9.6,
+  "volume": 0.28,
+  "fade_in": 1.5,
+  "seed": 7990
+ },
+ "post_caption": "Twenty minutes stuck with a stranger. 🛗\n\nHas a stranger ever changed your day?\n\n#VoiceNotes #HumanConnection #ShortFilm #Strangers #Kindness\nMade with AI"
+}

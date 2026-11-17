@@ -1,0 +1,203 @@
+{
+ "title": "On the air",
+ "slug": "on-the-air",
+ "look": "None",
+ "style": "35mm film photograph, Kodak Vision3 500T, natural available light, candid and unposed, real skin texture with pores and small imperfections, ordinary everyday person, lived-in real location, slightly off-center framing, shallow depth of field, soft film grain, muted natural colors",
+ "aspect": "9:16",
+ "reel": true,
+ "film_look": true,
+ "subtitles": true,
+ "people": {
+  "jess": {
+   "look": "a fictional young woman of eighteen with long straight brown hair, a black graduation gown and cap, mascara slightly smudged",
+   "seed": 7701
+  },
+  "dad": {
+   "look": "a fictional man in his fifties with a grey goatee, a trucker cap and a flannel shirt, weathered hands",
+   "seed": 7702
+  }
+ },
+ "cast": {
+  "host": {
+   "voice": "a late-night radio host, deep smooth male voice, calm and kind",
+   "sample": "You're on the air with Night Lines."
+  },
+  "dad": {
+   "voice": "an American man in his fifties, rough voice, not used to talking about feelings",
+   "sample": "Yeah, hi. Long time listener."
+  },
+  "jess": {
+   "voice": "an American teenage girl, choked up, laughing through tears",
+   "sample": "Dad? Oh my God."
+  }
+ },
+ "shots": [
+  {
+   "still": "sitting alone in a parked car outside a school hall at night in a graduation gown, the car radio glowing, staring at the dashboard",
+   "motion": "handheld camera with slight natural sway, documentary feel, she stares at the glowing radio, eyes glistening",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7711,
+   "with": [
+    "jess"
+   ],
+   "sfx": "inside a parked car at night, muffled crowd far away",
+   "sfx_volume": 0.4
+  },
+  {
+   "still": "driving a big truck on a dark highway at night, talking on a phone headset, dashboard lights on his face",
+   "motion": "handheld camera with slight natural sway, documentary feel, he drives and talks, glancing at the road",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7712,
+   "with": [
+    "dad"
+   ],
+   "sfx": "truck cab engine rumble, road noise",
+   "sfx_volume": 0.5
+  },
+  {
+   "still": "Close-up of a car radio display glowing orange in a dark car, a hand turning the volume knob up",
+   "motion": "handheld camera with slight natural sway, documentary feel, a hand turns the volume knob up",
+   "moves": [
+    "Static"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    2.4
+   ],
+   "seed": 7713,
+   "sfx": "radio volume knob click",
+   "sfx_volume": 0.6
+  },
+  {
+   "still": "in the parked car laughing and crying at the same time, wiping her mascara",
+   "motion": "handheld camera with slight natural sway, documentary feel, she laughs and cries, wiping her eyes",
+   "moves": [
+    "Push-in Close-up"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7714,
+   "with": [
+    "jess"
+   ]
+  },
+  {
+   "still": "headlights of a big truck pulling into a school parking lot at night, horn lights flashing",
+   "motion": "handheld camera with slight natural sway, documentary feel, a truck pulls into the parking lot, headlights sweeping",
+   "moves": [
+    "Static"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7715,
+   "sfx": "truck air brakes, two long horn blasts",
+   "sfx_volume": 0.85
+  },
+  {
+   "still": "stepping out of the car in her graduation gown, turning toward the headlights, hand over her mouth",
+   "motion": "handheld camera with slight natural sway, documentary feel, she gets out of the car and turns to the headlights, hand over her mouth",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.2,
+    3.4
+   ],
+   "seed": 7716,
+   "with": [
+    "jess"
+   ]
+  }
+ ],
+ "lines": [
+  {
+   "who": "host",
+   "text": "You're on the air with Night Lines. Who's this one for?",
+   "at": 0.15,
+   "emotion": {
+    "calm": 0.7
+   },
+   "fx": "radio",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "dad",
+   "text": "My daughter, Jess. She graduates tonight and I'm... four hundred miles out.",
+   "at": 3.0,
+   "emotion": {
+    "melancholic": 0.4,
+    "calm": 0.3
+   },
+   "fx": "radio",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "dad",
+   "text": "Jess, I'm real proud of you, kid.",
+   "at": 8.4,
+   "emotion": {
+    "sad": 0.3,
+    "happy": 0.3
+   },
+   "fx": "radio",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "dad",
+   "text": "...Also, I lied about the four hundred miles.",
+   "at": 11.6,
+   "emotion": {
+    "happy": 0.55
+   },
+   "fx": "radio",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "jess",
+   "text": "Dad?!",
+   "at": 16.4,
+   "emotion": {
+    "surprised": 0.6,
+    "happy": 0.3
+   },
+   "fx": "room",
+   "strength": 0.8,
+   "volume": 1.4
+  }
+ ],
+ "ambience": "quiet parking lot at night",
+ "music": {
+  "description": "warm americana slide guitar and soft organ, rising to a hopeful swell",
+  "start": 8.0,
+  "volume": 0.3,
+  "fade_in": 1.2,
+  "seed": 7790
+ },
+ "post_caption": "He said he couldn't make it. 🚚\n\nWhat's the best surprise anyone ever gave you?\n\n#VoiceNotes #HumanConnection #ShortFilm #Dad #Graduation\nMade with AI"
+}

@@ -1,0 +1,205 @@
+{
+ "title": "Lost in translation",
+ "slug": "translator",
+ "look": "None",
+ "style": "35mm film photograph, Kodak Vision3 500T, natural available light, candid and unposed, real skin texture with pores and small imperfections, ordinary everyday person, lived-in real location, slightly off-center framing, shallow depth of field, soft film grain, muted natural colors",
+ "aspect": "9:16",
+ "reel": true,
+ "film_look": true,
+ "subtitles": true,
+ "people": {
+  "halmeoni": {
+   "look": "a fictional Korean grandmother in her seventies with short permed grey hair, a lilac cardigan, a jade bracelet, a stern face that hides a smile",
+   "seed": 7601
+  },
+  "claire": {
+   "look": "a fictional young white woman in her late twenties with a red bob haircut, freckles, a cream knit sweater, nervous polite smile",
+   "seed": 7602
+  }
+ },
+ "cast": {
+  "halmeoni": {
+   "voice": "an elderly Korean woman in her seventies, firm, dry, secretly warm",
+   "sample": "어서 와. 앉아.",
+   "language": "Korean"
+  },
+  "app": {
+   "voice": "a neutral, slightly synthetic female voice assistant, clear and flat",
+   "sample": "Translation. She says: please sit down."
+  },
+  "claire": {
+   "voice": "a young American woman, nervous, polite, sweet",
+   "sample": "Oh! Thank you. It's so nice to meet you."
+  }
+ },
+ "shots": [
+  {
+   "still": "sitting at a low table covered with many small Korean side dishes, holding up a smartphone toward someone across the table, unsmiling",
+   "motion": "handheld camera with slight natural sway, documentary feel, she holds the phone out and speaks into it firmly",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7611,
+   "with": [
+    "halmeoni"
+   ],
+   "sfx": "small apartment, kettle, chopsticks on dishes",
+   "sfx_volume": 0.4
+  },
+  {
+   "still": "sitting at a low table full of Korean dishes, holding chopsticks awkwardly, leaning toward a phone held out to her, nervous smile",
+   "motion": "handheld camera with slight natural sway, documentary feel, she leans toward the phone and listens, smiling nervously",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7612,
+   "with": [
+    "claire"
+   ]
+  },
+  {
+   "still": "Close-up of chopsticks placing a large piece of grilled fish onto a full rice bowl, then another",
+   "motion": "handheld camera with slight natural sway, documentary feel, chopsticks keep adding food to the already full rice bowl",
+   "moves": [
+    "Static"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    2.6
+   ],
+   "seed": 7613,
+   "sfx": "chopsticks clicking on a ceramic bowl",
+   "sfx_volume": 0.6
+  },
+  {
+   "still": "laughing out loud with her hand over her mouth at a low table full of food",
+   "motion": "handheld camera with slight natural sway, documentary feel, she bursts out laughing, covering her mouth",
+   "moves": [
+    "Push-in Close-up"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7614,
+   "with": [
+    "claire"
+   ]
+  },
+  {
+   "still": "putting the phone face down on the table, looking straight ahead with a tiny smile",
+   "motion": "handheld camera with slight natural sway, documentary feel, she puts the phone down and looks up with a small smile",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7615,
+   "with": [
+    "halmeoni"
+   ]
+  },
+  {
+   "still": "the grandmother and the young woman sitting side by side at the low table, the grandmother patting the back of the young woman's hand once, both smiling",
+   "motion": "handheld camera with slight natural sway, documentary feel, the grandmother pats her hand once, both smile",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.2,
+    3.4
+   ],
+   "seed": 7616,
+   "with": [
+    "halmeoni",
+    "claire"
+   ]
+  }
+ ],
+ "lines": [
+  {
+   "who": "halmeoni",
+   "text": "너무 말랐어. 많이 먹어.",
+   "at": 0.15,
+   "emotion": {
+    "calm": 0.5,
+    "angry": 0.15
+   },
+   "fx": "room",
+   "strength": 0.8,
+   "volume": 1.4,
+   "subtitle_text": "(Korean) You're too skinny. Eat."
+  },
+  {
+   "who": "app",
+   "text": "Translation. She says: you are too skinny. Eat more.",
+   "at": 2.4,
+   "emotion": {
+    "calm": 0.8
+   },
+   "fx": "phone",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "claire",
+   "text": "Oh! Okay. Tell her it's delicious.",
+   "at": 6.4,
+   "emotion": {
+    "happy": 0.4,
+    "afraid": 0.2
+   },
+   "fx": "room",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "app",
+   "text": "Translation. She says: you are now my granddaughter. Also, eat more.",
+   "at": 9.4,
+   "emotion": {
+    "calm": 0.8
+   },
+   "fx": "phone",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "halmeoni",
+   "text": "Welcome. ...Family.",
+   "at": 15.4,
+   "emotion": {
+    "happy": 0.35,
+    "calm": 0.4
+   },
+   "fx": "room",
+   "strength": 0.8,
+   "volume": 1.4
+  }
+ ],
+ "ambience": "quiet apartment dinner, faint kitchen sounds",
+ "music": {
+  "description": "gentle plucked gayageum and soft piano, warm and a little playful",
+  "start": 6.0,
+  "volume": 0.28,
+  "fade_in": 1.5,
+  "seed": 7690
+ },
+ "post_caption": "Grandma doesn't need the app. 🍚\n\nWhat did your grandparents say when they met your partner?\n\n#VoiceNotes #HumanConnection #ShortFilm #Grandma #Family #Korean\nMade with AI"
+}

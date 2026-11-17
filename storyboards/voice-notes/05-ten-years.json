@@ -1,0 +1,205 @@
+{
+ "title": "Ten years",
+ "slug": "ten-years",
+ "look": "None",
+ "style": "35mm film photograph, Kodak Vision3 500T, natural available light, candid and unposed, real skin texture with pores and small imperfections, ordinary everyday person, lived-in real location, slightly off-center framing, shallow depth of field, soft film grain, muted natural colors",
+ "aspect": "9:16",
+ "reel": true,
+ "film_look": true,
+ "subtitles": true,
+ "people": {
+  "jonah": {
+   "look": "a fictional man in his mid thirties with a short dark beard and tired eyes, a faded green work jacket",
+   "seed": 7501
+  },
+  "sam": {
+   "look": "a fictional man in his mid thirties with sandy hair going thin, freckles, a navy wool coat and scarf",
+   "seed": 7502
+  }
+ },
+ "cast": {
+  "sam": {
+   "voice": "an American man in his thirties, hesitant, nervous laugh, sincere",
+   "sample": "Hey. It's Sam. Yeah. I know."
+  },
+  "jonah": {
+   "voice": "an American man in his thirties, low dry voice, quietly moved",
+   "sample": "Sam. Wow. Hi."
+  }
+ },
+ "shots": [
+  {
+   "still": "standing on a small apartment balcony at dusk with a phone to his ear, frozen, a half-eaten sandwich in his other hand",
+   "motion": "handheld camera with slight natural sway, documentary feel, he freezes, listening, the sandwich forgotten",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7511,
+   "with": [
+    "jonah"
+   ],
+   "sfx": "city at dusk from a balcony, distant traffic, a dog barking far away",
+   "sfx_volume": 0.45
+  },
+  {
+   "still": "sitting in a parked car in the rain recording a voice note, rubbing his forehead, rain on the windshield",
+   "motion": "handheld camera with slight natural sway, documentary feel, he rubs his forehead and keeps talking into the phone, rain streaks down",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7512,
+   "with": [
+    "sam"
+   ],
+   "sfx": "rain on a car roof, wipers off",
+   "sfx_volume": 0.55
+  },
+  {
+   "still": "Close-up of an old instant photo of two teenage boys laughing in a diner booth, held between fingers, slightly faded",
+   "motion": "handheld camera with slight natural sway, documentary feel, fingers tilt the old photo toward the light",
+   "moves": [
+    "Static"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    2.6
+   ],
+   "seed": 7513
+  },
+  {
+   "still": "on the balcony, lowering the phone, staring at the city, deciding, jaw tight",
+   "motion": "handheld camera with slight natural sway, documentary feel, he lowers the phone and stares at the city, deciding",
+   "moves": [
+    "Dolly In"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7514,
+   "with": [
+    "jonah"
+   ]
+  },
+  {
+   "still": "walking fast down a wet street at night under neon diner signs, hands in his jacket pockets",
+   "motion": "handheld camera with slight natural sway, documentary feel, he walks quickly down the wet street toward the diner",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7515,
+   "with": [
+    "jonah"
+   ],
+   "sfx": "footsteps on wet pavement, passing car",
+   "sfx_volume": 0.5
+  },
+  {
+   "still": "both men sitting across from each other in a worn diner booth with two coffees, both laughing, a little emotional",
+   "motion": "handheld camera with slight natural sway, documentary feel, they laugh across the table, one shakes his head",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.2,
+    3.4
+   ],
+   "seed": 7516,
+   "with": [
+    "jonah",
+    "sam"
+   ],
+   "sfx": "diner ambience, cutlery, coffee machine",
+   "sfx_volume": 0.45
+  }
+ ],
+ "lines": [
+  {
+   "who": "sam",
+   "text": "Hey. It's Sam. ...Yeah. I know. Ten years.",
+   "at": 0.15,
+   "emotion": {
+    "afraid": 0.2,
+    "melancholic": 0.3,
+    "calm": 0.2
+   },
+   "fx": "voicenote",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "sam",
+   "text": "I'm in town till Sunday. That diner on Fifth is still there.",
+   "at": 4.6,
+   "emotion": {
+    "calm": 0.4,
+    "melancholic": 0.2
+   },
+   "fx": "voicenote",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "sam",
+   "text": "No pressure. I just... I missed my friend.",
+   "at": 8.4,
+   "emotion": {
+    "sad": 0.35,
+    "calm": 0.3
+   },
+   "fx": "voicenote",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "jonah",
+   "text": "You're late.",
+   "at": 15.3,
+   "emotion": {
+    "happy": 0.4,
+    "calm": 0.3
+   },
+   "fx": "room",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "sam",
+   "text": "Ten years late.",
+   "at": 16.6,
+   "emotion": {
+    "happy": 0.55
+   },
+   "fx": "room",
+   "strength": 0.8,
+   "volume": 1.4
+  }
+ ],
+ "ambience": "city evening, distant traffic",
+ "music": {
+  "description": "slow melancholic Rhodes piano and soft upright bass, late night, warm",
+  "start": 7.8,
+  "volume": 0.3,
+  "fade_in": 1.5,
+  "seed": 7590
+ },
+ "post_caption": "Ten years of silence. One voice note. 🕰️\n\nWho's the friend you still think about?\n\n#VoiceNotes #HumanConnection #ShortFilm #Friendship #OldFriends\nMade with AI"
+}

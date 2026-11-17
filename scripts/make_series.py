@@ -42,7 +42,7 @@ def main():
     ap.add_argument("--scale", type=float, default=1.0, help="Wan size: 1.0 = 480p class, 1.5 = 720p class")
     ap.add_argument("--upscale", type=int, default=1, help="2 = Real-ESRGAN x2 on Colab after each clip")
     ap.add_argument("--colab-spaces", default="edit", help='Spaces to run on Colab ("" = Hugging Face)')
-    ap.add_argument("--only", default="", help="stills | clips | edit (default: everything)")
+    ap.add_argument("--only", default="", help="prep (Hugging Face parts only) | stills | clips | edit")
     ap.add_argument("--grace", type=float, default=0, help="minutes to keep runtimes up after the work")
     ap.add_argument("--keep-colab", action="store_true")
     a = ap.parse_args()
@@ -106,13 +106,19 @@ def main():
             guarded(f"{f.slug} sound", f.sound_track)
 
     try:
+        if a.only == "prep":  # everything that runs on Hugging Face only (no Colab)
+            snd = threading.Thread(target=sounds)
+            snd.start()
+            for f in films:
+                guarded(f"{f.slug} stills (plain)", lambda f=f: f.stills("plain"))
+            snd.join()
         if a.only in ("", "stills"):
             snd = threading.Thread(target=sounds)
             snd.start()
             for f in films:
                 guarded(f"{f.slug} stills (plain)", lambda f=f: f.stills("plain"))
             jobs = [(f, i) for f in films for i, s in enumerate(f.shots)
-                    if s.get("character") and f"shot{i + 1}_still" not in f.state and "character_ref" in f.state]
+                    if (s.get("character") or s.get("with")) and f"shot{i + 1}_still" not in f.state]
             if jobs:
                 pool(jobs, "still")
             snd.join()
@@ -122,7 +128,7 @@ def main():
             if jobs:
                 pool(jobs, "clip")
     finally:
-        if not a.keep_colab:
+        if not a.keep_colab and a.only != "prep":
             if a.grace > 0:
                 say(f"keeping runtimes up for {a.grace:.0f} min for quick fixes")
                 time.sleep(60 * a.grace)

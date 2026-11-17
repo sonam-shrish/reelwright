@@ -1,0 +1,205 @@
+{
+ "title": "Is it recording?",
+ "slug": "is-it-recording",
+ "look": "None",
+ "style": "35mm film photograph, Kodak Vision3 500T, natural available light, candid and unposed, real skin texture with pores and small imperfections, ordinary everyday person, lived-in real location, slightly off-center framing, shallow depth of field, soft film grain, muted natural colors",
+ "aspect": "9:16",
+ "reel": true,
+ "film_look": true,
+ "subtitles": true,
+ "people": {
+  "maya": {
+   "look": "a fictional woman in her mid twenties with dark curly hair tied up loosely, tired eyes, olive skin, a worn navy scrub top under an open grey parka",
+   "seed": 7101
+  },
+  "grandpa": {
+   "look": "a fictional man in his late seventies with thin white hair, big reading glasses, a brown cardigan over a checked shirt, kind lined face",
+   "seed": 7102
+  }
+ },
+ "cast": {
+  "grandpa": {
+   "voice": "an elderly American man in his late seventies, warm gravelly voice, a little unsure of technology, slow and gentle",
+   "sample": "Okay. Is this thing on? I think it's on."
+  },
+  "maya": {
+   "voice": "a young American woman in her twenties, soft warm voice, tired after a night shift",
+   "sample": "Hey. I'm on the bus. I just got off work."
+  }
+ },
+ "shots": [
+  {
+   "still": "sitting by the window of an almost empty night bus, holding her phone to her ear, eyes closed, city lights smearing across the glass",
+   "motion": "handheld camera with slight natural sway, documentary feel, she listens with her eyes closed, the bus sways, lights slide across her face",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7111,
+   "with": [
+    "maya"
+   ],
+   "sfx": "city bus interior at night, engine hum, soft rattle",
+   "sfx_volume": 0.5
+  },
+  {
+   "still": "at a small kitchen table at night holding a smartphone far from his face, squinting at it through his glasses, one finger hovering, a wall clock and a teapot behind him",
+   "motion": "handheld camera with slight natural sway, documentary feel, he squints at the phone, holds it further away, leans in to speak",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7112,
+   "with": [
+    "grandpa"
+   ],
+   "sfx": "quiet kitchen at night, wall clock ticking, fridge hum",
+   "sfx_volume": 0.5
+  },
+  {
+   "still": "on the night bus, a small smile starting, she presses her lips together, eyes wet, looking out of the window",
+   "motion": "handheld camera with slight natural sway, documentary feel, she smiles and looks out of the window, blinking slowly",
+   "moves": [
+    "Push-in Close-up"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7113,
+   "with": [
+    "maya"
+   ]
+  },
+  {
+   "still": "Close-up of an old man's hand with a wedding ring tapping carefully at a smartphone lying on a kitchen tablecloth, warm lamp light",
+   "motion": "handheld camera with slight natural sway, documentary feel, an old finger taps the phone screen twice, unsure",
+   "moves": [
+    "Static"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.4,
+    2.6
+   ],
+   "seed": 7114,
+   "sfx": "soft tap on a phone screen, a small beep",
+   "sfx_volume": 0.7
+  },
+  {
+   "still": "at the kitchen table looking at the phone with suspicion over his glasses, a little proud of himself",
+   "motion": "handheld camera with slight natural sway, documentary feel, he looks at the phone suspiciously, then chuckles to himself",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7115,
+   "with": [
+    "grandpa"
+   ]
+  },
+  {
+   "still": "on the night bus holding the phone close to her mouth, laughing quietly while recording a reply, dawn light starting outside",
+   "motion": "handheld camera with slight natural sway, documentary feel, she laughs softly and talks into the phone, the bus slows down",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.2,
+    3.4
+   ],
+   "seed": 7116,
+   "with": [
+    "maya"
+   ],
+   "sfx": "bus brakes hissing softly, doors opening",
+   "sfx_volume": 0.45
+  }
+ ],
+ "lines": [
+  {
+   "who": "grandpa",
+   "text": "Is it recording? ...Okay. I think it's recording.",
+   "at": 0.15,
+   "emotion": {
+    "surprised": 0.3,
+    "calm": 0.4
+   },
+   "fx": "voicenote",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "grandpa",
+   "text": "Your grandmother says I should use these voice things. So. Hello, Maya.",
+   "at": 3.6,
+   "emotion": {
+    "happy": 0.35,
+    "calm": 0.4
+   },
+   "fx": "voicenote",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "grandpa",
+   "text": "I heard about the exam. I'm proud of you, kiddo. That's all.",
+   "at": 8.9,
+   "emotion": {
+    "happy": 0.3,
+    "melancholic": 0.35,
+    "calm": 0.25
+   },
+   "fx": "voicenote",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "grandpa",
+   "text": "Now how do I stop this-",
+   "at": 13.0,
+   "emotion": {
+    "surprised": 0.55,
+    "happy": 0.2
+   },
+   "fx": "voicenote",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "maya",
+   "text": "Grandpa. It's still recording.",
+   "at": 15.6,
+   "emotion": {
+    "happy": 0.55,
+    "calm": 0.2
+   },
+   "fx": "room",
+   "strength": 0.8,
+   "volume": 1.4
+  }
+ ],
+ "ambience": "quiet city night bus interior, low engine rumble",
+ "music": {
+  "description": "sparse felt piano, two warm notes, intimate and tender, slow, with soft room tone",
+  "start": 8.5,
+  "volume": 0.32,
+  "fade_in": 1.5,
+  "seed": 7190
+ },
+ "post_caption": "He finally learned voice notes. 🎙️\n\nWho's the person whose voice you'd keep forever?\n\n#VoiceNotes #HumanConnection #ShortFilm #Grandpa #Family\nMade with AI"
+}

@@ -1,0 +1,208 @@
+{
+ "title": "Fridge notes",
+ "slug": "fridge-notes",
+ "look": "None",
+ "style": "35mm film photograph, Kodak Vision3 500T, natural available light, candid and unposed, real skin texture with pores and small imperfections, ordinary everyday person, lived-in real location, slightly off-center framing, shallow depth of field, soft film grain, muted natural colors",
+ "aspect": "9:16",
+ "reel": true,
+ "film_look": true,
+ "subtitles": true,
+ "people": {
+  "nadia": {
+   "look": "a fictional woman in her mid thirties with a short black bob and round glasses, an oversized grey t-shirt, arms crossed",
+   "seed": 7801
+  },
+  "tom": {
+   "look": "a fictional man in his mid thirties with messy light brown hair, stubble, a faded band t-shirt, sheepish",
+   "seed": 7802
+  }
+ },
+ "cast": {
+  "nadia": {
+   "voice": "a woman in her thirties, dry, quietly hurt, inner voice, close and soft",
+   "sample": "Fine. I'm not talking to him."
+  },
+  "tom": {
+   "voice": "a man in his thirties, awkward, soft, inner voice, close",
+   "sample": "Okay. She's still mad."
+  }
+ },
+ "shots": [
+  {
+   "still": "in a small morning kitchen sticking a yellow sticky note on the fridge door, arms then crossed, jaw set",
+   "motion": "handheld camera with slight natural sway, documentary feel, she sticks a note on the fridge and crosses her arms",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7811,
+   "with": [
+    "nadia"
+   ],
+   "sfx": "morning kitchen, kettle starting to boil",
+   "sfx_volume": 0.45
+  },
+  {
+   "still": "in pajamas in the same small kitchen reading a yellow sticky note on the fridge, rubbing the back of his neck",
+   "motion": "handheld camera with slight natural sway, documentary feel, he reads the note and rubs his neck awkwardly",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7812,
+   "with": [
+    "tom"
+   ]
+  },
+  {
+   "still": "Close-up of a hand pressing a yellow sticky note onto a fridge door next to two other notes, morning light",
+   "motion": "handheld camera with slight natural sway, documentary feel, a hand presses a new sticky note onto the fridge",
+   "moves": [
+    "Static"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    2.4
+   ],
+   "seed": 7813,
+   "sfx": "paper sticky note pressed on a fridge door",
+   "sfx_volume": 0.7
+  },
+  {
+   "still": "reading a new sticky note on the fridge, trying not to smile, failing",
+   "motion": "handheld camera with slight natural sway, documentary feel, she reads the note and tries not to smile, then smiles",
+   "moves": [
+    "Push-in Close-up"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7814,
+   "with": [
+    "nadia"
+   ]
+  },
+  {
+   "still": "both reaching for the same last sticky note on the fridge at the same time, hands touching, looking at each other",
+   "motion": "handheld camera with slight natural sway, documentary feel, both reach for the note at once and look at each other",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7815,
+   "with": [
+    "nadia",
+    "tom"
+   ]
+  },
+  {
+   "still": "the couple standing in the small kitchen laughing, sharing one mug of coffee, morning sun",
+   "motion": "handheld camera with slight natural sway, documentary feel, they laugh and pass the coffee mug between them",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.2,
+    3.4
+   ],
+   "seed": 7816,
+   "with": [
+    "nadia",
+    "tom"
+   ],
+   "sfx": "soft laughter, mug on counter, birds outside",
+   "sfx_volume": 0.4
+  }
+ ],
+ "lines": [
+  {
+   "who": "nadia",
+   "text": "Coffee's made. ...That's all he gets.",
+   "at": 0.15,
+   "emotion": {
+    "angry": 0.25,
+    "calm": 0.4
+   },
+   "fx": "",
+   "strength": 0.8,
+   "volume": 1.4,
+   "subtitle_text": "(note) Coffee's made."
+  },
+  {
+   "who": "tom",
+   "text": "Thanks. ...Wow. Okay. Still mad.",
+   "at": 3.1,
+   "emotion": {
+    "sad": 0.25,
+    "calm": 0.4
+   },
+   "fx": "",
+   "strength": 0.8,
+   "volume": 1.4,
+   "subtitle_text": "(note) Thanks."
+  },
+  {
+   "who": "nadia",
+   "text": "I hate that you're right about the thing.",
+   "at": 6.2,
+   "emotion": {
+    "angry": 0.2,
+    "sad": 0.25
+   },
+   "fx": "",
+   "strength": 0.8,
+   "volume": 1.4,
+   "subtitle_text": "(note) You were right about the thing."
+  },
+  {
+   "who": "tom",
+   "text": "I'm sorry I said it like that.",
+   "at": 9.4,
+   "emotion": {
+    "sad": 0.35,
+    "calm": 0.3
+   },
+   "fx": "",
+   "strength": 0.8,
+   "volume": 1.4,
+   "subtitle_text": "(note) Sorry I said it like that."
+  },
+  {
+   "who": "nadia",
+   "text": "...Idiot.",
+   "at": 13.6,
+   "emotion": {
+    "happy": 0.5
+   },
+   "fx": "whisper",
+   "strength": 0.8,
+   "volume": 1.4,
+   "subtitle_text": "(note) Idiot. ♥"
+  }
+ ],
+ "ambience": "small apartment kitchen in the morning",
+ "music": {
+  "description": "light pizzicato strings and soft piano, quirky and warm, romantic comedy feel",
+  "start": 9.2,
+  "volume": 0.3,
+  "fade_in": 1.0,
+  "seed": 7890
+ },
+ "post_caption": "Too proud to talk. Not too proud to write. 📝\n\nHow do you two make up after a fight?\n\n#VoiceNotes #HumanConnection #ShortFilm #Couples #Relationships\nMade with AI"
+}

@@ -1,0 +1,201 @@
+{
+ "title": "The last cookie",
+ "slug": "last-cookie",
+ "look": "None",
+ "style": "35mm film photograph, Kodak Vision3 500T, natural available light, candid and unposed, real skin texture with pores and small imperfections, ordinary everyday person, lived-in real location, slightly off-center framing, shallow depth of field, soft film grain, muted natural colors",
+ "aspect": "9:16",
+ "reel": true,
+ "film_look": true,
+ "subtitles": true,
+ "people": {
+  "ana": {
+   "look": "a fictional Latina woman in her thirties, hair in a low ponytail, light blue hospital scrubs, a lanyard, exhausted kind eyes",
+   "seed": 7401
+  },
+  "leo": {
+   "look": "a fictional six year old boy with messy brown hair and dinosaur pajamas, gap tooth",
+   "seed": 7402
+  }
+ },
+ "cast": {
+  "leo": {
+   "voice": "a six year old boy, small sleepy voice, whispering seriously, slight lisp",
+   "sample": "Mama. It's me. I'm whispering because it's late."
+  },
+  "ana": {
+   "voice": "a Latina woman in her thirties, soft tired voice, gentle",
+   "sample": "Hi, my love. Mama's at work."
+  }
+ },
+ "shots": [
+  {
+   "still": "sitting on a hospital stairwell step on her break, holding a paper cup of coffee and her phone, fluorescent light, eyes closed",
+   "motion": "handheld camera with slight natural sway, documentary feel, she leans her head against the wall and plays a voice note",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7411,
+   "with": [
+    "ana"
+   ],
+   "sfx": "hospital stairwell echo, distant pager beeps, ventilation hum",
+   "sfx_volume": 0.45
+  },
+  {
+   "still": "sitting in bed under a blanket fort holding a phone with both hands very close to his mouth, whispering, a night light glowing",
+   "motion": "handheld camera with slight natural sway, documentary feel, he whispers seriously into the phone, glancing at the door",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7412,
+   "with": [
+    "leo"
+   ]
+  },
+  {
+   "still": "on the stairwell, laughing silently with tears in her tired eyes, covering her mouth",
+   "motion": "handheld camera with slight natural sway, documentary feel, she laughs silently, covering her mouth, eyes wet",
+   "moves": [
+    "Push-in Close-up"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7413,
+   "with": [
+    "ana"
+   ]
+  },
+  {
+   "still": "Close-up of a single chocolate chip cookie wrapped in a paper napkin hidden under a pillow, dim morning light",
+   "motion": "handheld camera with slight natural sway, documentary feel, dawn light slowly crosses the napkin-wrapped cookie",
+   "moves": [
+    "Static"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    2.6
+   ],
+   "seed": 7414
+  },
+  {
+   "still": "pushing through hospital double doors back onto a busy ward, straightening her lanyard, a small smile",
+   "motion": "handheld camera with slight natural sway, documentary feel, she pushes through the doors and walks back onto the ward",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7415,
+   "with": [
+    "ana"
+   ],
+   "sfx": "hospital doors swinging, ward chatter, monitors beeping",
+   "sfx_volume": 0.4
+  },
+  {
+   "still": "at dawn in a small apartment bedroom, lifting a pillow and finding a napkin-wrapped cookie, laughing softly, still in scrubs",
+   "motion": "handheld camera with slight natural sway, documentary feel, she lifts the pillow, finds the cookie and laughs softly",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.2,
+    3.4
+   ],
+   "seed": 7416,
+   "with": [
+    "ana"
+   ],
+   "sfx": "birds at dawn, quiet apartment",
+   "sfx_volume": 0.45
+  }
+ ],
+ "lines": [
+  {
+   "who": "leo",
+   "text": "Mama. It's me. I'm whispering 'cause it's late.",
+   "at": 0.15,
+   "emotion": {
+    "calm": 0.5,
+    "afraid": 0.1
+   },
+   "fx": "voicenote",
+   "strength": 0.7,
+   "volume": 1.4
+  },
+  {
+   "who": "leo",
+   "text": "I brushed my teeth. Both sides.",
+   "at": 3.6,
+   "emotion": {
+    "happy": 0.4,
+    "calm": 0.3
+   },
+   "fx": "voicenote",
+   "strength": 0.7,
+   "volume": 1.4
+  },
+  {
+   "who": "leo",
+   "text": "And I saved you the last cookie. It's under the... I'm not telling.",
+   "at": 7.0,
+   "emotion": {
+    "happy": 0.5,
+    "surprised": 0.1
+   },
+   "fx": "voicenote",
+   "strength": 0.7,
+   "volume": 1.4
+  },
+  {
+   "who": "leo",
+   "text": "Goodnight, Mama. Don't be tired.",
+   "at": 11.6,
+   "emotion": {
+    "calm": 0.5,
+    "melancholic": 0.2
+   },
+   "fx": "voicenote",
+   "strength": 0.7,
+   "volume": 1.4
+  },
+  {
+   "who": "ana",
+   "text": "Found it.",
+   "at": 17.2,
+   "emotion": {
+    "happy": 0.6
+   },
+   "fx": "room",
+   "strength": 0.8,
+   "volume": 1.4
+  }
+ ],
+ "ambience": "hospital stairwell at night, faint hum",
+ "music": {
+  "description": "soft music box melody over gentle warm strings, lullaby-like, tender",
+  "start": 3.4,
+  "volume": 0.28,
+  "fade_in": 2.0,
+  "seed": 7490
+ },
+ "post_caption": "Night shift. One voice note. 🍪\n\nTag a nurse who needs this today.\n\n#VoiceNotes #HumanConnection #ShortFilm #Nurses #Parenting\nMade with AI"
+}

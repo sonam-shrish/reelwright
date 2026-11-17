@@ -1,0 +1,200 @@
+{
+ "title": "Note to future me",
+ "slug": "future-me",
+ "look": "None",
+ "style": "35mm film photograph, Kodak Vision3 500T, natural available light, candid and unposed, real skin texture with pores and small imperfections, ordinary everyday person, lived-in real location, slightly off-center framing, shallow depth of field, soft film grain, muted natural colors",
+ "aspect": "9:16",
+ "reel": true,
+ "film_look": true,
+ "subtitles": true,
+ "people": {
+  "teen": {
+   "look": "a fictional sixteen year old girl with frizzy auburn hair, braces, a hoodie covered in pins, sitting on a bedroom floor",
+   "seed": 8001
+  },
+  "adult": {
+   "look": "a fictional woman of thirty with auburn hair in a neat low bun, a crisp white shirt, the same face as the teenager grown up, confident",
+   "seed": 8002
+  }
+ },
+ "cast": {
+  "teen": {
+   "voice": "a sixteen year old girl, nervous, fast, a bit dramatic, self-conscious laugh",
+   "sample": "Okay. Hi. This is weird. Hi, future me."
+  },
+  "adult": {
+   "voice": "a woman of thirty, calm, warm, a little moved",
+   "sample": "Hi. I got your message."
+  }
+ },
+ "shots": [
+  {
+   "still": "sitting on a messy bedroom floor at night holding a phone up to record herself, embarrassed, posters and fairy lights behind her",
+   "motion": "handheld camera with slight natural sway, documentary feel, she records herself, laughs nervously and hides her face",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 8011,
+   "with": [
+    "teen"
+   ],
+   "sfx": "teen bedroom at night, quiet music through a wall",
+   "sfx_volume": 0.35
+  },
+  {
+   "still": "in a bright office stairwell at lunchtime holding a phone to her ear, listening, completely still",
+   "motion": "handheld camera with slight natural sway, documentary feel, she stands still, listening, the corner of her mouth moving",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 8012,
+   "with": [
+    "adult"
+   ],
+   "sfx": "office stairwell, distant lift ding, footsteps above",
+   "sfx_volume": 0.4
+  },
+  {
+   "still": "Close-up of a teenager's hands picking at a chipped pin badge on a hoodie sleeve",
+   "motion": "handheld camera with slight natural sway, documentary feel, nervous fingers pick at the pin badge",
+   "moves": [
+    "Static"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    2.4
+   ],
+   "seed": 8013
+  },
+  {
+   "still": "on the bedroom floor, suddenly serious, looking straight into her phone camera, eyes a little wet",
+   "motion": "handheld camera with slight natural sway, documentary feel, she stops laughing and looks into the camera seriously",
+   "moves": [
+    "Push-in Close-up"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 8014,
+   "with": [
+    "teen"
+   ]
+  },
+  {
+   "still": "in the office stairwell laughing softly while wiping one eye with her knuckle",
+   "motion": "handheld camera with slight natural sway, documentary feel, she laughs softly and wipes one eye",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 8015,
+   "with": [
+    "adult"
+   ]
+  },
+  {
+   "still": "in the office stairwell holding the phone close and recording a reply, smiling",
+   "motion": "handheld camera with slight natural sway, documentary feel, she smiles and records a reply into the phone",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.2,
+    3.4
+   ],
+   "seed": 8016,
+   "with": [
+    "adult"
+   ]
+  }
+ ],
+ "lines": [
+  {
+   "who": "teen",
+   "text": "Okay. Hi. This is so weird. Hi, future me.",
+   "at": 0.15,
+   "emotion": {
+    "happy": 0.3,
+    "afraid": 0.25
+   },
+   "fx": "voicenote",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "teen",
+   "text": "Are we still scared of everything? Did we ever do the thing?",
+   "at": 3.4,
+   "emotion": {
+    "afraid": 0.3,
+    "calm": 0.3
+   },
+   "fx": "voicenote",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "teen",
+   "text": "Please tell me we're okay.",
+   "at": 8.0,
+   "emotion": {
+    "sad": 0.35,
+    "afraid": 0.2
+   },
+   "fx": "voicenote",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "adult",
+   "text": "Hi. We're scared of everything.",
+   "at": 12.4,
+   "emotion": {
+    "happy": 0.35,
+    "calm": 0.35
+   },
+   "fx": "voicenote",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "adult",
+   "text": "We did it anyway.",
+   "at": 15.4,
+   "emotion": {
+    "happy": 0.4,
+    "calm": 0.4
+   },
+   "fx": "voicenote",
+   "strength": 0.8,
+   "volume": 1.4
+  }
+ ],
+ "ambience": "quiet room tone",
+ "music": {
+  "description": "delicate glockenspiel and warm piano, nostalgic, gently uplifting",
+  "start": 7.4,
+  "volume": 0.3,
+  "fade_in": 1.5,
+  "seed": 8090
+ },
+ "post_caption": "A voice note from 16 to 30. ⏳\n\nWhat would you tell your 16-year-old self?\n\n#VoiceNotes #HumanConnection #ShortFilm #FutureMe #GrowingUp\nMade with AI"
+}

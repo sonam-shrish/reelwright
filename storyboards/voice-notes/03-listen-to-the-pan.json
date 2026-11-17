@@ -1,0 +1,204 @@
+{
+ "title": "Listen to the pan",
+ "slug": "listen-to-the-pan",
+ "look": "None",
+ "style": "35mm film photograph, Kodak Vision3 500T, natural available light, candid and unposed, real skin texture with pores and small imperfections, ordinary everyday person, lived-in real location, slightly off-center framing, shallow depth of field, soft film grain, muted natural colors",
+ "aspect": "9:16",
+ "reel": true,
+ "film_look": true,
+ "subtitles": true,
+ "people": {
+  "priya": {
+   "look": "a fictional Indian woman in her late twenties with long black hair in a messy bun, an oversized university sweatshirt, a tiny apartment kitchen",
+   "seed": 7301
+  },
+  "amma": {
+   "look": "a fictional Indian woman in her late fifties, silver streak in her black hair, a cotton salwar kameez, bangles, reading glasses pushed up on her head",
+   "seed": 7302
+  }
+ },
+ "cast": {
+  "amma": {
+   "voice": "an Indian mother in her late fifties, Indian English accent, quick, funny, bossy and loving",
+   "sample": "Priya, are you listening? Don't measure anything. Listen."
+  },
+  "priya": {
+   "voice": "a young British Indian woman in her late twenties, dry sense of humor, warm",
+   "sample": "Amma, I followed the recipe exactly."
+  }
+ },
+ "shots": [
+  {
+   "still": "in a tiny apartment kitchen waving smoke away from a frying pan with a tea towel, coughing, phone propped against a jar",
+   "motion": "handheld camera with slight natural sway, documentary feel, she waves smoke away from the pan and coughs, annoyed",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7311,
+   "with": [
+    "priya"
+   ],
+   "sfx": "hot oil sizzling, smoke alarm chirp once",
+   "sfx_volume": 0.55
+  },
+  {
+   "still": "in her own kitchen at home recording a voice note, gesturing at the camera with a wooden spoon like a teacher",
+   "motion": "handheld camera with slight natural sway, documentary feel, she lectures into the phone, pointing with a wooden spoon",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7312,
+   "with": [
+    "amma"
+   ]
+  },
+  {
+   "still": "Close-up of cumin seeds crackling and dancing in hot oil in a steel pan, warm light",
+   "motion": "handheld camera with slight natural sway, documentary feel, cumin seeds crackle and jump in the hot oil",
+   "moves": [
+    "Static"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    2.6
+   ],
+   "seed": 7313,
+   "sfx": "cumin seeds crackling and popping in hot oil",
+   "sfx_volume": 0.8
+  },
+  {
+   "still": "leaning over the pan, listening to it with her head tilted, a small surprised smile",
+   "motion": "handheld camera with slight natural sway, documentary feel, she tilts her head, listening to the pan, then smiles",
+   "moves": [
+    "Push-in Close-up"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7314,
+   "with": [
+    "priya"
+   ]
+  },
+  {
+   "still": "in her kitchen laughing at her own joke, then pointing at the phone seriously",
+   "motion": "handheld camera with slight natural sway, documentary feel, she laughs, then points at the phone sternly",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.3,
+    3.3
+   ],
+   "seed": 7315,
+   "with": [
+    "amma"
+   ]
+  },
+  {
+   "still": "sitting on the kitchen counter eating dal from the pan with a spoon, eyes closed, then picking up the phone to call someone",
+   "motion": "handheld camera with slight natural sway, documentary feel, she tastes, closes her eyes, then lifts the phone to call",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.5,
+   "trim": [
+    0.2,
+    3.4
+   ],
+   "seed": 7316,
+   "with": [
+    "priya"
+   ],
+   "sfx": "spoon on steel pan, soft dial tone",
+   "sfx_volume": 0.5
+  }
+ ],
+ "lines": [
+  {
+   "who": "priya",
+   "text": "Amma, I followed your recipe exactly.",
+   "at": 0.15,
+   "emotion": {
+    "angry": 0.2,
+    "sad": 0.2,
+    "calm": 0.3
+   },
+   "fx": "room",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "amma",
+   "text": "Recipe? What recipe? You don't measure. You listen to the pan.",
+   "at": 2.6,
+   "emotion": {
+    "happy": 0.35,
+    "surprised": 0.2,
+    "calm": 0.2
+   },
+   "fx": "voicenote",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "amma",
+   "text": "When the cumin talks back, it's ready.",
+   "at": 6.2,
+   "emotion": {
+    "happy": 0.3,
+    "calm": 0.4
+   },
+   "fx": "voicenote",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "amma",
+   "text": "And call your father. He thinks you're angry with him. Silly man.",
+   "at": 11.4,
+   "emotion": {
+    "happy": 0.4,
+    "melancholic": 0.2
+   },
+   "fx": "voicenote",
+   "strength": 0.8,
+   "volume": 1.4
+  },
+  {
+   "who": "priya",
+   "text": "Hi, Appa. ...No, I'm not angry.",
+   "at": 15.9,
+   "emotion": {
+    "happy": 0.4,
+    "calm": 0.4
+   },
+   "fx": "room",
+   "strength": 0.8,
+   "volume": 1.4
+  }
+ ],
+ "ambience": "small apartment kitchen, extractor fan hum, city outside the window",
+ "music": {
+  "description": "playful warm acoustic guitar with light tabla, cozy and homely",
+  "start": 6.0,
+  "volume": 0.3,
+  "fade_in": 1.0,
+  "seed": 7390
+ },
+ "post_caption": "Moms don't give recipes. They give instructions for life. 🍲\n\nWhat's the advice your mom always repeats?\n\n#VoiceNotes #HumanConnection #ShortFilm #Mom #Cooking\nMade with AI"
+}

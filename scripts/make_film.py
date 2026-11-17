@@ -164,6 +164,16 @@ class Film:
         all Z-Image), "character" (shots with the character, Qwen-Image-Edit) or "all"."""
         q = "Standard" if self.draft else "High"
         ch = self.sb.get("character")
+        style = self.sb.get("style", "")
+        if which in ("plain", "all"):
+            # "people": several recurring characters, each with a reference portrait (Z-Image)
+            for name, person in (self.sb.get("people") or {}).items():
+                if f"ref_{name}" not in self.state:
+                    item = self.studio.create_images(self.job(f"{self.slug} {name}"),
+                                                     f"Candid portrait photo of {person['look']}, natural window light, "
+                                                     f"plain background, {style}", "None", "3:4", 1,
+                                                     person.get("seed", 1))[0]
+                    self.save(f"ref_{name}", item.path)
         if which in ("plain", "all") and ch and any(s.get("character") for s in self.shots) \
                 and "character_ref" not in self.state:
             item = self.studio.create_images(self.job(f"{self.slug} character"), f"Portrait of {ch['description']}, "
@@ -171,7 +181,7 @@ class Film:
                                              "3:4", 1, ch.get("seed", 1))[0]
             self.save("character_ref", item.path)
         for i, s in enumerate(self.shots):
-            wanted = which == "all" or (which == "character") == bool(s.get("character"))
+            wanted = which == "all" or (which == "character") == bool(s.get("character") or s.get("with"))
             if wanted:
                 self.still_one(i)
             if clip_queue is not None:
@@ -186,11 +196,17 @@ class Film:
         st, s = studio or self.studio, self.shots[i]
         q = "Standard" if self.draft else "High"
         who = f"{self.slug} shot {i + 1} still"
-        if s.get("character"):
-            item = st.character_scene(self.job(who), [self.state["character_ref"]], s["still"], self.aspect, q,
+        style = self.sb.get("style", "")
+        prompt = f"{s['still']}, {style}" if style else s["still"]
+        if s.get("with"):  # named people from "people", 1-3 of them
+            refs = [self.state[f"ref_{n}"] for n in s["with"]]
+            item = st.character_scene(self.job(who), refs, prompt, self.aspect, q, s.get("seed"),
+                                      finish="Photorealistic." if style else "Photorealistic, cinematic lighting.")[0]
+        elif s.get("character"):
+            item = st.character_scene(self.job(who), [self.state["character_ref"]], prompt, self.aspect, q,
                                       s.get("seed"))[0]
         else:
-            item = st.create_images(self.job(who), s["still"], self.sb.get("look", "Cinematic"), self.aspect, 1,
+            item = st.create_images(self.job(who), prompt, self.sb.get("look", "Cinematic"), self.aspect, 1,
                                     s.get("seed"))[0]
         self.save(key, item.path)
 
@@ -269,9 +285,16 @@ class Film:
             key = f"line{i + 1}"
             if key not in self.state:
                 ref = self.state[f"voice_ref_{line['who']}"]
-                self.save(key, self.studio.emotional_speech_file(self.job(f"{self.slug} line {i + 1}"), line["text"],
-                                                                 ref, line.get("emotion"),
-                                                                 float(line.get("strength", 0.8))))
+                cast = (self.sb.get("cast") or {})[line["who"]]
+                lang = cast.get("language", "English")
+                if lang not in ("English", "Chinese") or line.get("engine") == "qwen":
+                    # IndexTTS-2 only speaks English and Chinese: clone the designed voice with Qwen3-TTS
+                    path = self.studio.cloned_speech_file(self.job(f"{self.slug} line {i + 1}"), line["text"], ref,
+                                                          cast["sample"], lang)
+                else:
+                    path = self.studio.emotional_speech_file(self.job(f"{self.slug} line {i + 1}"), line["text"],
+                                                             ref, line.get("emotion"), float(line.get("strength", 0.8)))
+                self.save(key, path)
         v = self.sb.get("voice")
         if v:
             first = None
@@ -287,6 +310,15 @@ class Film:
                     first = (self.state[key], line["text"])
 
     # ---------------------------------------------------------------- edit
+    def line_starts(self) -> list[float]:
+        """Planned start ("at") of each line, pushed later if it would overlap the line before."""
+        starts, end = [], 0.0
+        for i, line in enumerate(self.sb.get("lines", [])):
+            a = max(float(line.get("at", 0)), end + 0.15 if i else 0.0)
+            starts.append(a)
+            end = a + media.duration(self.state[f"line{i + 1}"])
+        return starts
+
     def trimmed_clips(self) -> list[str]:
         out = []
         for i, s in enumerate(self.shots):
@@ -304,6 +336,13 @@ class Film:
         clips = self.trimmed_clips()
         picture = media.concat_videos(clips, self.out / "picture.mp4", fps=16)
         dur = media.duration(picture)
+        lines = self.sb.get("lines", [])
+        line_at = self.line_starts() if lines else []
+        if lines:  # the last line must finish on picture: hold the last frame if needed
+            need = line_at[-1] + media.duration(self.state[f"line{len(lines)}"]) + 0.7
+            if need > dur:
+                picture = media.hold_last_frame(picture, need, self.out / "picture_hold.mp4")
+                dur = media.duration(picture)
         inputs, parts, labels = [], [], []
         if "music" in self.state:
             m = self.sb.get("music", {})
@@ -322,9 +361,9 @@ class Film:
                              f"afade=t=in:d=0.08,afade=t=out:st={max(0.0, ln - 0.1):.2f}:d=0.5,"
                              f"adelay={ms}|{ms},apad,atrim=0:{dur:.2f}[s{i}]")
                 labels.append(f"[s{i}]")
-        for i, line in enumerate(self.sb.get("lines", [])):
+        for i, line in enumerate(lines):
             inputs.append(self.state[f"line{i + 1}"])
-            ms = int(float(line.get("at", 0)) * 1000)
+            ms = int(line_at[i] * 1000)
             fx = VOICE_FX.get(line.get("fx", ""), "")
             parts.append(f"[{len(inputs) - 1}:a]{fx}volume={float(line.get('volume', 1.4))},adelay={ms}|{ms},"
                          f"apad,atrim=0:{dur:.2f}[l{i}]")
@@ -351,9 +390,9 @@ class Film:
             a_in, a_out = 0.5, 1.5
         texts = [dict(t, style="caption") for t in self.sb.get("texts", [])]
         if self.sb.get("subtitles"):
-            for i, line in enumerate(self.sb.get("lines", [])):
+            for i, line in enumerate(lines):
                 if line.get("subtitle", True):
-                    a = float(line.get("at", 0))
+                    a = line_at[i]
                     texts.append({"text": line.get("subtitle_text", line["text"]), "start": a, "style": "subtitle",
                                   "end": min(dur, a + media.duration(self.state[f"line{i + 1}"]) + 0.15)})
         args = ["ffmpeg", "-v", "error", "-y"]
