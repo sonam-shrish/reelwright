@@ -1,13 +1,15 @@
-"""Make several short films/reels in one go, sharing one Colab runtime.
+"""Make several short films/reels in one go, spread over several Colab runtimes.
 
-    python scripts/make_series.py storyboards/connection/*.json [--scale 1.5] [--colab-spaces image,edit]
+    python scripts/make_series.py storyboards/voice-notes/*.json --runtimes 3 --scale 1.5 --upscale 2
 
-Order (so each model is loaded only once):
-  1. stills for every film: Z-Image first (portraits + plain shots), then Qwen-Image-Edit
-     (shots with the recurring character). Music runs on Hugging Face at the same time.
-  2. every video clip with Wan 2.2 on Colab (the model stays loaded).
-  3. edit each film here (captions, mix, 1080x1920 for reels).
-Progress is saved per film, so re-running resumes. Colab is stopped at the end.
+Order (each model loads once per runtime):
+  1. plain stills (Z-Image on Hugging Face), music, ambience, sound effects and voices
+     (Qwen3-TTS + IndexTTS-2 on Hugging Face) for every film, in parallel with:
+  2. character stills (Qwen-Image-Edit) shared out over the Colab runtimes,
+  3. every video clip (Wan 2.2, SageAttention where it works) shared out over the runtimes,
+  4. edit each film here (trims, sound mix, subtitles, film look, 1080x1920).
+Progress is saved per film, so re-running resumes. All runtimes are stopped at the end
+(after --grace minutes, so quick fixes can reuse the loaded models).
 """
 import argparse
 import json
@@ -22,67 +24,113 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from make_film import Film  # noqa: E402
 
+from reelwright import config  # noqa: E402
+from reelwright.colab import ColabRunner  # noqa: E402
 from reelwright.studio import Studio  # noqa: E402
+
+
+def session_name(k: int) -> str:
+    return config.COLAB_SESSION if k == 0 else f"{config.COLAB_SESSION}-{k + 1}"
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("storyboards", nargs="+")
     ap.add_argument("--draft", action="store_true")
-    ap.add_argument("--keep-colab", action="store_true")
+    ap.add_argument("--runtimes", type=int, default=1, help="Colab runtimes to use in parallel")
+    ap.add_argument("--gpu", default=config.COLAB_GPU, help='GPU preference list, e.g. "G4,A100"')
     ap.add_argument("--scale", type=float, default=1.0, help="Wan size: 1.0 = 480p class, 1.5 = 720p class")
+    ap.add_argument("--upscale", type=int, default=1, help="2 = Real-ESRGAN x2 on Colab after each clip")
     ap.add_argument("--colab-spaces", default="edit", help='Spaces to run on Colab ("" = Hugging Face)')
     ap.add_argument("--only", default="", help="stills | clips | edit (default: everything)")
+    ap.add_argument("--grace", type=float, default=0, help="minutes to keep runtimes up after the work")
+    ap.add_argument("--keep-colab", action="store_true")
     a = ap.parse_args()
     import logging
     logging.basicConfig(level=logging.WARNING, format="%(message)s")
     logging.getLogger("reelwright.colab").setLevel(logging.INFO)
 
-    studio = Studio()
-    studio.colab_space_keys = {k.strip() for k in a.colab_spaces.split(",") if k.strip()}
-    studio.colab.video_scale = a.scale
-    films = [Film(json.loads(Path(p).read_text()), a.draft, True, studio) for p in a.storyboards]
+    keys = {k.strip() for k in a.colab_spaces.split(",") if k.strip()}
+    studios = []
+    for k in range(max(1, a.runtimes)):
+        runner = ColabRunner(session=session_name(k), gpu=a.gpu, workdir=config.DATA_DIR / "colab" / f"r{k + 1}")
+        runner.video_scale, runner.video_upscale = a.scale, a.upscale
+        st = Studio(colab=runner)
+        st.colab_space_keys = keys
+        studios.append(st)
+    films = [Film(json.loads(Path(p).read_text()), a.draft, True, studios[0]) for p in a.storyboards]
     t0 = time.time()
     errors: list[str] = []
+    timings: dict[str, list[float]] = {"clip": [], "still": []}
+
+    def say(msg):
+        print(f"[{int(time.time() - t0):5d}s] {msg}", flush=True)
 
     def guarded(name, fn):
         try:
             fn()
+            return True
         except Exception as e:  # noqa: BLE001
             errors.append(f"{name}: {type(e).__name__}: {str(e)[:300]}")
-            print(f"[{name}] FAILED {type(e).__name__}: {str(e)[:300]}", flush=True)
+            say(f"[{name}] FAILED {type(e).__name__}: {str(e)[:300]}")
+            return False
+
+    def pool(jobs: list, kind: str):
+        """Share (film, shot) jobs out over the runtimes; each runtime works through the queue."""
+        q: queue.Queue = queue.Queue()
+        for j in jobs:
+            q.put(j)
+
+        def worker(k: int, st: Studio):
+            time.sleep(20 * k)  # stagger runtime starts: the Colab CLI keeps one shared session file
+            while True:
+                try:
+                    f, i = q.get_nowait()
+                except queue.Empty:
+                    return
+                t = time.time()
+                fn = f.still_one if kind == "still" else f.clip_one
+                if guarded(f"{f.slug} shot {i + 1} {kind} on {st.colab.session}", lambda: fn(i, st)):
+                    timings[kind].append(time.time() - t)
+                    say(f"{kind} {f.slug} #{i + 1} done on {st.colab.session} ({time.time() - t:.0f} s)")
+
+        threads = [threading.Thread(target=worker, args=(k, st))
+                   for k, st in enumerate(studios[:max(1, min(len(studios), len(jobs)))])]
+        for th in threads:
+            th.start()
+        for th in threads:
+            th.join()
 
     def sounds():
         for f in films:
             guarded(f"{f.slug} sound", f.sound_track)
 
-    def stills():
-        for which in ("plain", "character"):
-            for f in films:
-                guarded(f"{f.slug} stills ({which})", lambda f=f: f.stills(which))
-            if which == "plain" and studio.colab_space_keys and studio.colab.is_running():
-                studio.colab.call("space_stop", timeout=90, retries=2)  # free the GPU for the next model
-
     try:
         if a.only in ("", "stills"):
             snd = threading.Thread(target=sounds)
             snd.start()
-            stills()
+            for f in films:
+                guarded(f"{f.slug} stills (plain)", lambda f=f: f.stills("plain"))
+            jobs = [(f, i) for f in films for i, s in enumerate(f.shots)
+                    if s.get("character") and f"shot{i + 1}_still" not in f.state and "character_ref" in f.state]
+            if jobs:
+                pool(jobs, "still")
             snd.join()
         if a.only in ("", "clips"):
-            for f in films:
-                if all(f"shot{i + 1}_still" in f.state for i in range(len(f.shots))):
-                    q: queue.Queue = queue.Queue()
-                    for i in range(len(f.shots)):
-                        q.put(i)
-                    q.put(None)
-                    guarded(f"{f.slug} clips", lambda f=f, q=q: f.colab_track(q))
+            jobs = [(f, i) for f in films for i in range(len(f.shots))
+                    if f"shot{i + 1}_clip" not in f.state and f"shot{i + 1}_still" in f.state]
+            if jobs:
+                pool(jobs, "clip")
     finally:
         if not a.keep_colab:
-            try:
-                print("[colab]", studio.colab.stop(), flush=True)
-            except Exception as e:  # noqa: BLE001
-                print("[colab] could not stop:", e, flush=True)
+            if a.grace > 0:
+                say(f"keeping runtimes up for {a.grace:.0f} min for quick fixes")
+                time.sleep(60 * a.grace)
+            for st in studios:
+                try:
+                    say(f"[{st.colab.session}] {st.colab.stop()}")
+                except Exception as e:  # noqa: BLE001
+                    say(f"[{st.colab.session}] could not stop: {e}")
     done = []
     if a.only in ("", "edit"):
         for f in films:
@@ -90,7 +138,10 @@ def main():
                 guarded(f"{f.slug} edit", lambda f=f: done.append(f.edit()))
     for p in done:
         print("FILM", p, flush=True)
-    print(f"total {int((time.time() - t0) / 60)} min; {len(done)}/{len(films)} films", flush=True)
+    for kind, ts in timings.items():
+        if ts:
+            say(f"{kind}s: {len(ts)}, average {sum(ts) / len(ts):.0f} s each (wall clock per runtime)")
+    say(f"total {int((time.time() - t0) / 60)} min; {len(done)}/{len(films)} films; {len(studios)} runtime(s)")
     if errors:
         print("Not finished (re-run to resume):\n  " + "\n  ".join(errors), flush=True)
         sys.exit(1)

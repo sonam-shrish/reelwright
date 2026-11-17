@@ -214,3 +214,25 @@ def test_connection_error_is_retried(tmp_path, signed_in, media_files, monkeypat
 
     out = runner(run, tmp_path).generate_video(media_files["img"], "x", 2, 1)
     assert out.is_file() and failed["n"] == 1
+
+
+def test_gpu_preference_list_falls_back(tmp_path, signed_in, media_files):
+    fake = FakeCLI(media_files["vid_silent"], results=[{"status": "started", "id": "x"},
+                                                      {"status": "done", "path": "/content/rw_out/e.mp4"}])
+
+    def run(args, **kw):
+        if args[3] == "new" and "G4" in args:
+            return subprocess.CompletedProcess(args, 0, "[colab] Backend rejected accelerator 'G4'.", "")
+        return fake(args, **kw)
+
+    r = runner(run, tmp_path, gpu="G4,A100")
+    r.generate_video(media_files["img"], "x", 2, 1)
+    news = [c for c in fake.cmds if c[0] == "new"]
+    assert r.active_gpu == "A100" and news[-1][news[-1].index("--gpu") + 1] == "A100"
+
+
+def test_session_name_must_match_exactly(tmp_path, signed_in, media_files):
+    def run(args, **kw):
+        return subprocess.CompletedProcess(args, 0, "[reelwright-2] m-s-x | Hardware: A100", "")
+    assert ColabRunner(session="reelwright", run=run, workdir=tmp_path).is_running() is False
+    assert ColabRunner(session="reelwright-2", run=run, workdir=tmp_path).is_running() is True

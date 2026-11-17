@@ -273,6 +273,21 @@ class Studio:
                                              use_xvector_only=False, model_size="1.7B")
         return self._fetch_first(r, ".wav", "voice_design")
 
+    def emotional_speech_file(self, job, text: str, reference: str, emotion: dict | str | None = None,
+                              strength: float = 0.8) -> Path:
+        """Speech in the voice of a reference clip with a chosen emotion (IndexTTS-2), e.g.
+        emotion={"sad": 0.5, "calm": 0.3}. Pair with designed_speech_file for the reference."""
+        if not text.strip():
+            raise SpaceError("invalid", "Write the words to speak.")
+        vec = presets.emotion_vector(emotion)
+        job.log(f"IndexTTS-2: {emotion or 'calm'}")
+        kw = {f"vec{i + 1}": v for i, v in enumerate(vec)}
+        r = self.caller("emotion_tts").call("/gen_single", emo_control_method="Use emotion vectors",
+                                            prompt=self._handle(reference), text=text, emo_ref_path=None,
+                                            emo_weight=float(strength), emo_text="", emo_random=False,
+                                            max_text_tokens_per_segment=120, **kw)
+        return self._fetch_first(r, ".wav", "emotion_tts")
+
     def speech(self, job, script: str, voice: str | None = None, expressiveness: float = 0.5) -> list[Item]:
         path = self.speech_file(job, script, voice, expressiveness)
         return [self.library.add(path, "Voice", script, {"cloned": bool(voice)})]

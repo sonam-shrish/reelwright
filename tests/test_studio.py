@@ -1,6 +1,7 @@
 import json
 
 import pytest
+from pathlib import Path
 
 from reelwright import media, presets
 from reelwright.jobs import Job, JobQueue
@@ -33,6 +34,7 @@ class FakeCaller:
             ("tts", "/generate_tts_audio"): {"path": f["wav"]},
             ("voice_design", "/generate_voice_design"): {"path": f["wav"]},
             ("voice_design", "/generate_voice_clone"): {"path": f["wav"]},
+            ("emotion_tts", "/gen_single"): {"value": {"path": f["wav"]}, "__type__": "update"},
             ("sound", "/generate_audio"): {"path": f["wav"]},
             # MiniMax returns a player-status dict with a relative url first, then the real FileData
             ("music", "/simple_generate"): ({"cmd": "done", "url": "/gradio_api/file=/tmp/x.wav"}, "done",
@@ -50,8 +52,8 @@ class FakeCaller:
 @pytest.fixture
 def studio(tmp_path, media_files):
     calls, overrides = [], {}
-    spaces = {k: k for k in ["image", "wan", "ltx", "edit", "edit_lora", "tts", "voice_design", "sound", "music",
-                             "avatar", "avatar_fast", "lipsync"]}
+    spaces = {k: k for k in ["image", "wan", "ltx", "edit", "edit_lora", "tts", "voice_design", "emotion_tts", "sound",
+                             "music", "avatar", "avatar_fast", "lipsync"]}
     s = Studio(data_dir=tmp_path / "data", token="t", spaces=spaces,
                caller_factory=lambda key: FakeCaller(key, media_files, calls, overrides),
                handle=lambda p: {"path": str(p)})
@@ -242,3 +244,19 @@ def test_job_queue_reports_friendly_errors(tmp_path):
     q._pool.shutdown(wait=True)
     assert j.status == "failed" and "GPU quota" in j.error
     assert (tmp_path / "jobs.jsonl").read_text().count('"failed"') == 1
+
+
+def test_emotional_speech_sends_emotion_sliders(studio, media_files):
+    out = studio.emotional_speech_file(job(), "I'm proud of you.", media_files["wav"], {"sad": 0.4, "happy": 0.4})
+    assert Path(out).is_file()
+    key, api, kw = studio.calls[-1]
+    assert (key, api) == ("emotion_tts", "/gen_single") and kw["emo_control_method"] == "Use emotion vectors"
+    assert kw["vec1"] == 0.4 and kw["vec3"] == 0.4 and kw["vec8"] == 0.0
+
+
+def test_emotion_vector_rules():
+    from reelwright import presets
+    assert presets.emotion_vector(None)[-1] == 0.6
+    assert abs(sum(presets.emotion_vector({"happy": 1, "sad": 1})) - 1.2) < 1e-9
+    with pytest.raises(ValueError):
+        presets.emotion_vector({"joyful": 1})

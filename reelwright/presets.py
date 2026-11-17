@@ -183,3 +183,23 @@ def split_text(text: str, max_chars: int) -> list[str]:
     if cur:
         chunks.append(cur)
     return chunks
+
+
+# IndexTTS-2 emotion sliders, in the Space's order (vec1..vec8).
+TTS_EMOTIONS = ["happy", "angry", "sad", "afraid", "disgusted", "melancholic", "surprised", "calm"]
+
+
+def emotion_vector(emotion: dict | str | None) -> list[float]:
+    """{"sad": 0.6, "calm": 0.3} or "sad" -> the 8 IndexTTS-2 sliders (each 0..1, total kept <= 1.2)."""
+    if not emotion:
+        return [0.0] * 7 + [0.6]
+    if isinstance(emotion, str):
+        emotion = {emotion: 0.7}
+    vec = [max(0.0, min(1.0, float(emotion.get(k, 0.0)))) for k in TTS_EMOTIONS]
+    unknown = set(emotion) - set(TTS_EMOTIONS)
+    if unknown:
+        raise ValueError(f"unknown emotion(s) {sorted(unknown)}; use {TTS_EMOTIONS}")
+    total = sum(vec)
+    if total > 1.2:
+        vec = [v * 1.2 / total for v in vec]
+    return vec

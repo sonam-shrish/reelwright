@@ -7,6 +7,7 @@ Do not import Reelwright modules here: only this file is sent to Colab.
 """
 import base64
 import copy
+import importlib.util
 import gc
 import io
 import json
@@ -89,8 +90,71 @@ def _setup_locked(model_id: str) -> dict:
     except Exception:
         pass
     RW.update(pipe=pipe, model_id=model_id, mode=mode, scheduler=copy.deepcopy(pipe.scheduler))
-    return {"status": "ready", "cached": False, "mode": mode, "vram_gb": round(vram, 1),
-            "download_s": round(t1 - t0), "load_s": round(time.time() - t1)}
+    attn = _set_attention(pipe) if mode == "gpu" else "native"
+    return {"status": "ready", "cached": False, "mode": mode, "vram_gb": round(vram, 1), "attention": attn,
+            "gpu": torch.cuda.get_device_name(0), "download_s": round(t1 - t0), "load_s": round(time.time() - t1)}
+
+
+ATTENTION_BACKENDS = ["sage_hub", "sage"]  # tried in order; "native" (PyTorch SDPA) if none works
+
+
+def _transformers(pipe):
+    return [m for m in (getattr(pipe, "transformer", None), getattr(pipe, "transformer_2", None)) if m is not None]
+
+
+def _set_attention(pipe) -> str:
+    """Use SageAttention (quantized attention, ~1.5-2x faster) when it works on this GPU.
+    Each backend is probed on a small attention call first; generation falls back to native on error."""
+    import torch
+    for name in ATTENTION_BACKENDS:
+        try:
+            if name == "sage_hub":
+                if importlib.util.find_spec("kernels") is None:
+                    _pip("kernels")
+            elif importlib.util.find_spec("sageattention") is None:
+                _pip("sageattention")
+            from diffusers.models.attention_dispatch import AttentionBackendName, dispatch_attention_fn
+            q = torch.randn(1, 512, 8, 128, device="cuda", dtype=torch.bfloat16)
+            ref = dispatch_attention_fn(q, q, q, backend=AttentionBackendName("native"))
+            out = dispatch_attention_fn(q, q, q, backend=AttentionBackendName(name))
+            if not torch.isfinite(out).all() or (out - ref).abs().mean() > 0.05:
+                raise RuntimeError("inaccurate")
+            for m in _transformers(pipe):
+                m.set_attention_backend(name)
+            RW["attention"] = name
+            return name
+        except Exception as e:  # noqa: BLE001
+            RW.setdefault("attention_errors", []).append(f"{name}: {type(e).__name__}: {str(e)[:200]}")
+    RW["attention"] = "native"
+    return "native"
+
+
+def _upscaler():
+    """Real-ESRGAN x2 (frame by frame on the GPU), loaded once per runtime."""
+    if RW.get("upscaler") is None:
+        import torch
+        if importlib.util.find_spec("spandrel") is None:
+            _pip("spandrel")
+        from huggingface_hub import hf_hub_download
+        from spandrel import ModelLoader
+        path = hf_hub_download("ai-forever/Real-ESRGAN", "RealESRGAN_x2.pth")
+        RW["upscaler"] = ModelLoader().load_from_file(path).model.to("cuda").eval().half()
+    return RW["upscaler"]
+
+
+def _upscale(frames, batch: int = 4):
+    """frames: list of HxWx3 float arrays in 0..1 (diffusers output) -> 2x bigger, same format."""
+    import numpy as np
+    import torch
+    model = _upscaler()
+    out = []
+    with torch.inference_mode():
+        for i in range(0, len(frames), batch):
+            x = torch.from_numpy(np.stack([np.asarray(f, dtype=np.float32) for f in frames[i:i + batch]]))
+            x = x.permute(0, 3, 1, 2).to("cuda", torch.float16)
+            y = model(x).clamp(0, 1).float().permute(0, 2, 3, 1).cpu().numpy()
+            out.extend(list(y))
+    return out
 
 
 def _resize(image, scale: float = 1.0):
@@ -139,14 +203,24 @@ def rw_generate(job: dict) -> dict:
     pipe = RW["pipe"]
     image = _resize(Image.open(io.BytesIO(base64.b64decode(job["image_b64"]))).convert("RGB"),
                     float(job.get("scale", 1.0)))
-    frames = _num_frames(float(job.get("seconds", 3.5)))
+    import numpy as np
+    n_frames = _num_frames(float(job.get("seconds", 3.5)))
     kwargs = dict(image=image, prompt=job["prompt"], negative_prompt=job.get("negative_prompt", ""),
-                  height=image.height, width=image.width, num_frames=frames,
+                  height=image.height, width=image.width, num_frames=n_frames,
                   guidance_scale=float(job.get("guidance", 1.0)), guidance_scale_2=float(job.get("guidance", 1.0)),
                   num_inference_steps=int(job.get("steps", 4)))
     t0 = time.time()
     try:
-        out = pipe(**kwargs, generator=torch.Generator(device="cuda").manual_seed(int(job["seed"])))
+        try:
+            out = pipe(**kwargs, generator=torch.Generator(device="cuda").manual_seed(int(job["seed"])))
+        except Exception as e:  # noqa: BLE001
+            if RW.get("attention", "native") == "native" or isinstance(e, torch.OutOfMemoryError):
+                raise
+            RW.setdefault("attention_errors", []).append(f"{RW['attention']} at run time: {str(e)[:200]}")
+            for m in _transformers(pipe):
+                m.set_attention_backend("native")
+            RW["attention"] = "native"
+            out = pipe(**kwargs, generator=torch.Generator(device="cuda").manual_seed(int(job["seed"])))
     except torch.OutOfMemoryError:
         # fall back to the memory-saving mode for the rest of this runtime
         gc.collect()
@@ -156,13 +230,19 @@ def rw_generate(job: dict) -> dict:
         RW["mode"] = "offload"
         out = pipe(**kwargs, generator=torch.Generator(device="cuda").manual_seed(int(job["seed"])))
     gen_s = time.time() - t0
+    frames, up_s = out.frames[0], 0.0
+    if int(job.get("upscale", 1)) == 2:
+        t1 = time.time()
+        frames = _upscale(frames)
+        up_s = time.time() - t1
     os.makedirs(OUT_DIR, exist_ok=True)
     path = f"{OUT_DIR}/{uuid.uuid4().hex[:12]}.mp4"
-    export_to_video(out.frames[0], path, fps=FPS)
+    export_to_video(frames, path, fps=FPS, quality=9)
     gc.collect()
     torch.cuda.empty_cache()
-    return {"status": "done", "path": path, "frames": frames, "size": f"{image.width}x{image.height}",
-            "gen_s": round(gen_s, 1), "mode": RW["mode"]}
+    h, w = np.asarray(frames[0]).shape[:2]
+    return {"status": "done", "path": path, "frames": len(frames), "size": f"{w}x{h}", "gen_s": round(gen_s, 1),
+            "upscale_s": round(up_s, 1), "mode": RW["mode"], "attention": RW.get("attention", "native")}
 
 
 def _background(job_id: str, model_id: str, job: dict):

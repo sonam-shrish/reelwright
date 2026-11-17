@@ -10,6 +10,7 @@ Sign in (once per container):  bash scripts/colab_signin.sh   (then paste the co
 from __future__ import annotations
 
 import json
+import re
 import logging
 import os
 import shutil
@@ -86,6 +87,8 @@ class ColabRunner:
         self._watchdog: threading.Thread | None = None
         self.poll_every = 15.0
         self.video_scale = config.COLAB_VIDEO_SCALE  # 1.5 = 720p class (slower, sharper)
+        self.video_upscale = config.COLAB_VIDEO_UPSCALE  # 2 = Real-ESRGAN x2 on Colab after generating
+        self.active_gpu = ""
 
     # ---------------------------------------------------------------- CLI
     def _cli(self, args: list[str], timeout: float = 600) -> str:
@@ -109,16 +112,32 @@ class ColabRunner:
     # ---------------------------------------------------------------- runtime
     def is_running(self) -> bool:
         out = self._cli(["sessions"], timeout=120)
-        return "No active sessions" not in out and self.session in out
+        # exact name: "reelwright" must not match "reelwright-2"
+        return re.search(rf"(?<![\w-]){re.escape(self.session)}(?![\w-])", out) is not None
 
     def start(self, say: Callable[[str], None] = lambda m: None):
         if self.is_running():
             return
-        say(f"Starting a Colab {self.gpu} runtime")
-        args = ["new", "-s", self.session, "--gpu", self.gpu] + (["--high-mem"] if self.high_mem else [])
-        self._cli(args, timeout=900)
-        self.started_at = time.time()
-        self._start_watchdog()
+        # gpu may be a preference list like "G4,A100": try each (with and without high RAM),
+        # because a GPU type can be refused (no entitlement) or have no free machines.
+        errors = []
+        for gpu in [g.strip() for g in self.gpu.split(",") if g.strip()]:
+            for high_mem in ([True, False] if self.high_mem else [False]):
+                say(f"Starting a Colab {gpu} runtime" + (" (high RAM)" if high_mem else ""))
+                args = ["new", "-s", self.session, "--gpu", gpu] + (["--high-mem"] if high_mem else [])
+                try:
+                    out = self._cli(args, timeout=900)
+                except ColabError as e:
+                    errors.append(f"{gpu}{' high-mem' if high_mem else ''}: {str(e)[-200:]}")
+                    continue
+                if "READY" not in out:
+                    errors.append(f"{gpu}{' high-mem' if high_mem else ''}: {out.strip()[-200:]}")
+                    continue
+                self.active_gpu = gpu
+                self.started_at = time.time()
+                self._start_watchdog()
+                return
+        raise ColabError("could not start a Colab runtime: " + " | ".join(errors))
 
     def stop(self) -> str:
         with self._lock:
@@ -294,7 +313,7 @@ class ColabRunner:
             job_id = uuid.uuid4().hex[:12]
             job = {"image_b64": base64.b64encode(Path(image).read_bytes()).decode(), "prompt": prompt,
                    "negative_prompt": negative_prompt, "seconds": seconds, "seed": seed, "steps": steps,
-                   "scale": self.video_scale}
+                   "scale": self.video_scale, "upscale": self.video_upscale}
             # Short limits: a hung connection is dropped after ~1 min and retried; the job keeps going on Colab.
             self.call("start", timeout=50, retries=6, job_id=job_id, model_id=self.model_id, job=job)
             say(f"Started on Colab: {seconds:.1f}s, {steps} steps, seed {seed}")

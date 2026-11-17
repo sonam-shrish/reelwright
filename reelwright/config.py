@@ -20,7 +20,8 @@ _DEFAULT_SPACES = {
     "edit": "Qwen/Qwen-Image-Edit-2511",
     "edit_lora": "prithivMLmods/Qwen-Image-Edit-2511-LoRAs-Fast",
     "tts": "ResembleAI/Chatterbox",
-    "voice_design": "Qwen/Qwen3-TTS",  # open Qwen3-TTS: voice design from a description, and voice cloning
+    "voice_design": "Qwen/Qwen3-TTS",
+    "emotion_tts": "IndexTeam/IndexTTS-2-Demo",  # speak in a reference voice with a chosen emotion  # open Qwen3-TTS: voice design from a description, and voice cloning
     "sound": "OpenSound/EzAudio",
     "music": "MiniMaxAI/MiniMax-Music3",
     "avatar": "alexnasa/OmniAvatar",
@@ -31,11 +32,13 @@ _DEFAULT_SPACES = {
 SPACES = {k: os.environ.get(f"REELWRIGHT_SPACE_{k.upper()}", v) for k, v in _DEFAULT_SPACES.items()}
 
 # Google Colab backend (only inside a Claude Code session; see reelwright/colab.py)
+# GPU preference list: the first one Colab grants is used (G4 = RTX PRO 6000 Blackwell 96 GB)
 COLAB_GPU = os.environ.get("REELWRIGHT_COLAB_GPU", "A100")
 COLAB_SESSION = os.environ.get("REELWRIGHT_COLAB_SESSION", "reelwright")
 COLAB_WAN_MODEL = os.environ.get("REELWRIGHT_COLAB_WAN_MODEL", "TestOrganizationPleaseIgnore/WAMU_v3_WAN2.2_I2V_LIGHTNING")
 # Wan size on Colab: 1.0 = 480p class (832x480), 1.5 = 720p class (1248x720, ~2.5x slower)
 COLAB_VIDEO_SCALE = float(os.environ.get("REELWRIGHT_COLAB_VIDEO_SCALE", "1.0"))
+COLAB_VIDEO_UPSCALE = int(os.environ.get("REELWRIGHT_COLAB_VIDEO_UPSCALE", "1"))  # 2 = Real-ESRGAN x2
 COLAB_IDLE_STOP_MIN = float(os.environ.get("REELWRIGHT_COLAB_IDLE_STOP_MIN", "15"))
 # Which Spaces to run on your Colab GPU instead of Hugging Face ZeroGPU, by key
 # (e.g. "edit,voice_design" or "all"). Only works where Colab is signed in.
