@@ -40,6 +40,10 @@ TRANSIENT_HINTS = ("Timeout", "ConnectionError", "Connection was lost", "Connect
                    "502", "503", "504")
 
 
+# GPUs Colab only offers in one shape: never request --high-mem for these.
+STANDARD_ONLY_GPUS = {"G4", "L4"}
+
+
 class ColabError(RuntimeError):
     def user_message(self) -> str:
         return f"Colab: {self}"
@@ -122,7 +126,9 @@ class ColabRunner:
         # because a GPU type can be refused (no entitlement) or have no free machines.
         errors = []
         for gpu in [g.strip() for g in self.gpu.split(",") if g.strip()]:
-            for high_mem in ([True, False] if self.high_mem else [False]):
+            # G4 has one shape (about 176 GB RAM already); asking for high RAM gets a misleading
+            # "no quota or entitlement" refusal, so only A100/T4/CPU get the high-RAM request.
+            for high_mem in ([True, False] if self.high_mem and gpu.upper() not in STANDARD_ONLY_GPUS else [False]):
                 say(f"Starting a Colab {gpu} runtime" + (" (high RAM)" if high_mem else ""))
                 args = ["new", "-s", self.session, "--gpu", gpu] + (["--high-mem"] if high_mem else [])
                 try:
