@@ -224,7 +224,7 @@
   {
    "who": "grandpa",
    "text": "Is it recording? ...Okay. I think it's recording.",
-   "at": 0.15,
+   "at": 0.23,
    "emotion": {
     "surprised": 0.3,
     "calm": 0.4
@@ -237,7 +237,7 @@
   {
    "who": "grandpa",
    "text": "Your grandmother says I should use these voice things. So. Hello, Maya.",
-   "at": 4.79,
+   "at": 5.5,
    "emotion": {
     "happy": 0.35,
     "calm": 0.4
@@ -250,7 +250,7 @@
   {
    "who": "grandpa",
    "text": "I heard about the exam. I'm proud of you, kiddo. That's all.",
-   "at": 10.52,
+   "at": 13.61,
    "emotion": {
     "happy": 0.3,
     "melancholic": 0.35,
@@ -264,7 +264,7 @@
   {
    "who": "grandpa",
    "text": "She made me practice this four times.",
-   "at": 15.82,
+   "at": 18.91,
    "emotion": {
     "happy": 0.45,
     "calm": 0.3
@@ -277,7 +277,7 @@
   {
    "who": "grandpa",
    "text": "Now how do I stop this-",
-   "at": 18.13,
+   "at": 22.08,
    "emotion": {
     "surprised": 0.55,
     "happy": 0.2
@@ -290,7 +290,7 @@
   {
    "who": "maya",
    "text": "Grandpa. It's still recording.",
-   "at": 20.44,
+   "at": 24.39,
    "emotion": {
     "happy": 0.55,
     "calm": 0.2
@@ -299,25 +299,12 @@
    "strength": 0.8,
    "volume": 1.4,
    "planned_at": 15.6
-  },
-  {
-   "who": "maya",
-   "text": "Love you too, Grandpa.",
-   "at": 23.57,
-   "emotion": {
-    "happy": 0.4,
-    "melancholic": 0.25
-   },
-   "fx": "room",
-   "strength": 0.8,
-   "volume": 1.2,
-   "planned_at": 23.8
   }
  ],
  "ambience": "quiet city night bus interior, low engine rumble",
  "music": {
   "description": "sparse felt piano, two warm notes, intimate and tender, slow, with soft room tone",
-  "start": 8.42,
+  "start": 13.0,
   "volume": 0.32,
   "fade_in": 1.5,
   "seed": 7190,

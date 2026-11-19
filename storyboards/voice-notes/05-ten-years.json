@@ -42,21 +42,17 @@
    "moves": [
     "Static"
    ],
-   "seconds": 3.75,
+   "seconds": 3.5,
    "trim": [
     0.3,
-    3.41
+    3.3
    ],
    "seed": 7521,
    "with": [
     "jonah"
    ],
    "sfx": "city skyline at dusk, distant sirens, wind",
-   "sfx_volume": 0.45,
-   "planned_trim": [
-    0.3,
-    3.3
-   ]
+   "sfx_volume": 0.45
   },
   {
    "still": "standing on a small apartment balcony at dusk with a phone to his ear, frozen, a half-eaten sandwich in his other hand",
@@ -64,21 +60,17 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.75,
+   "seconds": 3.5,
    "trim": [
     0.3,
-    3.41
+    3.3
    ],
    "seed": 7511,
    "with": [
     "jonah"
    ],
    "sfx": "city at dusk from a balcony, distant traffic, a dog barking far away",
-   "sfx_volume": 0.45,
-   "planned_trim": [
-    0.3,
-    3.3
-   ]
+   "sfx_volume": 0.45
   },
   {
    "still": "sitting in a parked car in the rain recording a voice note, rubbing his forehead, rain on the windshield",
@@ -86,21 +78,17 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.75,
+   "seconds": 3.5,
    "trim": [
     0.3,
-    3.41
+    3.3
    ],
    "seed": 7512,
    "with": [
     "sam"
    ],
    "sfx": "rain on a car roof, wipers off",
-   "sfx_volume": 0.55,
-   "planned_trim": [
-    0.3,
-    3.3
-   ]
+   "sfx_volume": 0.55
   },
   {
    "still": "Close-up of an old instant photo of two teenage boys laughing in a diner booth, held between fingers, slightly faded",
@@ -108,16 +96,12 @@
    "moves": [
     "Static"
    ],
-   "seconds": 3.0,
+   "seconds": 3.5,
    "trim": [
     0.3,
-    2.69
-   ],
-   "seed": 7513,
-   "planned_trim": [
-    0.3,
     2.6
-   ]
+   ],
+   "seed": 7513
   },
   {
    "still": "Close-up of a man's thumb hovering over a phone screen in dusk light, screen glare hiding the screen, then tapping",
@@ -125,16 +109,12 @@
    "moves": [
     "Static"
    ],
-   "seconds": 3.75,
+   "seconds": 3.5,
    "trim": [
     0.3,
-    3.41
-   ],
-   "seed": 7522,
-   "planned_trim": [
-    0.3,
     3.3
-   ]
+   ],
+   "seed": 7522
   },
   {
    "still": "on the balcony, lowering the phone, staring at the city, deciding, jaw tight",
@@ -142,18 +122,14 @@
    "moves": [
     "Dolly In"
    ],
-   "seconds": 3.75,
+   "seconds": 3.5,
    "trim": [
     0.3,
-    3.41
+    3.3
    ],
    "seed": 7514,
    "with": [
     "jonah"
-   ],
-   "planned_trim": [
-    0.3,
-    3.3
    ]
   },
   {
@@ -162,21 +138,17 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.75,
+   "seconds": 3.5,
    "trim": [
     0.3,
-    3.41
+    3.3
    ],
    "seed": 7515,
    "with": [
     "jonah"
    ],
    "sfx": "footsteps on wet pavement, passing car",
-   "sfx_volume": 0.5,
-   "planned_trim": [
-    0.3,
-    3.3
-   ]
+   "sfx_volume": 0.5
   },
   {
    "still": "both men sitting across from each other in a worn diner booth with two coffees, both laughing, a little emotional",
@@ -184,10 +156,10 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.75,
+   "seconds": 3.5,
    "trim": [
     0.2,
-    3.52
+    3.4
    ],
    "seed": 7516,
    "with": [
@@ -195,11 +167,7 @@
     "sam"
    ],
    "sfx": "diner ambience, cutlery, coffee machine",
-   "sfx_volume": 0.45,
-   "planned_trim": [
-    0.2,
-    3.4
-   ]
+   "sfx_volume": 0.45
   },
   {
    "still": "Wide shot through a rain-streaked diner window at night, two men laughing in a booth inside, neon reflections on the glass",
@@ -207,10 +175,10 @@
    "moves": [
     "Static"
    ],
-   "seconds": 3.75,
+   "seconds": 3.5,
    "trim": [
     0.3,
-    3.41
+    3.3
    ],
    "seed": 7523,
    "with": [
@@ -218,18 +186,14 @@
     "sam"
    ],
    "sfx": "rain on a window, muffled diner laughter",
-   "sfx_volume": 0.5,
-   "planned_trim": [
-    0.3,
-    3.3
-   ]
+   "sfx_volume": 0.5
   }
  ],
  "lines": [
   {
    "who": "sam",
    "text": "Hey. It's Sam. ...Yeah. I know. Ten years.",
-   "at": 0.16,
+   "at": 0.15,
    "emotion": {
     "afraid": 0.2,
     "melancholic": 0.3,
@@ -237,94 +201,86 @@
    },
    "fx": "voicenote",
    "strength": 0.8,
-   "volume": 1.4,
-   "planned_at": 0.15
+   "volume": 1.4
   },
   {
    "who": "sam",
    "text": "I'm in town till Sunday. That diner on Fifth is still there.",
-   "at": 5.06,
+   "at": 4.6,
    "emotion": {
     "calm": 0.4,
     "melancholic": 0.2
    },
    "fx": "voicenote",
    "strength": 0.8,
-   "volume": 1.4,
-   "planned_at": 4.6
+   "volume": 1.4
   },
   {
    "who": "sam",
    "text": "Remember the milkshake thing? We still owe that place a mop.",
-   "at": 9.7,
+   "at": 8.0,
    "emotion": {
     "happy": 0.4,
     "melancholic": 0.2
    },
    "fx": "voicenote",
    "strength": 0.8,
-   "volume": 1.4,
-   "planned_at": 8.0
+   "volume": 1.4
   },
   {
    "who": "sam",
    "text": "No pressure. I just... I missed my friend.",
-   "at": 13.5,
+   "at": 8.4,
    "emotion": {
     "sad": 0.35,
     "calm": 0.3
    },
    "fx": "voicenote",
    "strength": 0.8,
-   "volume": 1.4,
-   "planned_at": 8.4
+   "volume": 1.4
   },
   {
    "who": "jonah",
    "text": "You're late.",
-   "at": 17.31,
+   "at": 15.3,
    "emotion": {
     "happy": 0.4,
     "calm": 0.3
    },
    "fx": "room",
    "strength": 0.8,
-   "volume": 1.4,
-   "planned_at": 15.3
+   "volume": 1.4
   },
   {
    "who": "sam",
    "text": "Ten years late.",
-   "at": 18.36,
+   "at": 16.6,
    "emotion": {
     "happy": 0.55
    },
    "fx": "room",
    "strength": 0.8,
-   "volume": 1.4,
-   "planned_at": 16.6
+   "volume": 1.4
   },
   {
    "who": "jonah",
    "text": "Milkshakes are on you.",
-   "at": 25.47,
+   "at": 24.6,
    "emotion": {
     "happy": 0.5
    },
    "fx": "room",
    "strength": 0.8,
-   "volume": 1.4,
-   "planned_at": 24.6
+   "volume": 1.4
   }
  ],
  "ambience": "city evening, distant traffic",
  "music": {
   "description": "slow melancholic Rhodes piano and soft upright bass, late night, warm",
-  "start": 8.08,
+  "start": 7.8,
   "volume": 0.3,
   "fade_in": 1.5,
-  "seed": 7590,
-  "planned_start": 7.8
+  "seed": 7590
  },
  "post_caption": "Ten years of silence. One voice note. 🕰️\n\nWho's the friend you still think about?\n\n#VoiceNotes #HumanConnection #ShortFilm #Friendship #OldFriends\nMade with AI"
 }

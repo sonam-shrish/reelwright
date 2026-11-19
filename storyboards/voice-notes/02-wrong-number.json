@@ -232,7 +232,7 @@
   {
    "who": "bev",
    "text": "Rosa, baby, it's Auntie Bev. Today's the big interview, eh?",
-   "at": 0.21,
+   "at": 0.19,
    "emotion": {
     "happy": 0.55
    },
@@ -244,7 +244,7 @@
   {
    "who": "daniel",
    "text": "...I'm not Rosa.",
-   "at": 5.7,
+   "at": 5.68,
    "emotion": {
     "surprised": 0.3,
     "calm": 0.4
@@ -257,7 +257,7 @@
   {
    "who": "bev",
    "text": "You walk in there with your head up. They need you more than you need them, you hear?",
-   "at": 7.83,
+   "at": 7.13,
    "emotion": {
     "happy": 0.4,
     "calm": 0.3
@@ -270,7 +270,7 @@
   {
    "who": "bev",
    "text": "Your mama would be so proud of you. I'm proud of you.",
-   "at": 13.98,
+   "at": 12.7,
    "emotion": {
     "happy": 0.3,
     "melancholic": 0.3
@@ -322,7 +322,7 @@
  "ambience": "quiet office corridor, distant phones",
  "music": {
   "description": "warm understated soul guitar and soft brushed drums, hopeful, builds gently",
-  "start": 12.58,
+  "start": 11.43,
   "volume": 0.3,
   "fade_in": 1.2,
   "seed": 7290,

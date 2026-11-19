@@ -81,9 +81,7 @@ EXTRA = {
                            "her ear, smiling with tired happy eyes", "the bus pulls away behind her, she smiles and "
                            "walks off", ["maya"], seed=7123, sfx="bus pulling away, early morning birds", vol=0.45))],
         "lines": [(3, line("grandpa", "She made me practice this four times.", 12.2, {"happy": 0.45, "calm": 0.3},
-                           "voicenote")),
-                  (6, line("maya", "Love you too, Grandpa.", 23.8, {"happy": 0.4, "melancholic": 0.25}, "room",
-                           volume=1.2))]},
+                           "voicenote"))]},
     "wrong-number": {
         "shots": [(0, shot("walking alone into a tall glass office lobby in the early morning, too-big suit, holding a "
                            "folder, looking up at the ceiling", "he walks in slowly and looks up, nervous", ["daniel"],

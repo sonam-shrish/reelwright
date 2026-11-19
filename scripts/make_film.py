@@ -192,11 +192,17 @@ class Film:
     def _migrate_keys(self):
         """Older progress files used positions (shot3_still, line2...): copy them to content keys."""
         st, changed = self.state, False
+        # Only for progress files that have never been migrated: once content keys exist, old
+        # position keys must never be mapped again (positions change when a storyboard is edited).
+        if any(k.startswith(("still_", "line_", "clip_", "sfx_")) for k in st):
+            return
+        moved: list[str] = []
 
         def move(old, new):
             nonlocal changed
             if old in st and new not in st:
                 st[new] = st[old]
+                moved.append(old)
                 changed = True
         try:
             for i, s in enumerate(self.shots):
@@ -212,6 +218,8 @@ class Film:
                 move(f"line{i + 1}", self.line_key(i))
         except KeyError:
             return
+        for k in moved:  # drop the position keys so they can never be re-applied
+            st.pop(k, None)
         if changed:
             self.progress.write_text(json.dumps(st, indent=1))
 

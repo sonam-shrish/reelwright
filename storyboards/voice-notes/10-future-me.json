@@ -42,21 +42,17 @@
    "moves": [
     "Static"
    ],
-   "seconds": 3.75,
+   "seconds": 3.5,
    "trim": [
     0.3,
-    3.44
+    3.3
    ],
    "seed": 8021,
    "with": [
     "teen"
    ],
    "sfx": "suburban street at night, crickets",
-   "sfx_volume": 0.4,
-   "planned_trim": [
-    0.3,
-    3.3
-   ]
+   "sfx_volume": 0.4
   },
   {
    "still": "sitting on a messy bedroom floor at night holding a phone up to record herself, embarrassed, posters and fairy lights behind her",
@@ -64,21 +60,17 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.75,
+   "seconds": 3.5,
    "trim": [
     0.3,
-    3.44
+    3.3
    ],
    "seed": 8011,
    "with": [
     "teen"
    ],
    "sfx": "teen bedroom at night, quiet music through a wall",
-   "sfx_volume": 0.35,
-   "planned_trim": [
-    0.3,
-    3.3
-   ]
+   "sfx_volume": 0.35
   },
   {
    "still": "in a bright office stairwell at lunchtime holding a phone to her ear, listening, completely still",
@@ -86,21 +78,17 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.75,
+   "seconds": 3.5,
    "trim": [
     0.3,
-    3.44
+    3.3
    ],
    "seed": 8012,
    "with": [
     "adult"
    ],
    "sfx": "office stairwell, distant lift ding, footsteps above",
-   "sfx_volume": 0.4,
-   "planned_trim": [
-    0.3,
-    3.3
-   ]
+   "sfx_volume": 0.4
   },
   {
    "still": "Close-up of a teenager's hands picking at a chipped pin badge on a hoodie sleeve",
@@ -108,16 +96,12 @@
    "moves": [
     "Static"
    ],
-   "seconds": 2.75,
+   "seconds": 3.5,
    "trim": [
     0.3,
-    2.5
-   ],
-   "seed": 8013,
-   "planned_trim": [
-    0.3,
     2.4
-   ]
+   ],
+   "seed": 8013
   },
   {
    "still": "Close-up of an old phone with a cracked case lying on a bedroom carpet beside a diary and a pencil, fairy light bokeh",
@@ -125,16 +109,12 @@
    "moves": [
     "Static"
    ],
-   "seconds": 3.75,
+   "seconds": 3.5,
    "trim": [
     0.3,
-    3.44
-   ],
-   "seed": 8022,
-   "planned_trim": [
-    0.3,
     3.3
-   ]
+   ],
+   "seed": 8022
   },
   {
    "still": "on the bedroom floor, suddenly serious, looking straight into her phone camera, eyes a little wet",
@@ -142,18 +122,14 @@
    "moves": [
     "Push-in Close-up"
    ],
-   "seconds": 3.75,
+   "seconds": 3.5,
    "trim": [
     0.3,
-    3.44
+    3.3
    ],
    "seed": 8014,
    "with": [
     "teen"
-   ],
-   "planned_trim": [
-    0.3,
-    3.3
    ]
   },
   {
@@ -162,18 +138,14 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.75,
+   "seconds": 3.5,
    "trim": [
     0.3,
-    3.44
+    3.3
    ],
    "seed": 8015,
    "with": [
     "adult"
-   ],
-   "planned_trim": [
-    0.3,
-    3.3
    ]
   },
   {
@@ -182,18 +154,14 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.75,
+   "seconds": 3.5,
    "trim": [
     0.2,
-    3.55
+    3.4
    ],
    "seed": 8016,
    "with": [
     "adult"
-   ],
-   "planned_trim": [
-    0.2,
-    3.4
    ]
   },
   {
@@ -202,123 +170,111 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.75,
+   "seconds": 3.5,
    "trim": [
     0.3,
-    3.44
+    3.3
    ],
    "seed": 8023,
    "with": [
     "adult"
    ],
    "sfx": "city street at golden hour, footsteps",
-   "sfx_volume": 0.45,
-   "planned_trim": [
-    0.3,
-    3.3
-   ]
+   "sfx_volume": 0.45
   }
  ],
  "lines": [
   {
    "who": "teen",
    "text": "Okay. Hi. This is so weird. Hi, future me.",
-   "at": 0.14,
+   "at": 0.15,
    "emotion": {
     "happy": 0.3,
     "afraid": 0.25
    },
    "fx": "voicenote",
    "strength": 0.8,
-   "volume": 1.4,
-   "planned_at": 0.15
+   "volume": 1.4
   },
   {
    "who": "teen",
    "text": "Are we still scared of everything? Did we ever do the thing?",
-   "at": 5.39,
+   "at": 3.4,
    "emotion": {
     "afraid": 0.3,
     "calm": 0.3
    },
    "fx": "voicenote",
    "strength": 0.8,
-   "volume": 1.4,
-   "planned_at": 3.4
+   "volume": 1.4
   },
   {
    "who": "teen",
    "text": "Also, did we ever learn to drive? Mum says I'm a danger.",
-   "at": 9.64,
+   "at": 7.6,
    "emotion": {
     "happy": 0.3,
     "afraid": 0.2
    },
    "fx": "voicenote",
    "strength": 0.8,
-   "volume": 1.4,
-   "planned_at": 7.6
+   "volume": 1.4
   },
   {
    "who": "teen",
    "text": "Please tell me we're okay.",
-   "at": 12.41,
+   "at": 8.0,
    "emotion": {
     "sad": 0.35,
     "afraid": 0.2
    },
    "fx": "voicenote",
    "strength": 0.8,
-   "volume": 1.4,
-   "planned_at": 8.0
+   "volume": 1.4
   },
   {
    "who": "adult",
    "text": "Hi. We're scared of everything.",
-   "at": 15.18,
+   "at": 12.4,
    "emotion": {
     "happy": 0.35,
     "calm": 0.35
    },
    "fx": "voicenote",
    "strength": 0.8,
-   "volume": 1.4,
-   "planned_at": 12.4
+   "volume": 1.4
   },
   {
    "who": "adult",
    "text": "We did it anyway.",
-   "at": 17.82,
+   "at": 15.4,
    "emotion": {
     "happy": 0.4,
     "calm": 0.4
    },
    "fx": "voicenote",
    "strength": 0.8,
-   "volume": 1.4,
-   "planned_at": 15.4
+   "volume": 1.4
   },
   {
    "who": "adult",
    "text": "Also... we can drive now. Mostly.",
-   "at": 22.84,
+   "at": 23.8,
    "emotion": {
     "happy": 0.5
    },
    "fx": "voicenote",
    "strength": 0.8,
-   "volume": 1.4,
-   "planned_at": 23.8
+   "volume": 1.4
   }
  ],
  "ambience": "quiet room tone",
  "music": {
   "description": "delicate glockenspiel and warm piano, nostalgic, gently uplifting",
-  "start": 7.1,
+  "start": 7.4,
   "volume": 0.3,
   "fade_in": 1.5,
-  "seed": 8090,
-  "planned_start": 7.4
+  "seed": 8090
  },
  "post_caption": "A voice note from 16 to 30. ⏳\n\nWhat would you tell your 16-year-old self?\n\n#VoiceNotes #HumanConnection #ShortFilm #FutureMe #GrowingUp\nMade with AI"
 }

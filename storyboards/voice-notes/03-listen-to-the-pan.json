@@ -277,7 +277,7 @@
   {
    "who": "amma",
    "text": "And call your father. He thinks you're angry with him. Silly man.",
-   "at": 13.56,
+   "at": 13.47,
    "emotion": {
     "happy": 0.4,
     "melancholic": 0.2
@@ -290,7 +290,7 @@
   {
    "who": "priya",
    "text": "Hi, Appa. ...No, I'm not angry.",
-   "at": 17.52,
+   "at": 17.44,
    "emotion": {
     "happy": 0.4,
     "calm": 0.4

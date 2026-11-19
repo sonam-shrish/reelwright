@@ -47,21 +47,17 @@
    "moves": [
     "Static"
    ],
-   "seconds": 3.75,
+   "seconds": 3.5,
    "trim": [
     0.3,
-    3.44
+    3.3
    ],
    "seed": 7721,
    "with": [
     "jess"
    ],
    "sfx": "parking lot at night, families chatting, car doors",
-   "sfx_volume": 0.4,
-   "planned_trim": [
-    0.3,
-    3.3
-   ]
+   "sfx_volume": 0.4
   },
   {
    "still": "sitting alone in a parked car outside a school hall at night in a graduation gown, the car radio glowing, staring at the dashboard",
@@ -69,21 +65,17 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.75,
+   "seconds": 3.5,
    "trim": [
     0.3,
-    3.44
+    3.3
    ],
    "seed": 7711,
    "with": [
     "jess"
    ],
    "sfx": "inside a parked car at night, muffled crowd far away",
-   "sfx_volume": 0.4,
-   "planned_trim": [
-    0.3,
-    3.3
-   ]
+   "sfx_volume": 0.4
   },
   {
    "still": "driving a big truck on a dark highway at night, talking on a phone headset, dashboard lights on his face",
@@ -91,21 +83,17 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.75,
+   "seconds": 3.5,
    "trim": [
     0.3,
-    3.44
+    3.3
    ],
    "seed": 7712,
    "with": [
     "dad"
    ],
    "sfx": "truck cab engine rumble, road noise",
-   "sfx_volume": 0.5,
-   "planned_trim": [
-    0.3,
-    3.3
-   ]
+   "sfx_volume": 0.5
   },
   {
    "still": "Close-up of a car radio display glowing orange in a dark car, a hand turning the volume knob up",
@@ -113,18 +101,14 @@
    "moves": [
     "Static"
    ],
-   "seconds": 2.75,
+   "seconds": 3.5,
    "trim": [
     0.3,
-    2.5
+    2.4
    ],
    "seed": 7713,
    "sfx": "radio volume knob click",
-   "sfx_volume": 0.6,
-   "planned_trim": [
-    0.3,
-    2.4
-   ]
+   "sfx_volume": 0.6
   },
   {
    "still": "glancing at a faded photo of a little girl tucked into the truck's sun visor while driving at night, a small smile",
@@ -132,21 +116,17 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.75,
+   "seconds": 3.5,
    "trim": [
     0.3,
-    3.44
+    3.3
    ],
    "seed": 7722,
    "with": [
     "dad"
    ],
    "sfx": "truck cab engine rumble",
-   "sfx_volume": 0.45,
-   "planned_trim": [
-    0.3,
-    3.3
-   ]
+   "sfx_volume": 0.45
   },
   {
    "still": "in the parked car laughing and crying at the same time, wiping her mascara",
@@ -154,18 +134,14 @@
    "moves": [
     "Push-in Close-up"
    ],
-   "seconds": 3.75,
+   "seconds": 3.5,
    "trim": [
     0.3,
-    3.44
+    3.3
    ],
    "seed": 7714,
    "with": [
     "jess"
-   ],
-   "planned_trim": [
-    0.3,
-    3.3
    ]
   },
   {
@@ -174,18 +150,14 @@
    "moves": [
     "Static"
    ],
-   "seconds": 3.75,
+   "seconds": 3.5,
    "trim": [
     0.3,
-    3.44
+    3.3
    ],
    "seed": 7715,
    "sfx": "truck air brakes, two long horn blasts",
-   "sfx_volume": 0.85,
-   "planned_trim": [
-    0.3,
-    3.3
-   ]
+   "sfx_volume": 0.85
   },
   {
    "still": "stepping out of the car in her graduation gown, turning toward the headlights, hand over her mouth",
@@ -193,18 +165,14 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.75,
+   "seconds": 3.5,
    "trim": [
     0.2,
-    3.55
+    3.4
    ],
    "seed": 7716,
    "with": [
     "jess"
-   ],
-   "planned_trim": [
-    0.2,
-    3.4
    ]
   },
   {
@@ -213,120 +181,108 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.75,
+   "seconds": 3.5,
    "trim": [
     0.3,
-    3.44
+    3.3
    ],
    "seed": 7723,
    "with": [
     "dad"
    ],
    "sfx": "truck door slam, footsteps on asphalt",
-   "sfx_volume": 0.6,
-   "planned_trim": [
-    0.3,
-    3.3
-   ]
+   "sfx_volume": 0.6
   }
  ],
  "lines": [
   {
    "who": "host",
    "text": "You're on the air with Night Lines. Who's this one for?",
-   "at": 0.2,
+   "at": 0.15,
    "emotion": {
     "calm": 0.7
    },
    "fx": "radio",
    "strength": 0.8,
-   "volume": 1.4,
-   "planned_at": 0.15
+   "volume": 1.4
   },
   {
    "who": "dad",
    "text": "My daughter, Jess. She graduates tonight and I'm... four hundred miles out.",
-   "at": 4.11,
+   "at": 3.0,
    "emotion": {
     "melancholic": 0.4,
     "calm": 0.3
    },
    "fx": "radio",
    "strength": 0.8,
-   "volume": 1.4,
-   "planned_at": 3.0
+   "volume": 1.4
   },
   {
    "who": "dad",
    "text": "Jess, I'm real proud of you, kid.",
-   "at": 11.24,
+   "at": 8.4,
    "emotion": {
     "sad": 0.3,
     "happy": 0.3
    },
    "fx": "radio",
    "strength": 0.8,
-   "volume": 1.4,
-   "planned_at": 8.4
+   "volume": 1.4
   },
   {
    "who": "host",
    "text": "Jess, if you're out there... that's one proud dad.",
-   "at": 15.0,
+   "at": 11.0,
    "emotion": {
     "calm": 0.7
    },
    "fx": "radio",
    "strength": 0.8,
-   "volume": 1.4,
-   "planned_at": 11.0
+   "volume": 1.4
   },
   {
    "who": "dad",
    "text": "...Also, I lied about the four hundred miles.",
-   "at": 18.78,
+   "at": 11.6,
    "emotion": {
     "happy": 0.55
    },
    "fx": "radio",
    "strength": 0.8,
-   "volume": 1.4,
-   "planned_at": 11.6
+   "volume": 1.4
   },
   {
    "who": "dad",
    "text": "Look out your window, kid.",
-   "at": 24.09,
+   "at": 18.0,
    "emotion": {
     "happy": 0.5
    },
    "fx": "radio",
    "strength": 0.8,
-   "volume": 1.4,
-   "planned_at": 18.0
+   "volume": 1.4
   },
   {
    "who": "jess",
    "text": "Dad?!",
-   "at": 26.03,
+   "at": 16.4,
    "emotion": {
     "surprised": 0.6,
     "happy": 0.3
    },
    "fx": "room",
    "strength": 0.8,
-   "volume": 1.4,
-   "planned_at": 16.4
+   "volume": 1.4
   }
  ],
  "ambience": "quiet parking lot at night",
  "music": {
   "description": "warm americana slide guitar and soft organ, rising to a hopeful swell",
-  "start": 10.71,
+  "start": 8.0,
   "volume": 0.3,
   "fade_in": 1.2,
-  "seed": 7790,
-  "planned_start": 8.0
+  "seed": 7790
  },
  "post_caption": "He said he couldn't make it. 🚚\n\nWhat's the best surprise anyone ever gave you?\n\n#VoiceNotes #HumanConnection #ShortFilm #Dad #Graduation\nMade with AI"
 }
