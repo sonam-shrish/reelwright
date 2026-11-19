@@ -90,6 +90,12 @@ def main():
                 except queue.Empty:
                     return
                 t = time.time()
+                try:  # a runtime Colab won't give us: hand the job back and retire this worker
+                    st.colab.start(lambda m: None)
+                except Exception as e:  # noqa: BLE001
+                    q.put((f, i))
+                    say(f"{st.colab.session}: no runtime ({str(e)[:160]}); its work goes to the others")
+                    return
                 fn = f.still_one if kind == "still" else f.clip_one
                 if guarded(f"{f.slug} shot {i + 1} {kind} on {st.colab.session}", lambda: fn(i, st)):
                     timings[kind].append(time.time() - t)
