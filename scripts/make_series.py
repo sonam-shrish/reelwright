@@ -29,6 +29,9 @@ from reelwright.colab import ColabRunner  # noqa: E402
 from reelwright.studio import Studio  # noqa: E402
 
 
+RETRY_MIN = 5  # minutes between attempts to get a refused runtime
+
+
 def session_name(k: int) -> str:
     return config.COLAB_SESSION if k == 0 else f"{config.COLAB_SESSION}-{k + 1}"
 
@@ -90,12 +93,16 @@ def main():
                 except queue.Empty:
                     return
                 t = time.time()
-                try:  # a runtime Colab won't give us: hand the job back and retire this worker
+                try:  # Colab won't give us this runtime yet: hand the job back, try again later
                     st.colab.start(lambda m: None)
                 except Exception as e:  # noqa: BLE001
                     q.put((f, i))
-                    say(f"{st.colab.session}: no runtime ({str(e)[:160]}); its work goes to the others")
-                    return
+                    say(f"{st.colab.session}: no runtime yet ({str(e)[:120]}); retrying in {RETRY_MIN} min")
+                    for _ in range(RETRY_MIN * 6):  # wake early once the others have emptied the queue
+                        if q.empty():
+                            return
+                        time.sleep(10)
+                    continue
                 fn = f.still_one if kind == "still" else f.clip_one
                 if guarded(f"{f.slug} shot {i + 1} {kind} on {st.colab.session}", lambda: fn(i, st)):
                     timings[kind].append(time.time() - t)
