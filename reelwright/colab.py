@@ -42,6 +42,8 @@ TRANSIENT_HINTS = ("Timeout", "ConnectionError", "Connection was lost", "Connect
 
 # GPUs Colab only offers in one shape: never request --high-mem for these.
 STANDARD_ONLY_GPUS = {"G4", "L4"}
+# GPUs whose standard shape is a smaller card: only accept the high-RAM shape (A100 80 GB).
+HIGH_MEM_REQUIRED = {"A100"}
 
 
 class ColabError(RuntimeError):
@@ -128,7 +130,13 @@ class ColabRunner:
         for gpu in [g.strip() for g in self.gpu.split(",") if g.strip()]:
             # G4 has one shape (about 176 GB RAM already); asking for high RAM gets a misleading
             # "no quota or entitlement" refusal, so only A100/T4/CPU get the high-RAM request.
-            for high_mem in ([True, False] if self.high_mem and gpu.upper() not in STANDARD_ONLY_GPUS else [False]):
+            if gpu.upper() in HIGH_MEM_REQUIRED and self.high_mem:
+                shapes = [True]  # a standard-shape A100 is the 40 GB card: too small for Wan 14B / Qwen-Edit
+            elif self.high_mem and gpu.upper() not in STANDARD_ONLY_GPUS:
+                shapes = [True, False]
+            else:
+                shapes = [False]
+            for high_mem in shapes:
                 say(f"Starting a Colab {gpu} runtime" + (" (high RAM)" if high_mem else ""))
                 args = ["new", "-s", self.session, "--gpu", gpu] + (["--high-mem"] if high_mem else [])
                 try:
