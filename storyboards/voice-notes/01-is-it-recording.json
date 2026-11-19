@@ -1,4 +1,10 @@
 {
+ "episode": 1,
+ "story_seconds": 27.5,
+ "end_card_seconds": 2.5,
+ "series": "VOICE NOTES",
+ "tagline": "Keep their voices.",
+ "handle": "@_babelground",
  "title": "Is it recording?",
  "slug": "is-it-recording",
  "look": "None",
@@ -20,31 +26,56 @@
  "cast": {
   "grandpa": {
    "voice": "an elderly American man in his late seventies, warm gravelly voice, a little unsure of technology, slow and gentle",
-   "sample": "Okay. Is this thing on? I think it's on."
+   "sample": "Okay. Is this thing on? I think it's on.",
+   "label": "Grandpa"
   },
   "maya": {
    "voice": "a young American woman in her twenties, soft warm voice, tired after a night shift",
-   "sample": "Hey. I'm on the bus. I just got off work."
+   "sample": "Hey. I'm on the bus. I just got off work.",
+   "label": "Maya"
   }
  },
  "shots": [
+  {
+   "still": "Wide shot of an almost empty city night bus driving through a quiet rain-wet street at 3am, warm interior lights glowing, reflections on the asphalt",
+   "motion": "handheld camera with slight natural sway, documentary feel, the bus drives slowly through the empty wet street",
+   "moves": [
+    "Static"
+   ],
+   "seconds": 3.75,
+   "trim": [
+    0.3,
+    3.42
+   ],
+   "seed": 7121,
+   "sfx": "a city bus passing at night on a wet road",
+   "sfx_volume": 0.5,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
+  },
   {
    "still": "sitting by the window of an almost empty night bus, holding her phone to her ear, eyes closed, city lights smearing across the glass",
    "motion": "handheld camera with slight natural sway, documentary feel, she listens with her eyes closed, the bus sways, lights slide across her face",
    "moves": [
     "Handheld"
    ],
-   "seconds": 4.25,
+   "seconds": 3.75,
    "trim": [
     0.3,
-    3.87
+    3.42
    ],
    "seed": 7111,
    "with": [
     "maya"
    ],
    "sfx": "city bus interior at night, engine hum, soft rattle",
-   "sfx_volume": 0.5
+   "sfx_volume": 0.5,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
   },
   {
    "still": "at a small kitchen table at night holding a smartphone far from his face, squinting at it through his glasses, one finger hovering, a wall clock and a teapot behind him",
@@ -52,17 +83,21 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 4.25,
+   "seconds": 3.75,
    "trim": [
     0.3,
-    3.87
+    3.42
    ],
    "seed": 7112,
    "with": [
     "grandpa"
    ],
    "sfx": "quiet kitchen at night, wall clock ticking, fridge hum",
-   "sfx_volume": 0.5
+   "sfx_volume": 0.5,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
   },
   {
    "still": "on the night bus, a small smile starting, she presses her lips together, eyes wet, looking out of the window",
@@ -70,14 +105,35 @@
    "moves": [
     "Push-in Close-up"
    ],
-   "seconds": 4.25,
+   "seconds": 3.75,
    "trim": [
     0.3,
-    3.87
+    3.42
    ],
    "seed": 7113,
    "with": [
     "maya"
+   ],
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
+  },
+  {
+   "still": "Close-up of an old framed wedding photograph and a pair of reading glasses on a kitchen shelf, warm lamp light, dust in the air",
+   "motion": "handheld camera with slight natural sway, documentary feel, dust drifts slowly in the lamp light",
+   "moves": [
+    "Push-in Close-up"
+   ],
+   "seconds": 3.75,
+   "trim": [
+    0.3,
+    3.42
+   ],
+   "seed": 7122,
+   "planned_trim": [
+    0.3,
+    3.3
    ]
   },
   {
@@ -86,14 +142,18 @@
    "moves": [
     "Static"
    ],
-   "seconds": 3.25,
+   "seconds": 3.0,
    "trim": [
     0.4,
-    3.02
+    2.69
    ],
    "seed": 7114,
    "sfx": "soft tap on a phone screen, a small beep",
-   "sfx_volume": 0.7
+   "sfx_volume": 0.7,
+   "planned_trim": [
+    0.4,
+    2.6
+   ]
   },
   {
    "still": "at the kitchen table looking at the phone with suspicion over his glasses, a little proud of himself",
@@ -101,14 +161,18 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 4.25,
+   "seconds": 3.75,
    "trim": [
     0.3,
-    3.87
+    3.42
    ],
    "seed": 7115,
    "with": [
     "grandpa"
+   ],
+   "planned_trim": [
+    0.3,
+    3.3
    ]
   },
   {
@@ -117,17 +181,43 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 4.25,
+   "seconds": 3.75,
    "trim": [
     0.2,
-    4.01
+    3.53
    ],
    "seed": 7116,
    "with": [
     "maya"
    ],
    "sfx": "bus brakes hissing softly, doors opening",
-   "sfx_volume": 0.45
+   "sfx_volume": 0.45,
+   "planned_trim": [
+    0.2,
+    3.4
+   ]
+  },
+  {
+   "still": "standing on the pavement at dawn as a city bus pulls away behind her, holding her phone to her ear, smiling with tired happy eyes",
+   "motion": "handheld camera with slight natural sway, documentary feel, the bus pulls away behind her, she smiles and walks off",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.75,
+   "trim": [
+    0.3,
+    3.42
+   ],
+   "seed": 7123,
+   "with": [
+    "maya"
+   ],
+   "sfx": "bus pulling away, early morning birds",
+   "sfx_volume": 0.45,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
   }
  ],
  "lines": [
@@ -141,24 +231,26 @@
    },
    "fx": "voicenote",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 0.15
   },
   {
    "who": "grandpa",
    "text": "Your grandmother says I should use these voice things. So. Hello, Maya.",
-   "at": 4.64,
+   "at": 4.79,
    "emotion": {
     "happy": 0.35,
     "calm": 0.4
    },
    "fx": "voicenote",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 3.6
   },
   {
    "who": "grandpa",
    "text": "I heard about the exam. I'm proud of you, kiddo. That's all.",
-   "at": 10.28,
+   "at": 10.52,
    "emotion": {
     "happy": 0.3,
     "melancholic": 0.35,
@@ -166,40 +258,70 @@
    },
    "fx": "voicenote",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 8.9
+  },
+  {
+   "who": "grandpa",
+   "text": "She made me practice this four times.",
+   "at": 15.82,
+   "emotion": {
+    "happy": 0.45,
+    "calm": 0.3
+   },
+   "fx": "voicenote",
+   "strength": 0.8,
+   "volume": 1.4,
+   "planned_at": 12.2
   },
   {
    "who": "grandpa",
    "text": "Now how do I stop this-",
-   "at": 15.44,
+   "at": 18.13,
    "emotion": {
     "surprised": 0.55,
     "happy": 0.2
    },
    "fx": "voicenote",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 13.0
   },
   {
    "who": "maya",
    "text": "Grandpa. It's still recording.",
-   "at": 17.6,
+   "at": 20.44,
    "emotion": {
     "happy": 0.55,
     "calm": 0.2
    },
    "fx": "room",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 15.6
+  },
+  {
+   "who": "maya",
+   "text": "Love you too, Grandpa.",
+   "at": 23.57,
+   "emotion": {
+    "happy": 0.4,
+    "melancholic": 0.25
+   },
+   "fx": "room",
+   "strength": 0.8,
+   "volume": 1.2,
+   "planned_at": 23.8
   }
  ],
  "ambience": "quiet city night bus interior, low engine rumble",
  "music": {
   "description": "sparse felt piano, two warm notes, intimate and tender, slow, with soft room tone",
-  "start": 8.5,
+  "start": 8.42,
   "volume": 0.32,
   "fade_in": 1.5,
-  "seed": 7190
+  "seed": 7190,
+  "planned_start": 8.5
  },
  "post_caption": "He finally learned voice notes. 🎙️\n\nWho's the person whose voice you'd keep forever?\n\n#VoiceNotes #HumanConnection #ShortFilm #Grandpa #Family\nMade with AI"
 }

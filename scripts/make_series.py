@@ -45,6 +45,7 @@ def main():
     ap.add_argument("--only", default="", help="prep (Hugging Face parts only) | stills | clips | edit")
     ap.add_argument("--grace", type=float, default=0, help="minutes to keep runtimes up after the work")
     ap.add_argument("--keep-colab", action="store_true")
+    ap.add_argument("--no-sound", action="store_true", help="skip music/voices (made separately)")
     a = ap.parse_args()
     import logging
     logging.basicConfig(level=logging.WARNING, format="%(message)s")
@@ -106,6 +107,13 @@ def main():
             guarded(f"{f.slug} sound", f.sound_track)
 
     try:
+        if a.only == "voices":  # voices, sound effects and plain stills; music comes after retime.py
+            snd = threading.Thread(target=lambda: [guarded(f"{f.slug} voices", lambda f=f: f.sound_track(music=False))
+                                                   for f in films])
+            snd.start()
+            for f in films:
+                guarded(f"{f.slug} stills (plain)", lambda f=f: f.stills("plain"))
+            snd.join()
         if a.only == "prep":  # everything that runs on Hugging Face only (no Colab)
             snd = threading.Thread(target=sounds)
             snd.start()
@@ -113,22 +121,22 @@ def main():
                 guarded(f"{f.slug} stills (plain)", lambda f=f: f.stills("plain"))
             snd.join()
         if a.only in ("", "stills"):
-            snd = threading.Thread(target=sounds)
+            snd = threading.Thread(target=(lambda: None) if a.no_sound else sounds)
             snd.start()
             for f in films:
                 guarded(f"{f.slug} stills (plain)", lambda f=f: f.stills("plain"))
             jobs = [(f, i) for f in films for i, s in enumerate(f.shots)
-                    if (s.get("character") or s.get("with")) and f"shot{i + 1}_still" not in f.state]
+                    if (s.get("character") or s.get("with")) and f.still_key(i) not in f.state]
             if jobs:
                 pool(jobs, "still")
             snd.join()
         if a.only in ("", "clips"):
             jobs = [(f, i) for f in films for i in range(len(f.shots))
-                    if f"shot{i + 1}_clip" not in f.state and f"shot{i + 1}_still" in f.state]
+                    if f.clip_key(i) not in f.state and f.still_key(i) in f.state]
             if jobs:
                 pool(jobs, "clip")
     finally:
-        if not a.keep_colab and a.only != "prep":
+        if not a.keep_colab and a.only not in ("prep", "voices"):
             if a.grace > 0:
                 say(f"keeping runtimes up for {a.grace:.0f} min for quick fixes")
                 time.sleep(60 * a.grace)
@@ -140,7 +148,7 @@ def main():
     done = []
     if a.only in ("", "edit"):
         for f in films:
-            if all(f"shot{i + 1}_clip" in f.state for i in range(len(f.shots))):
+            if all(f.clip_key(i) in f.state for i in range(len(f.shots))):
                 guarded(f"{f.slug} edit", lambda f=f: done.append(f.edit()))
     for p in done:
         print("FILM", p, flush=True)

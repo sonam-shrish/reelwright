@@ -1,4 +1,10 @@
 {
+ "episode": 5,
+ "story_seconds": 27.5,
+ "end_card_seconds": 2.5,
+ "series": "VOICE NOTES",
+ "tagline": "Send the message.",
+ "handle": "@_babelground",
  "title": "Ten years",
  "slug": "ten-years",
  "look": "None",
@@ -20,14 +26,38 @@
  "cast": {
   "sam": {
    "voice": "an American man in his thirties, hesitant, nervous laugh, sincere",
-   "sample": "Hey. It's Sam. Yeah. I know."
+   "sample": "Hey. It's Sam. Yeah. I know.",
+   "label": "Sam"
   },
   "jonah": {
    "voice": "an American man in his thirties, low dry voice, quietly moved",
-   "sample": "Sam. Wow. Hi."
+   "sample": "Sam. Wow. Hi.",
+   "label": "Jonah"
   }
  },
  "shots": [
+  {
+   "still": "small in the frame on an apartment balcony at dusk, a big city skyline behind him, holding a phone to his ear",
+   "motion": "handheld camera with slight natural sway, documentary feel, he stands still on the balcony as city lights come on",
+   "moves": [
+    "Static"
+   ],
+   "seconds": 3.75,
+   "trim": [
+    0.3,
+    3.41
+   ],
+   "seed": 7521,
+   "with": [
+    "jonah"
+   ],
+   "sfx": "city skyline at dusk, distant sirens, wind",
+   "sfx_volume": 0.45,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
+  },
   {
    "still": "standing on a small apartment balcony at dusk with a phone to his ear, frozen, a half-eaten sandwich in his other hand",
    "motion": "handheld camera with slight natural sway, documentary feel, he freezes, listening, the sandwich forgotten",
@@ -37,14 +67,18 @@
    "seconds": 3.75,
    "trim": [
     0.3,
-    3.56
+    3.41
    ],
    "seed": 7511,
    "with": [
     "jonah"
    ],
    "sfx": "city at dusk from a balcony, distant traffic, a dog barking far away",
-   "sfx_volume": 0.45
+   "sfx_volume": 0.45,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
   },
   {
    "still": "sitting in a parked car in the rain recording a voice note, rubbing his forehead, rain on the windshield",
@@ -55,14 +89,18 @@
    "seconds": 3.75,
    "trim": [
     0.3,
-    3.56
+    3.41
    ],
    "seed": 7512,
    "with": [
     "sam"
    ],
    "sfx": "rain on a car roof, wipers off",
-   "sfx_volume": 0.55
+   "sfx_volume": 0.55,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
   },
   {
    "still": "Close-up of an old instant photo of two teenage boys laughing in a diner booth, held between fingers, slightly faded",
@@ -73,9 +111,30 @@
    "seconds": 3.0,
    "trim": [
     0.3,
-    2.8
+    2.69
    ],
-   "seed": 7513
+   "seed": 7513,
+   "planned_trim": [
+    0.3,
+    2.6
+   ]
+  },
+  {
+   "still": "Close-up of a man's thumb hovering over a phone screen in dusk light, screen glare hiding the screen, then tapping",
+   "motion": "handheld camera with slight natural sway, documentary feel, a thumb hesitates over the phone, then taps",
+   "moves": [
+    "Static"
+   ],
+   "seconds": 3.75,
+   "trim": [
+    0.3,
+    3.41
+   ],
+   "seed": 7522,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
   },
   {
    "still": "on the balcony, lowering the phone, staring at the city, deciding, jaw tight",
@@ -86,11 +145,15 @@
    "seconds": 3.75,
    "trim": [
     0.3,
-    3.56
+    3.41
    ],
    "seed": 7514,
    "with": [
     "jonah"
+   ],
+   "planned_trim": [
+    0.3,
+    3.3
    ]
   },
   {
@@ -102,14 +165,18 @@
    "seconds": 3.75,
    "trim": [
     0.3,
-    3.56
+    3.41
    ],
    "seed": 7515,
    "with": [
     "jonah"
    ],
    "sfx": "footsteps on wet pavement, passing car",
-   "sfx_volume": 0.5
+   "sfx_volume": 0.5,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
   },
   {
    "still": "both men sitting across from each other in a worn diner booth with two coffees, both laughing, a little emotional",
@@ -117,10 +184,10 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 4.0,
+   "seconds": 3.75,
    "trim": [
     0.2,
-    3.68
+    3.52
    ],
    "seed": 7516,
    "with": [
@@ -128,14 +195,41 @@
     "sam"
    ],
    "sfx": "diner ambience, cutlery, coffee machine",
-   "sfx_volume": 0.45
+   "sfx_volume": 0.45,
+   "planned_trim": [
+    0.2,
+    3.4
+   ]
+  },
+  {
+   "still": "Wide shot through a rain-streaked diner window at night, two men laughing in a booth inside, neon reflections on the glass",
+   "motion": "handheld camera with slight natural sway, documentary feel, rain runs down the glass, they laugh inside",
+   "moves": [
+    "Static"
+   ],
+   "seconds": 3.75,
+   "trim": [
+    0.3,
+    3.41
+   ],
+   "seed": 7523,
+   "with": [
+    "jonah",
+    "sam"
+   ],
+   "sfx": "rain on a window, muffled diner laughter",
+   "sfx_volume": 0.5,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
   }
  ],
  "lines": [
   {
    "who": "sam",
    "text": "Hey. It's Sam. ...Yeah. I know. Ten years.",
-   "at": 0.15,
+   "at": 0.16,
    "emotion": {
     "afraid": 0.2,
     "melancholic": 0.3,
@@ -143,63 +237,94 @@
    },
    "fx": "voicenote",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 0.15
   },
   {
    "who": "sam",
    "text": "I'm in town till Sunday. That diner on Fifth is still there.",
-   "at": 4.91,
+   "at": 5.06,
    "emotion": {
     "calm": 0.4,
     "melancholic": 0.2
    },
    "fx": "voicenote",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 4.6
+  },
+  {
+   "who": "sam",
+   "text": "Remember the milkshake thing? We still owe that place a mop.",
+   "at": 9.7,
+   "emotion": {
+    "happy": 0.4,
+    "melancholic": 0.2
+   },
+   "fx": "voicenote",
+   "strength": 0.8,
+   "volume": 1.4,
+   "planned_at": 8.0
   },
   {
    "who": "sam",
    "text": "No pressure. I just... I missed my friend.",
-   "at": 9.39,
+   "at": 13.5,
    "emotion": {
     "sad": 0.35,
     "calm": 0.3
    },
    "fx": "voicenote",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 8.4
   },
   {
    "who": "jonah",
    "text": "You're late.",
-   "at": 15.3,
+   "at": 17.31,
    "emotion": {
     "happy": 0.4,
     "calm": 0.3
    },
    "fx": "room",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 15.3
   },
   {
    "who": "sam",
    "text": "Ten years late.",
-   "at": 16.6,
+   "at": 18.36,
    "emotion": {
     "happy": 0.55
    },
    "fx": "room",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 16.6
+  },
+  {
+   "who": "jonah",
+   "text": "Milkshakes are on you.",
+   "at": 25.47,
+   "emotion": {
+    "happy": 0.5
+   },
+   "fx": "room",
+   "strength": 0.8,
+   "volume": 1.4,
+   "planned_at": 24.6
   }
  ],
  "ambience": "city evening, distant traffic",
  "music": {
   "description": "slow melancholic Rhodes piano and soft upright bass, late night, warm",
-  "start": 7.8,
+  "start": 8.08,
   "volume": 0.3,
   "fade_in": 1.5,
-  "seed": 7590
+  "seed": 7590,
+  "planned_start": 7.8
  },
  "post_caption": "Ten years of silence. One voice note. 🕰️\n\nWho's the friend you still think about?\n\n#VoiceNotes #HumanConnection #ShortFilm #Friendship #OldFriends\nMade with AI"
 }

@@ -34,13 +34,179 @@ def line(who, text, at, emotion=None, fx="", subtitle=None, strength=0.8, volume
 
 
 def film(n, slug, title, people, cast, shots, lines, ambience, music, caption):
-    sb = {"title": title, "slug": slug, "look": "None", "style": STYLE, "aspect": "9:16", "reel": True,
+    # 30 s versions: extra shots and lines inserted at their final positions (see EXTRA below)
+    for idx, sh in EXTRA.get(slug, {}).get("shots", []):
+        shots.insert(idx, sh)
+    for idx, ln in EXTRA.get(slug, {}).get("lines", []):
+        lines.insert(idx, ln)
+    for name, c in cast.items():
+        c.setdefault("label", LABELS.get(name, name.title()))
+    sb = {"episode": n, "story_seconds": STORY_SECONDS, "end_card_seconds": 2.5, "series": "VOICE NOTES",
+          "tagline": TAGLINES.get(slug, ""), "handle": "@_babelground", "title": title, "slug": slug, "look": "None", "style": STYLE, "aspect": "9:16", "reel": True,
           "film_look": True, "subtitles": True, "people": people, "cast": cast, "shots": shots, "lines": lines,
           "ambience": ambience, "music": music, "post_caption": caption}
     (OUT / f"{n:02d}-{slug}.json").write_text(json.dumps(sb, indent=1, ensure_ascii=False))
 
 
 TAGS = "#VoiceNotes #HumanConnection #ShortFilm"
+STORY_SECONDS = 27.5  # + a 2.5 s end card in Remotion = 30 s
+
+# End-card line per film, and the names shown on the voice-message / call / radio pill.
+TAGLINES = {
+    "is-it-recording": "Keep their voices.", "wrong-number": "Say the kind thing.",
+    "listen-to-the-pan": "Call home.", "last-cookie": "Leave them a voice note.",
+    "ten-years": "Send the message.", "translator": "Love needs no translation.",
+    "on-the-air": "Show up.", "fridge-notes": "Say sorry first.",
+    "stuck": "Ask a stranger how they are.", "future-me": "Be kind to your younger self.",
+}
+LABELS = {
+    "grandpa": "Grandpa", "maya": "Maya", "bev": "Auntie Bev", "daniel": "Daniel", "receptionist": "Reception",
+    "amma": "Amma", "priya": "Priya", "leo": "Leo", "ana": "Ana", "sam": "Sam", "jonah": "Jonah",
+    "halmeoni": "Halmeoni", "app": "Translate", "claire": "Claire", "host": "Night Lines 98.4",
+    "dad": "Caller · Rick", "jess": "Jess", "nadia": "Nadia", "tom": "Tom", "ines": "Ines", "ray": "Ray",
+    "teen": "Me, 16", "adult": "Me, 30",
+}
+
+# Extra beats for the 30-second cut: (position, shot) and (position, line), applied in order.
+EXTRA = {
+    "is-it-recording": {
+        "shots": [(0, shot("Wide shot of an almost empty city night bus driving through a quiet rain-wet street at 3am, "
+                           "warm interior lights glowing, reflections on the asphalt",
+                           "the bus drives slowly through the empty wet street", None, seed=7121, moves=["Static"],
+                           sfx="a city bus passing at night on a wet road", vol=0.5)),
+                  (4, shot("Close-up of an old framed wedding photograph and a pair of reading glasses on a kitchen "
+                           "shelf, warm lamp light, dust in the air", "dust drifts slowly in the lamp light", None,
+                           seed=7122, moves=["Push-in Close-up"])),
+                  (8, shot("standing on the pavement at dawn as a city bus pulls away behind her, holding her phone to "
+                           "her ear, smiling with tired happy eyes", "the bus pulls away behind her, she smiles and "
+                           "walks off", ["maya"], seed=7123, sfx="bus pulling away, early morning birds", vol=0.45))],
+        "lines": [(3, line("grandpa", "She made me practice this four times.", 12.2, {"happy": 0.45, "calm": 0.3},
+                           "voicenote")),
+                  (6, line("maya", "Love you too, Grandpa.", 23.8, {"happy": 0.4, "melancholic": 0.25}, "room",
+                           volume=1.2))]},
+    "wrong-number": {
+        "shots": [(0, shot("walking alone into a tall glass office lobby in the early morning, too-big suit, holding a "
+                           "folder, looking up at the ceiling", "he walks in slowly and looks up, nervous", ["daniel"],
+                           seed=7221, moves=["Tracking Shot"], sfx="busy office lobby, footsteps echo, revolving door",
+                           vol=0.45)),
+                  (5, shot("standing at her sunny kitchen window with the phone to her ear, looking out, a soft proud "
+                           "smile", "she gazes out of the window, smiling softly", ["bev"], seed=7222)),
+                  (8, shot("An office door with a frosted glass panel closing slowly in a plain corridor, an empty "
+                           "plastic chair beside it with a paper cup left on it", "the door slowly swings shut", None,
+                           seed=7223, moves=["Static"], sfx="office door closing softly, latch click", vol=0.6))],
+        "lines": [(3, line("bev", "Your mama would be so proud of you. I'm proud of you.", 10.0,
+                           {"happy": 0.3, "melancholic": 0.3}, "phone"))]},
+    "listen-to-the-pan": {
+        "shots": [(0, shot("Wide shot of a tiny city apartment kitchen at night, smoke drifting under a hanging bulb, "
+                           "a phone propped against a jar on the counter, nobody in frame", "smoke drifts across the "
+                           "small kitchen", None, seed=7321, moves=["Static"], sfx="extractor fan, sizzling pan, city "
+                           "outside", vol=0.45)),
+                  (5, shot("in her kitchen stirring a big steel pot with one hand, laughing at her own story, steam "
+                           "rising", "she stirs the pot and laughs", ["amma"], seed=7322)),
+                  (8, shot("sitting on her small kitchen floor with a bowl of dal, phone to her ear, smiling and "
+                           "rolling her eyes affectionately", "she eats and smiles while listening on the phone",
+                           ["priya"], seed=7323))],
+        "lines": [(3, line("amma", "Your nani never measured. I never measured. You will not measure.", 9.4,
+                           {"happy": 0.4, "calm": 0.2}, "voicenote")),
+                  (6, line("priya", "Yes, I'm eating. Amma says hi.", 24.0, {"happy": 0.45}, "room"))]},
+    "last-cookie": {
+        "shots": [(0, shot("Wide shot of a long empty hospital corridor at 3am under fluorescent lights, a nurse in blue "
+                           "scrubs sitting alone on a chair at the far end", "the lights hum, the nurse sits still far "
+                           "away", None, seed=7421, moves=["Static"], sfx="empty hospital corridor at night, "
+                           "fluorescent hum, distant monitor beep", vol=0.45)),
+                  (4, shot("Close-up of a small child's fingers pressing a glowing phone screen in the dark, a night "
+                           "light shaped like a moon behind", "a small finger presses the glowing screen", None,
+                           seed=7422, moves=["Static"])),
+                  (8, shot("sitting on the edge of her bed at dawn still in scrubs, eating the cookie with her eyes "
+                           "closed, smiling", "she eats the cookie slowly, eyes closed, smiling", ["ana"], seed=7423,
+                           sfx="quiet bedroom at dawn, birds outside", vol=0.4))],
+        "lines": [(3, line("leo", "Also, Grandma let me stay up till nine. Don't tell her I told you.", 10.8,
+                           {"happy": 0.45, "surprised": 0.1}, "voicenote", strength=0.7)),
+                  (6, line("ana", "Best cookie ever.", 25.0, {"happy": 0.5, "melancholic": 0.15}, "room",
+                           volume=1.2))]},
+    "ten-years": {
+        "shots": [(0, shot("small in the frame on an apartment balcony at dusk, a big city skyline behind him, holding "
+                           "a phone to his ear", "he stands still on the balcony as city lights come on", ["jonah"],
+                           seed=7521, moves=["Static"], sfx="city skyline at dusk, distant sirens, wind", vol=0.45)),
+                  (4, shot("Close-up of a man's thumb hovering over a phone screen in dusk light, screen glare hiding "
+                           "the screen, then tapping", "a thumb hesitates over the phone, then taps", None, seed=7522,
+                           moves=["Static"])),
+                  (8, shot("Wide shot through a rain-streaked diner window at night, two men laughing in a booth "
+                           "inside, neon reflections on the glass", "rain runs down the glass, they laugh inside",
+                           ["jonah", "sam"], seed=7523, moves=["Static"], sfx="rain on a window, muffled diner "
+                           "laughter", vol=0.5))],
+        "lines": [(2, line("sam", "Remember the milkshake thing? We still owe that place a mop.", 8.0,
+                           {"happy": 0.4, "melancholic": 0.2}, "voicenote")),
+                  (6, line("jonah", "Milkshakes are on you.", 24.6, {"happy": 0.5}, "room"))]},
+    "translator": {
+        "shots": [(0, shot("Wide shot of a small warm apartment dining room in the evening, a low table crowded with "
+                           "Korean dishes, an old woman and a young woman sitting across from each other in silence",
+                           "they sit in awkward silence, steam rises from the dishes", ["halmeoni", "claire"],
+                           seed=7621, moves=["Static"])),
+                  (4, shot("nodding slowly while chewing, studying the young woman across the table with narrowed eyes",
+                           "she chews slowly and studies her guest", ["halmeoni"], seed=7622)),
+                  (8, shot("Close-up of an old hand putting another piece of fish into a full rice bowl while a young "
+                           "hand lifts in mock surrender, both laughing out of frame", "the old hand adds more food, "
+                           "the young hand waves in surrender", None, seed=7623, moves=["Static"],
+                           sfx="chopsticks on ceramic, two women laughing softly", vol=0.55))],
+        "lines": [(4, line("claire", "Oh. How do I say thank you?", 13.6, {"happy": 0.4, "calm": 0.2}, "room")),
+                  (5, line("halmeoni", "고마워요.", 15.6, {"calm": 0.6}, "room", "(Korean) Thank you."))]},
+    "on-the-air": {
+        "shots": [(0, shot("sitting alone in a parked car in a school parking lot at night in a graduation gown, "
+                           "families in dresses walking past toward glowing doors", "families walk past the car, she "
+                           "stays in her seat", ["jess"], seed=7721, moves=["Static"], sfx="parking lot at night, "
+                           "families chatting, car doors", vol=0.4)),
+                  (4, shot("glancing at a faded photo of a little girl tucked into the truck's sun visor while driving "
+                           "at night, a small smile", "he glances up at the photo and smiles", ["dad"], seed=7722,
+                           sfx="truck cab engine rumble", vol=0.45)),
+                  (8, shot("climbing down from a big truck cab in a school parking lot at night, holding a small bunch "
+                           "of supermarket flowers, nervous smile", "he climbs down from the cab with the flowers",
+                           ["dad"], seed=7723, sfx="truck door slam, footsteps on asphalt", vol=0.6))],
+        "lines": [(3, line("host", "Jess, if you're out there... that's one proud dad.", 11.0, {"calm": 0.7}, "radio")),
+                  (5, line("dad", "Look out your window, kid.", 18.0, {"happy": 0.5}, "radio"))]},
+    "fridge-notes": {
+        "shots": [(0, shot("Wide shot of a small sunny kitchen in the morning, a fridge covered in old magnets and "
+                           "photos, two coffee mugs on the counter, nobody there", "morning light moves across the "
+                           "quiet kitchen", None, seed=7821, moves=["Static"], sfx="quiet kitchen morning, clock "
+                           "ticking, birds", vol=0.4)),
+                  (4, shot("writing on a yellow sticky note against the kitchen counter, tongue between his teeth, "
+                           "concentrating hard", "he writes carefully, crosses something out, writes again", ["tom"],
+                           seed=7822, sfx="pen scratching on paper", vol=0.6)),
+                  (8, shot("Close-up of a fridge door covered in yellow sticky notes overlapping each other, warm "
+                           "morning sun, text not readable", "sunlight slowly moves over the notes", None, seed=7823,
+                           moves=["Push-in Close-up"]))],
+        "lines": [(2, line("nadia", "He bought the good coffee. Coward.", 6.4, {"happy": 0.3, "angry": 0.15},
+                           "", "(note) Bought the good coffee.")),
+                  (4, line("tom", "Okay. Last note. Don't mess this up.", 12.0, {"afraid": 0.3, "calm": 0.3}, "",
+                           "(thinking) Last note. Don't mess this up."))]},
+    "stuck": {
+        "shots": [(0, shot("rushing through a busy office building lobby at 8am, squeezing into an elevator just as "
+                           "the doors close", "she rushes through the crowd and slips into the elevator", ["ines"],
+                           seed=7921, moves=["Tracking Shot"], sfx="busy lobby, footsteps, elevator ding", vol=0.5)),
+                  (5, shot("sitting on the elevator floor unwrapping a sandwich and offering half across, kind grin",
+                           "he unwraps the sandwich and offers half", ["ray"], seed=7922,
+                           sfx="paper wrapper crinkling", vol=0.6)),
+                  (8, shot("walking out onto a sunny city street, pulling a small sketchbook out of her tote bag and "
+                           "smiling at it", "she walks out into the sun and opens a sketchbook", ["ines"], seed=7923,
+                           sfx="busy sunny street, traffic, birds", vol=0.45))],
+        "lines": [(4, line("ray", "Sandwich? Half. Cheese and pickle. Best in London.", 12.8,
+                           {"happy": 0.45, "calm": 0.2}, "room")),
+                  (7, line("ray", "Ray. Now go buy some paint.", 24.8, {"happy": 0.45}, "room"))]},
+    "future-me": {
+        "shots": [(0, shot("Wide shot from outside of a suburban bedroom window at night glowing with fairy lights, a "
+                           "teenage girl visible inside sitting on the floor with her phone", "the curtains move "
+                           "slightly, the girl sits inside", ["teen"], seed=8021, moves=["Static"],
+                           sfx="suburban street at night, crickets", vol=0.4)),
+                  (4, shot("Close-up of an old phone with a cracked case lying on a bedroom carpet beside a diary and "
+                           "a pencil, fairy light bokeh", "fairy lights twinkle softly", None, seed=8022,
+                           moves=["Static"])),
+                  (8, shot("walking out of an office building into golden evening light, putting her phone in her "
+                           "pocket, taking a deep breath, smiling", "she walks out, breathes in deeply and smiles",
+                           ["adult"], seed=8023, sfx="city street at golden hour, footsteps", vol=0.45))],
+        "lines": [(2, line("teen", "Also, did we ever learn to drive? Mum says I'm a danger.", 7.6,
+                           {"happy": 0.3, "afraid": 0.2}, "voicenote")),
+                  (6, line("adult", "Also... we can drive now. Mostly.", 23.8, {"happy": 0.5}, "voicenote"))]},
+}
 
 # 1 ------------------------------------------------------------------------------------------
 film(1, "is-it-recording", "Is it recording?",

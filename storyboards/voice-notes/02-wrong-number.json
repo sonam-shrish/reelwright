@@ -1,4 +1,10 @@
 {
+ "episode": 2,
+ "story_seconds": 27.5,
+ "end_card_seconds": 2.5,
+ "series": "VOICE NOTES",
+ "tagline": "Say the kind thing.",
+ "handle": "@_babelground",
  "title": "Wrong number",
  "slug": "wrong-number",
  "look": "None",
@@ -20,35 +26,64 @@
  "cast": {
   "bev": {
    "voice": "a Jamaican woman in her sixties, warm, loud and loving, speaks fast, laughs easily",
-   "sample": "Rosa, baby, it's your Auntie Bev. Listen to me now."
+   "sample": "Rosa, baby, it's your Auntie Bev. Listen to me now.",
+   "label": "Auntie Bev"
   },
   "daniel": {
    "voice": "a young Black British man in his twenties, soft spoken, a little nervous",
-   "sample": "Hi. Sorry. I think you have the wrong number."
+   "sample": "Hi. Sorry. I think you have the wrong number.",
+   "label": "Daniel"
   },
   "receptionist": {
    "voice": "a polite woman in her forties, neutral office voice",
-   "sample": "Daniel? They're ready for you."
+   "sample": "Daniel? They're ready for you.",
+   "label": "Reception"
   }
  },
  "shots": [
+  {
+   "still": "walking alone into a tall glass office lobby in the early morning, too-big suit, holding a folder, looking up at the ceiling",
+   "motion": "handheld camera with slight natural sway, documentary feel, he walks in slowly and looks up, nervous",
+   "moves": [
+    "Tracking Shot"
+   ],
+   "seconds": 3.75,
+   "trim": [
+    0.3,
+    3.42
+   ],
+   "seed": 7221,
+   "with": [
+    "daniel"
+   ],
+   "sfx": "busy office lobby, footsteps echo, revolving door",
+   "sfx_volume": 0.45,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
+  },
   {
    "still": "sitting alone on a plastic chair in a plain office corridor, knee bouncing, phone to his ear, frowning in confusion",
    "motion": "handheld camera with slight natural sway, documentary feel, his knee bounces nervously, he frowns at the voice on the phone",
    "moves": [
     "Handheld"
    ],
-   "seconds": 4.25,
+   "seconds": 3.75,
    "trim": [
     0.3,
-    3.91
+    3.42
    ],
    "seed": 7211,
    "with": [
     "daniel"
    ],
    "sfx": "quiet office corridor, distant printer, air conditioning",
-   "sfx_volume": 0.45
+   "sfx_volume": 0.45,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
   },
   {
    "still": "in her small sunny kitchen holding a phone up to her mouth, talking with her free hand, a pot steaming on the stove",
@@ -56,17 +91,21 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 4.25,
+   "seconds": 3.75,
    "trim": [
     0.3,
-    3.91
+    3.42
    ],
    "seed": 7212,
    "with": [
     "bev"
    ],
    "sfx": "pot simmering, radio playing very quietly in the background",
-   "sfx_volume": 0.4
+   "sfx_volume": 0.4,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
   },
   {
    "still": "Close-up of a young man's hands holding a printed CV, the text blurred and out of focus, slightly crumpled corner, shallow depth of field",
@@ -74,14 +113,18 @@
    "moves": [
     "Static"
    ],
-   "seconds": 3.25,
+   "seconds": 2.75,
    "trim": [
     0.3,
-    2.94
+    2.59
    ],
    "seed": 7213,
    "sfx": "paper rustle",
-   "sfx_volume": 0.6
+   "sfx_volume": 0.6,
+   "planned_trim": [
+    0.3,
+    2.5
+   ]
   },
   {
    "still": "in the corridor, a slow smile, sitting up straighter, still holding the phone to his ear",
@@ -89,14 +132,38 @@
    "moves": [
     "Push-in Close-up"
    ],
-   "seconds": 4.25,
+   "seconds": 3.75,
    "trim": [
     0.3,
-    3.91
+    3.42
    ],
    "seed": 7214,
    "with": [
     "daniel"
+   ],
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
+  },
+  {
+   "still": "standing at her sunny kitchen window with the phone to her ear, looking out, a soft proud smile",
+   "motion": "handheld camera with slight natural sway, documentary feel, she gazes out of the window, smiling softly",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.75,
+   "trim": [
+    0.3,
+    3.42
+   ],
+   "seed": 7222,
+   "with": [
+    "bev"
+   ],
+   "planned_trim": [
+    0.3,
+    3.3
    ]
   },
   {
@@ -105,14 +172,18 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 4.25,
+   "seconds": 3.75,
    "trim": [
     0.3,
-    3.91
+    3.42
    ],
    "seed": 7215,
    "with": [
     "bev"
+   ],
+   "planned_trim": [
+    0.3,
+    3.3
    ]
   },
   {
@@ -121,81 +192,122 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 4.25,
+   "seconds": 3.75,
    "trim": [
     0.2,
-    4.05
+    3.53
    ],
    "seed": 7216,
    "with": [
     "daniel"
    ],
    "sfx": "door opening, footsteps on office carpet",
-   "sfx_volume": 0.5
+   "sfx_volume": 0.5,
+   "planned_trim": [
+    0.2,
+    3.4
+   ]
+  },
+  {
+   "still": "An office door with a frosted glass panel closing slowly in a plain corridor, an empty plastic chair beside it with a paper cup left on it",
+   "motion": "handheld camera with slight natural sway, documentary feel, the door slowly swings shut",
+   "moves": [
+    "Static"
+   ],
+   "seconds": 3.75,
+   "trim": [
+    0.3,
+    3.42
+   ],
+   "seed": 7223,
+   "sfx": "office door closing softly, latch click",
+   "sfx_volume": 0.6,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
   }
  ],
  "lines": [
   {
    "who": "bev",
    "text": "Rosa, baby, it's Auntie Bev. Today's the big interview, eh?",
-   "at": 0.15,
+   "at": 0.21,
    "emotion": {
     "happy": 0.55
    },
    "fx": "phone",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 0.15
   },
   {
    "who": "daniel",
    "text": "...I'm not Rosa.",
-   "at": 5.52,
+   "at": 5.7,
    "emotion": {
     "surprised": 0.3,
     "calm": 0.4
    },
    "fx": "room",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 3.4
   },
   {
    "who": "bev",
    "text": "You walk in there with your head up. They need you more than you need them, you hear?",
-   "at": 6.87,
+   "at": 7.83,
    "emotion": {
     "happy": 0.4,
     "calm": 0.3
    },
    "fx": "phone",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 5.6
+  },
+  {
+   "who": "bev",
+   "text": "Your mama would be so proud of you. I'm proud of you.",
+   "at": 13.98,
+   "emotion": {
+    "happy": 0.3,
+    "melancholic": 0.3
+   },
+   "fx": "phone",
+   "strength": 0.8,
+   "volume": 1.4,
+   "planned_at": 10.0
   },
   {
    "who": "bev",
    "text": "And eat something first! I love you, baby.",
-   "at": 11.61,
+   "at": 17.89,
    "emotion": {
     "happy": 0.6
    },
    "fx": "phone",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 11.3
   },
   {
    "who": "receptionist",
    "text": "Daniel? They're ready for you.",
-   "at": 15.37,
+   "at": 21.8,
    "emotion": {
     "calm": 0.6
    },
    "fx": "room",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 14.7
   },
   {
    "who": "daniel",
    "text": "Thank you, Auntie Bev.",
-   "at": 17.75,
+   "at": 24.33,
    "emotion": {
     "happy": 0.45,
     "calm": 0.3
@@ -203,16 +315,18 @@
    "fx": "",
    "strength": 0.8,
    "volume": 1.1,
-   "subtitle_text": "(whispers) Thank you, Auntie Bev."
+   "subtitle_text": "(whispers) Thank you, Auntie Bev.",
+   "planned_at": 16.8
   }
  ],
  "ambience": "quiet office corridor, distant phones",
  "music": {
   "description": "warm understated soul guitar and soft brushed drums, hopeful, builds gently",
-  "start": 9.0,
+  "start": 12.58,
   "volume": 0.3,
   "fade_in": 1.2,
-  "seed": 7290
+  "seed": 7290,
+  "planned_start": 9.0
  },
  "post_caption": "Wrong number. Right words. ☎️\n\nWhat's the best thing a stranger ever told you?\n\n#VoiceNotes #HumanConnection #ShortFilm #Kindness #JobInterview\nMade with AI"
 }

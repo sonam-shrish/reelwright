@@ -1,4 +1,10 @@
 {
+ "episode": 3,
+ "story_seconds": 27.5,
+ "end_card_seconds": 2.5,
+ "series": "VOICE NOTES",
+ "tagline": "Call home.",
+ "handle": "@_babelground",
  "title": "Listen to the pan",
  "slug": "listen-to-the-pan",
  "look": "None",
@@ -20,31 +26,56 @@
  "cast": {
   "amma": {
    "voice": "an Indian mother in her late fifties, Indian English accent, quick, funny, bossy and loving",
-   "sample": "Priya, are you listening? Don't measure anything. Listen."
+   "sample": "Priya, are you listening? Don't measure anything. Listen.",
+   "label": "Amma"
   },
   "priya": {
    "voice": "a young British Indian woman in her late twenties, dry sense of humor, warm",
-   "sample": "Amma, I followed the recipe exactly."
+   "sample": "Amma, I followed the recipe exactly.",
+   "label": "Priya"
   }
  },
  "shots": [
+  {
+   "still": "Wide shot of a tiny city apartment kitchen at night, smoke drifting under a hanging bulb, a phone propped against a jar on the counter, nobody in frame",
+   "motion": "handheld camera with slight natural sway, documentary feel, smoke drifts across the small kitchen",
+   "moves": [
+    "Static"
+   ],
+   "seconds": 3.75,
+   "trim": [
+    0.3,
+    3.41
+   ],
+   "seed": 7321,
+   "sfx": "extractor fan, sizzling pan, city outside",
+   "sfx_volume": 0.45,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
+  },
   {
    "still": "in a tiny apartment kitchen waving smoke away from a frying pan with a tea towel, coughing, phone propped against a jar",
    "motion": "handheld camera with slight natural sway, documentary feel, she waves smoke away from the pan and coughs, annoyed",
    "moves": [
     "Handheld"
    ],
-   "seconds": 4.0,
+   "seconds": 3.75,
    "trim": [
     0.3,
-    3.61
+    3.41
    ],
    "seed": 7311,
    "with": [
     "priya"
    ],
    "sfx": "hot oil sizzling, smoke alarm chirp once",
-   "sfx_volume": 0.55
+   "sfx_volume": 0.55,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
   },
   {
    "still": "in her own kitchen at home recording a voice note, gesturing at the camera with a wooden spoon like a teacher",
@@ -52,14 +83,18 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 4.0,
+   "seconds": 3.75,
    "trim": [
     0.3,
-    3.61
+    3.41
    ],
    "seed": 7312,
    "with": [
     "amma"
+   ],
+   "planned_trim": [
+    0.3,
+    3.3
    ]
   },
   {
@@ -71,11 +106,15 @@
    "seconds": 3.0,
    "trim": [
     0.3,
-    2.84
+    2.69
    ],
    "seed": 7313,
    "sfx": "cumin seeds crackling and popping in hot oil",
-   "sfx_volume": 0.8
+   "sfx_volume": 0.8,
+   "planned_trim": [
+    0.3,
+    2.6
+   ]
   },
   {
    "still": "leaning over the pan, listening to it with her head tilted, a small surprised smile",
@@ -83,14 +122,38 @@
    "moves": [
     "Push-in Close-up"
    ],
-   "seconds": 4.0,
+   "seconds": 3.75,
    "trim": [
     0.3,
-    3.61
+    3.41
    ],
    "seed": 7314,
    "with": [
     "priya"
+   ],
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
+  },
+  {
+   "still": "in her kitchen stirring a big steel pot with one hand, laughing at her own story, steam rising",
+   "motion": "handheld camera with slight natural sway, documentary feel, she stirs the pot and laughs",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.75,
+   "trim": [
+    0.3,
+    3.41
+   ],
+   "seed": 7322,
+   "with": [
+    "amma"
+   ],
+   "planned_trim": [
+    0.3,
+    3.3
    ]
   },
   {
@@ -99,14 +162,18 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 4.0,
+   "seconds": 3.75,
    "trim": [
     0.3,
-    3.61
+    3.41
    ],
    "seed": 7315,
    "with": [
     "amma"
+   ],
+   "planned_trim": [
+    0.3,
+    3.3
    ]
   },
   {
@@ -115,17 +182,41 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 4.0,
+   "seconds": 3.75,
    "trim": [
     0.2,
-    3.73
+    3.52
    ],
    "seed": 7316,
    "with": [
     "priya"
    ],
    "sfx": "spoon on steel pan, soft dial tone",
-   "sfx_volume": 0.5
+   "sfx_volume": 0.5,
+   "planned_trim": [
+    0.2,
+    3.4
+   ]
+  },
+  {
+   "still": "sitting on her small kitchen floor with a bowl of dal, phone to her ear, smiling and rolling her eyes affectionately",
+   "motion": "handheld camera with slight natural sway, documentary feel, she eats and smiles while listening on the phone",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.75,
+   "trim": [
+    0.3,
+    3.41
+   ],
+   "seed": 7323,
+   "with": [
+    "priya"
+   ],
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
   }
  ],
  "lines": [
@@ -140,12 +231,13 @@
    },
    "fx": "room",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 0.15
   },
   {
    "who": "amma",
    "text": "Recipe? What recipe? You don't measure. You listen to the pan.",
-   "at": 2.85,
+   "at": 3.01,
    "emotion": {
     "happy": 0.35,
     "surprised": 0.2,
@@ -153,52 +245,82 @@
    },
    "fx": "voicenote",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 2.6
   },
   {
    "who": "amma",
    "text": "When the cumin talks back, it's ready.",
-   "at": 6.97,
+   "at": 7.28,
    "emotion": {
     "happy": 0.3,
     "calm": 0.4
    },
    "fx": "voicenote",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 6.2
+  },
+  {
+   "who": "amma",
+   "text": "Your nani never measured. I never measured. You will not measure.",
+   "at": 9.59,
+   "emotion": {
+    "happy": 0.4,
+    "calm": 0.2
+   },
+   "fx": "voicenote",
+   "strength": 0.8,
+   "volume": 1.4,
+   "planned_at": 9.4
   },
   {
    "who": "amma",
    "text": "And call your father. He thinks you're angry with him. Silly man.",
-   "at": 11.4,
+   "at": 13.56,
    "emotion": {
     "happy": 0.4,
     "melancholic": 0.2
    },
    "fx": "voicenote",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 11.4
   },
   {
    "who": "priya",
    "text": "Hi, Appa. ...No, I'm not angry.",
-   "at": 15.9,
+   "at": 17.52,
    "emotion": {
     "happy": 0.4,
     "calm": 0.4
    },
    "fx": "room",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 15.9
+  },
+  {
+   "who": "priya",
+   "text": "Yes, I'm eating. Amma says hi.",
+   "at": 24.45,
+   "emotion": {
+    "happy": 0.45
+   },
+   "fx": "room",
+   "strength": 0.8,
+   "volume": 1.4,
+   "planned_at": 24.0
   }
  ],
  "ambience": "small apartment kitchen, extractor fan hum, city outside the window",
  "music": {
   "description": "playful warm acoustic guitar with light tabla, cozy and homely",
-  "start": 6.0,
+  "start": 6.11,
   "volume": 0.3,
   "fade_in": 1.0,
-  "seed": 7390
+  "seed": 7390,
+  "planned_start": 6.0
  },
  "post_caption": "Moms don't give recipes. They give instructions for life. 🍲\n\nWhat's the advice your mom always repeats?\n\n#VoiceNotes #HumanConnection #ShortFilm #Mom #Cooking\nMade with AI"
 }

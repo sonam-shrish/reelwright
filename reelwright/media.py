@@ -179,3 +179,12 @@ def fit_to_audio(video: str | Path, audio: str | Path, out: str | Path) -> Path:
 def trim_audio(audio: str | Path, seconds: float, out: str | Path) -> Path:
     _run(["ffmpeg", "-v", "error", "-y", "-i", str(audio), "-t", f"{seconds:.3f}", str(out)])
     return Path(out)
+
+
+def trim_silence(audio: str | Path, out: str | Path, threshold_db: float = -42, pad: float = 0.08) -> Path:
+    """Cut silence from the start and end of a speech clip (TTS output often has a second or
+    two of dead air), keeping `pad` seconds of natural room either side."""
+    f = (f"silenceremove=start_periods=1:start_threshold={threshold_db}dB:start_silence={pad},"
+         f"areverse,silenceremove=start_periods=1:start_threshold={threshold_db}dB:start_silence={pad},areverse")
+    _run(["ffmpeg", "-v", "error", "-y", "-i", str(audio), "-af", f, str(out)])
+    return Path(out)

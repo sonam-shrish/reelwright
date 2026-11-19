@@ -1,4 +1,10 @@
 {
+ "episode": 6,
+ "story_seconds": 27.5,
+ "end_card_seconds": 2.5,
+ "series": "VOICE NOTES",
+ "tagline": "Love needs no translation.",
+ "handle": "@_babelground",
  "title": "Lost in translation",
  "slug": "translator",
  "look": "None",
@@ -21,35 +27,63 @@
   "halmeoni": {
    "voice": "an elderly Korean woman in her seventies, firm, dry, secretly warm",
    "sample": "어서 와. 앉아.",
-   "language": "Korean"
+   "language": "Korean",
+   "label": "Halmeoni"
   },
   "app": {
    "voice": "a neutral, slightly synthetic female voice assistant, clear and flat",
-   "sample": "Translation. She says: please sit down."
+   "sample": "Translation. She says: please sit down.",
+   "label": "Translate"
   },
   "claire": {
    "voice": "a young American woman, nervous, polite, sweet",
-   "sample": "Oh! Thank you. It's so nice to meet you."
+   "sample": "Oh! Thank you. It's so nice to meet you.",
+   "label": "Claire"
   }
  },
  "shots": [
+  {
+   "still": "Wide shot of a small warm apartment dining room in the evening, a low table crowded with Korean dishes, an old woman and a young woman sitting across from each other in silence",
+   "motion": "handheld camera with slight natural sway, documentary feel, they sit in awkward silence, steam rises from the dishes",
+   "moves": [
+    "Static"
+   ],
+   "seconds": 3.75,
+   "trim": [
+    0.3,
+    3.41
+   ],
+   "seed": 7621,
+   "with": [
+    "halmeoni",
+    "claire"
+   ],
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
+  },
   {
    "still": "sitting at a low table covered with many small Korean side dishes, holding up a smartphone toward someone across the table, unsmiling",
    "motion": "handheld camera with slight natural sway, documentary feel, she holds the phone out and speaks into it firmly",
    "moves": [
     "Handheld"
    ],
-   "seconds": 4.25,
+   "seconds": 3.75,
    "trim": [
     0.3,
-    3.98
+    3.41
    ],
    "seed": 7611,
    "with": [
     "halmeoni"
    ],
    "sfx": "small apartment, kettle, chopsticks on dishes",
-   "sfx_volume": 0.4
+   "sfx_volume": 0.4,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
   },
   {
    "still": "sitting at a low table full of Korean dishes, holding chopsticks awkwardly, leaning toward a phone held out to her, nervous smile",
@@ -57,14 +91,18 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 4.25,
+   "seconds": 3.75,
    "trim": [
     0.3,
-    3.98
+    3.41
    ],
    "seed": 7612,
    "with": [
     "claire"
+   ],
+   "planned_trim": [
+    0.3,
+    3.3
    ]
   },
   {
@@ -73,14 +111,38 @@
    "moves": [
     "Static"
    ],
-   "seconds": 3.5,
+   "seconds": 3.0,
    "trim": [
     0.3,
-    3.12
+    2.69
    ],
    "seed": 7613,
    "sfx": "chopsticks clicking on a ceramic bowl",
-   "sfx_volume": 0.6
+   "sfx_volume": 0.6,
+   "planned_trim": [
+    0.3,
+    2.6
+   ]
+  },
+  {
+   "still": "nodding slowly while chewing, studying the young woman across the table with narrowed eyes",
+   "motion": "handheld camera with slight natural sway, documentary feel, she chews slowly and studies her guest",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.75,
+   "trim": [
+    0.3,
+    3.41
+   ],
+   "seed": 7622,
+   "with": [
+    "halmeoni"
+   ],
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
   },
   {
    "still": "laughing out loud with her hand over her mouth at a low table full of food",
@@ -88,14 +150,18 @@
    "moves": [
     "Push-in Close-up"
    ],
-   "seconds": 4.25,
+   "seconds": 3.75,
    "trim": [
     0.3,
-    3.98
+    3.41
    ],
    "seed": 7614,
    "with": [
     "claire"
+   ],
+   "planned_trim": [
+    0.3,
+    3.3
    ]
   },
   {
@@ -104,14 +170,18 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 4.25,
+   "seconds": 3.75,
    "trim": [
     0.3,
-    3.98
+    3.41
    ],
    "seed": 7615,
    "with": [
     "halmeoni"
+   ],
+   "planned_trim": [
+    0.3,
+    3.3
    ]
   },
   {
@@ -120,15 +190,38 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 4.5,
+   "seconds": 3.75,
    "trim": [
     0.2,
-    4.13
+    3.52
    ],
    "seed": 7616,
    "with": [
     "halmeoni",
     "claire"
+   ],
+   "planned_trim": [
+    0.2,
+    3.4
+   ]
+  },
+  {
+   "still": "Close-up of an old hand putting another piece of fish into a full rice bowl while a young hand lifts in mock surrender, both laughing out of frame",
+   "motion": "handheld camera with slight natural sway, documentary feel, the old hand adds more food, the young hand waves in surrender",
+   "moves": [
+    "Static"
+   ],
+   "seconds": 3.75,
+   "trim": [
+    0.3,
+    3.41
+   ],
+   "seed": 7623,
+   "sfx": "chopsticks on ceramic, two women laughing softly",
+   "sfx_volume": 0.55,
+   "planned_trim": [
+    0.3,
+    3.3
    ]
   }
  ],
@@ -136,7 +229,7 @@
   {
    "who": "halmeoni",
    "text": "너무 말랐어. 많이 먹어.",
-   "at": 0.15,
+   "at": 0.22,
    "emotion": {
     "calm": 0.5,
     "angry": 0.15
@@ -144,62 +237,94 @@
    "fx": "room",
    "strength": 0.8,
    "volume": 1.4,
-   "subtitle_text": "(Korean) You're too skinny. Eat."
+   "subtitle_text": "(Korean) You're too skinny. Eat.",
+   "planned_at": 0.15
   },
   {
    "who": "app",
    "text": "Translation. She says: you are too skinny. Eat more.",
-   "at": 6.21,
+   "at": 4.26,
    "emotion": {
     "calm": 0.8
    },
    "fx": "phone",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 2.4
   },
   {
    "who": "claire",
    "text": "Oh! Okay. Tell her it's delicious.",
-   "at": 10.0,
+   "at": 9.28,
    "emotion": {
     "happy": 0.4,
     "afraid": 0.2
    },
    "fx": "room",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 6.4
   },
   {
    "who": "app",
    "text": "Translation. She says: you are now my granddaughter. Also, eat more.",
-   "at": 12.8,
+   "at": 13.62,
    "emotion": {
     "calm": 0.8
    },
    "fx": "phone",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 9.4
+  },
+  {
+   "who": "claire",
+   "text": "Oh. How do I say thank you?",
+   "at": 19.71,
+   "emotion": {
+    "happy": 0.4,
+    "calm": 0.2
+   },
+   "fx": "room",
+   "strength": 0.8,
+   "volume": 1.4,
+   "planned_at": 13.6
+  },
+  {
+   "who": "halmeoni",
+   "text": "고마워요.",
+   "at": 22.65,
+   "emotion": {
+    "calm": 0.6
+   },
+   "fx": "room",
+   "strength": 0.8,
+   "volume": 1.4,
+   "subtitle_text": "(Korean) Thank you.",
+   "planned_at": 15.6
   },
   {
    "who": "halmeoni",
    "text": "Welcome. ...Family.",
-   "at": 17.81,
+   "at": 24.06,
    "emotion": {
     "happy": 0.35,
     "calm": 0.4
    },
    "fx": "room",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 15.4
   }
  ],
  "ambience": "quiet apartment dinner, faint kitchen sounds",
  "music": {
   "description": "gentle plucked gayageum and soft piano, warm and a little playful",
-  "start": 6.0,
+  "start": 8.7,
   "volume": 0.28,
   "fade_in": 1.5,
-  "seed": 7690
+  "seed": 7690,
+  "planned_start": 6.0
  },
  "post_caption": "Grandma doesn't need the app. 🍚\n\nWhat did your grandparents say when they met your partner?\n\n#VoiceNotes #HumanConnection #ShortFilm #Grandma #Family #Korean\nMade with AI"
 }

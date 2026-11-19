@@ -233,7 +233,10 @@ def rw_generate(job: dict) -> dict:
     frames, up_s = out.frames[0], 0.0
     if int(job.get("upscale", 1)) == 2:
         t1 = time.time()
-        frames = _upscale(frames)
+        try:
+            frames = _upscale(frames)
+        except Exception as e:  # noqa: BLE001  never lose a finished clip to the upscaler
+            RW.setdefault("upscale_errors", []).append(f"{type(e).__name__}: {str(e)[:200]}")
         up_s = time.time() - t1
     os.makedirs(OUT_DIR, exist_ok=True)
     path = f"{OUT_DIR}/{uuid.uuid4().hex[:12]}.mp4"

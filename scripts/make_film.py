@@ -29,6 +29,7 @@ Storyboard format (JSON):
 """
 import argparse
 import json
+import math
 import queue
 import subprocess
 import sys
@@ -128,6 +129,91 @@ class Film:
         self.aspect = sb.get("aspect", "16:9")
         self.t0 = time.time()
         self.errors: list[str] = []
+        self._migrate_keys()
+
+    # ---------------------------------------------------------------- asset keys
+    # Assets are saved under a key made from what they depend on (not their position), so
+    # adding, removing or reordering shots and lines in a storyboard reuses everything else.
+    @staticmethod
+    def _h(*parts) -> str:
+        import hashlib
+        return hashlib.sha1(json.dumps(parts, sort_keys=True, default=str).encode()).hexdigest()[:10]
+
+    def ref_key(self, name: str) -> str:
+        p = self.sb["people"][name]
+        return f"ref_{name}_{self._h(p['look'], p.get('seed', 1), self.sb.get('style', ''))}"
+
+    def voice_key(self, name: str) -> str:
+        c = self.sb["cast"][name]
+        return f"voice_{name}_{self._h(c['voice'], c['sample'], c.get('language', 'English'))}"
+
+    def still_key(self, i: int) -> str:
+        s = self.shots[i]
+        refs = [self.ref_key(n) for n in s.get("with", [])] or (["character"] if s.get("character") else [])
+        return f"still_{self._h(s['still'], s.get('seed'), refs, self.sb.get('style', ''), self.aspect)}"
+
+    def clip_key(self, i: int) -> str:
+        s = self.shots[i]
+        return f"clip_{self._h(self.still_key(i), s['motion'], s.get('moves', []), float(s.get('seconds', 5)), s.get('seed'))}"
+
+    def sfx_key(self, i: int) -> str:
+        return f"sfx_{self._h(self.shots[i]['sfx'])}"
+
+    def line_key(self, i: int) -> str:
+        ln = self.sb["lines"][i]
+        return f"line_{self._h(self.voice_key(ln['who']), ln['text'], ln.get('emotion'), ln.get('strength', 0.8), ln.get('engine', ''))}"
+
+    def end_card(self) -> float:
+        return float(self.sb.get("end_card_seconds", 0))
+
+    def music_length(self) -> float:
+        """Music runs from its start to the end of the film (incl. end card), in MiniMax's 5 s steps."""
+        m = self.sb["music"]
+        return max(5.0, math.ceil((self.cut_duration() + self.end_card() - float(m.get("start", 0))) / 5) * 5)
+
+    def music_key(self) -> str:
+        m = self.sb["music"]
+        return f"music_{self._h(m['description'], m.get('seed'), self.music_length())}"
+
+    def ambience_key(self) -> str:
+        return f"ambience_{self._h(self.sb['ambience'], round(self.cut_duration() + self.end_card()))}"
+
+    def line_audio(self, i: int) -> str:
+        """Line i's speech with the silence at both ends cut off (cached next to the progress file)."""
+        src = Path(self.state[self.line_key(i)])
+        out = self.out / "lines" / f"{self.line_key(i)}.wav"
+        if not out.exists():
+            out.parent.mkdir(exist_ok=True)
+            media.trim_silence(src, out)
+            if media.duration(out) < 0.3:  # trimmed too much (very quiet line): keep the original
+                out.write_bytes(src.read_bytes())
+        return str(out)
+
+    def _migrate_keys(self):
+        """Older progress files used positions (shot3_still, line2...): copy them to content keys."""
+        st, changed = self.state, False
+
+        def move(old, new):
+            nonlocal changed
+            if old in st and new not in st:
+                st[new] = st[old]
+                changed = True
+        try:
+            for i, s in enumerate(self.shots):
+                move(f"shot{i + 1}_still", self.still_key(i))
+                move(f"shot{i + 1}_clip", self.clip_key(i))
+                if s.get("sfx"):
+                    move(f"shot{i + 1}_sfx", self.sfx_key(i))
+            for name in self.sb.get("people") or {}:
+                move(f"ref_{name}", self.ref_key(name))
+            for name in self.sb.get("cast") or {}:
+                move(f"voice_ref_{name}", self.voice_key(name))
+            for i in range(len(self.sb.get("lines", []))):
+                move(f"line{i + 1}", self.line_key(i))
+        except KeyError:
+            return
+        if changed:
+            self.progress.write_text(json.dumps(st, indent=1))
 
     # ---------------------------------------------------------------- helpers
     def say(self, who: str, msg: str):
@@ -168,12 +254,12 @@ class Film:
         if which in ("plain", "all"):
             # "people": several recurring characters, each with a reference portrait (Z-Image)
             for name, person in (self.sb.get("people") or {}).items():
-                if f"ref_{name}" not in self.state:
+                if self.ref_key(name) not in self.state:
                     item = self.studio.create_images(self.job(f"{self.slug} {name}"),
                                                      f"Candid portrait photo of {person['look']}, natural window light, "
                                                      f"plain background, {style}", "None", "3:4", 1,
                                                      person.get("seed", 1))[0]
-                    self.save(f"ref_{name}", item.path)
+                    self.save(self.ref_key(name), item.path)
         if which in ("plain", "all") and ch and any(s.get("character") for s in self.shots) \
                 and "character_ref" not in self.state:
             item = self.studio.create_images(self.job(f"{self.slug} character"), f"Portrait of {ch['description']}, "
@@ -190,7 +276,7 @@ class Film:
             clip_queue.put(None)
 
     def still_one(self, i: int, studio: Studio | None = None):
-        key = f"shot{i + 1}_still"
+        key = self.still_key(i)
         if key in self.state:
             return
         st, s = studio or self.studio, self.shots[i]
@@ -199,7 +285,7 @@ class Film:
         style = self.sb.get("style", "")
         prompt = f"{s['still']}, {style}" if style else s["still"]
         if s.get("with"):  # named people from "people", 1-3 of them
-            refs = [self.state[f"ref_{n}"] for n in s["with"]]
+            refs = [self.state[self.ref_key(n)] for n in s["with"]]
             item = st.character_scene(self.job(who), refs, prompt, self.aspect, q, s.get("seed"),
                                       finish="Photorealistic." if style else "Photorealistic, cinematic lighting.")[0]
         elif s.get("character"):
@@ -219,7 +305,7 @@ class Film:
 
     def colab_track(self, clip_queue: queue.Queue):
         colab = self.studio.colab
-        pending = [i for i in range(len(self.shots)) if f"shot{i + 1}_clip" not in self.state]
+        pending = [i for i in range(len(self.shots)) if self.clip_key(i) not in self.state]
         if not pending:
             while clip_queue.get() is not None:
                 pass
@@ -227,24 +313,24 @@ class Film:
         colab.prewarm(lambda m: self.say("colab", m))  # loads the model while stills are made
         q = "Standard" if self.draft else "High"
         while (i := clip_queue.get()) is not None:
-            key = f"shot{i + 1}_clip"
+            key = self.clip_key(i)
             if key in self.state:
                 continue
             s = self.shots[i]
-            item = self.studio.create_video(self.job(f"shot {i + 1} clip"), self.state[f"shot{i + 1}_still"],
+            item = self.studio.create_video(self.job(f"shot {i + 1} clip"), self.state[self.still_key(i)],
                                             s["motion"], s.get("moves", []), "wan_colab",
                                             float(s.get("seconds", 5)), 1, s.get("seed"), q)[0]
             self.save(key, item.path)
 
     def clip_one(self, i: int, studio: Studio | None = None):
         """Render shot i's clip (used by make_series to spread shots over several Colab runtimes)."""
-        key = f"shot{i + 1}_clip"
+        key = self.clip_key(i)
         if key in self.state:
             return
         s = self.shots[i]
         q = "Standard" if self.draft else "High"
         item = (studio or self.studio).create_video(self.job(f"{self.slug} shot {i + 1} clip"),
-                                                    self.state[f"shot{i + 1}_still"], s["motion"],
+                                                    self.state[self.still_key(i)], s["motion"],
                                                     s.get("moves", []), "wan_colab", float(s.get("seconds", 5)),
                                                     1, s.get("seed"), q)[0]
         self.save(key, item.path)
@@ -260,31 +346,33 @@ class Film:
     def cut_duration(self) -> float:
         return sum(self.shot_lengths())
 
-    def sound_track(self):
+    def sound_track(self, music: bool = True):
+        """music=False: voices and effects only (music length depends on the retimed story)."""
         dur = self.cut_duration()
-        m = self.sb.get("music")
-        if m and "music" not in self.state:
-            length = max(5.0, dur - float(m.get("start", 0)))
-            self.save("music", self.studio.music_file(self.job(f"{self.slug} music"), m["description"], length,
-                                                      instrumental=True, seed=m.get("seed")))
-        if self.sb.get("ambience") and "ambience" not in self.state:
-            self.save("ambience", self.studio.sound_file(self.job(f"{self.slug} ambience"), self.sb["ambience"], dur))
+        m = self.sb.get("music") if music else None
+        if m and self.music_key() not in self.state:
+            self.save(self.music_key(), self.studio.music_file(self.job(f"{self.slug} music"), m["description"],
+                                                               self.music_length(), instrumental=True,
+                                                               seed=m.get("seed")))
+        if music and self.sb.get("ambience") and self.ambience_key() not in self.state:
+            self.save(self.ambience_key(), self.studio.sound_file(self.job(f"{self.slug} ambience"),
+                                                                  self.sb["ambience"], dur + self.end_card()))
         # sound effects / foley per shot (EzAudio), laid under that shot
         for i, (s, length) in enumerate(zip(self.shots, self.shot_lengths())):
-            if s.get("sfx") and f"shot{i + 1}_sfx" not in self.state:
-                self.save(f"shot{i + 1}_sfx", self.studio.sound_file(self.job(f"{self.slug} shot {i + 1} sfx"),
-                                                                     s["sfx"], max(2.0, length + 0.5)))
+            if s.get("sfx") and self.sfx_key(i) not in self.state:  # 6 s, trimmed to the shot in the mix
+                self.save(self.sfx_key(i), self.studio.sound_file(self.job(f"{self.slug} shot {i + 1} sfx"),
+                                                                  s["sfx"], 6.0))
         # cast: design each voice once (Qwen3-TTS), then every line in that voice with its own
         # emotion (IndexTTS-2), so a character sounds the same but can laugh, break or whisper
         for name, c in (self.sb.get("cast") or {}).items():
-            key = f"voice_ref_{name}"
+            key = self.voice_key(name)
             if key not in self.state:
                 self.save(key, self.studio.designed_speech_file(self.job(f"{self.slug} voice {name}"),
                                                                 c["sample"], c["voice"], c.get("language", "English")))
         for i, line in enumerate(self.sb.get("lines", [])):
-            key = f"line{i + 1}"
+            key = self.line_key(i)
             if key not in self.state:
-                ref = self.state[f"voice_ref_{line['who']}"]
+                ref = self.state[self.voice_key(line["who"])]
                 cast = (self.sb.get("cast") or {})[line["who"]]
                 lang = cast.get("language", "English")
                 if lang not in ("English", "Chinese") or line.get("engine") == "qwen":
@@ -316,13 +404,105 @@ class Film:
         for i, line in enumerate(self.sb.get("lines", [])):
             a = max(float(line.get("at", 0)), end + 0.15 if i else 0.0)
             starts.append(a)
-            end = a + media.duration(self.state[f"line{i + 1}"])
+            end = a + media.duration(self.line_audio(i))
         return starts
+
+    # ---------------------------------------------------------------- Remotion package
+    def mix_audio(self, out: Path, total: float) -> Path:
+        """The whole soundtrack (music, ambience, per-shot effects, voices with their phone/radio
+        sound) as one mastered WAV of `total` seconds; the music rings out over the end card."""
+        lines = self.sb.get("lines", [])
+        line_at = self.line_starts() if lines else []
+        lengths = self.shot_lengths()
+        starts = [sum(lengths[:i]) for i in range(len(self.shots))]
+        inputs, parts, labels = [], [], []
+        m = self.sb.get("music")
+        if m and self.music_key() in self.state:
+            inputs.append(self.state[self.music_key()])
+            ms = int(float(m.get("start", 0)) * 1000)
+            parts.append(f"[{len(inputs) - 1}:a]volume={float(m.get('volume', 0.3))},afade=t=in:d={float(m.get('fade_in', 1.0))},"
+                         f"adelay={ms}|{ms},apad,atrim=0:{total:.2f}[m]")
+            labels.append("[m]")
+        if self.sb.get("ambience") and self.ambience_key() in self.state:
+            story = self.cut_duration()
+            inputs.append(self.state[self.ambience_key()])
+            parts.append(f"[{len(inputs) - 1}:a]volume=0.35,apad,atrim=0:{total:.2f},"
+                         f"afade=t=out:st={max(0.0, story - 0.5):.2f}:d=1.2[a]")
+            labels.append("[a]")
+        for i, s in enumerate(self.shots):
+            if s.get("sfx") and self.sfx_key(i) in self.state:
+                inputs.append(self.state[self.sfx_key(i)])
+                ms, ln = int(starts[i] * 1000), lengths[i]
+                parts.append(f"[{len(inputs) - 1}:a]volume={float(s.get('sfx_volume', 0.6))},atrim=0:{ln + 0.4:.2f},"
+                             f"afade=t=in:d=0.08,afade=t=out:st={max(0.0, ln - 0.1):.2f}:d=0.5,"
+                             f"adelay={ms}|{ms},apad,atrim=0:{total:.2f}[s{i}]")
+                labels.append(f"[s{i}]")
+        for i, line in enumerate(lines):
+            inputs.append(self.line_audio(i))
+            ms = int(line_at[i] * 1000)
+            fx = VOICE_FX.get(line.get("fx", ""), "")
+            parts.append(f"[{len(inputs) - 1}:a]{fx}volume={float(line.get('volume', 1.4))},adelay={ms}|{ms},"
+                         f"apad,atrim=0:{total:.2f}[l{i}]")
+            labels.append(f"[l{i}]")
+        fc = (";".join(parts) + ";" + "".join(labels) +
+              f"amix=inputs={len(labels)}:duration=first:normalize=0,afade=t=in:d=0.03,"
+              f"afade=t=out:st={total - 1.2:.2f}:d=1.2,alimiter=limit=0.89:level=false,"
+              f"loudnorm=I=-14:TP=-1.5:LRA=11[out]")
+        args = ["ffmpeg", "-v", "error", "-y"]
+        for p_ in inputs:
+            args += ["-i", p_]
+        args += ["-filter_complex", fc, "-map", "[out]", "-ar", "48000", "-ac", "2", "-t", f"{total:.3f}", str(out)]
+        subprocess.run(args, check=True)
+        return out
+
+    def remotion_package(self, public: Path, fps: int = 24, clips: list[str] | None = None) -> Path:
+        """Write everything Remotion needs into public/<slug>/ and return the props JSON path.
+        clips: optional stand-in clip per shot (for testing the template before real clips exist)."""
+        import shutil
+        d = public / self.slug
+        d.mkdir(parents=True, exist_ok=True)
+        story = self.cut_duration()
+        story_frames = round(story * fps)
+        total_frames = story_frames + round(self.end_card() * fps)
+        shots, frame = [], 0
+        for i, (s, ln) in enumerate(zip(self.shots, self.shot_lengths())):
+            src = (clips[i] if clips else self.state[self.clip_key(i)])
+            a = float(s.get("trim", [0, ln])[0])
+            n = round((sum(self.shot_lengths()[:i + 1])) * fps) - frame  # frame-exact, no drift
+            out = d / f"shot{i + 1:02d}.mp4"
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{a:.3f}", "-i", src, "-t", f"{n / fps + 0.25:.3f}",
+                            "-an", "-vf", FILM_LOOK, "-c:v", "libx264", "-crf", "14", "-preset", "medium",
+                            "-pix_fmt", "yuv420p", str(out)], check=True)
+            if media.duration(out) < n / fps:  # source clip too short: hold its last frame
+                held = media.hold_last_frame(out, n / fps + 0.1, d / f"shot{i + 1:02d}_h.mp4")
+                shutil.move(str(held), out)
+            shots.append({"src": f"{self.slug}/{out.name}", "from": frame, "duration": n,
+                          "push": float(s.get("push", 0.025))})
+            frame += n
+        audio = self.mix_audio(d / "mix.wav", total_frames / fps)
+        lines, cast = [], self.sb.get("cast") or {}
+        for i, (line, at) in enumerate(zip(self.sb.get("lines", []), self.line_starts())):
+            src = d / f"line{i + 1:02d}.wav"
+            shutil.copy(self.line_audio(i), src)
+            who = line["who"]
+            lines.append({"from": round(at * fps), "duration": max(1, round(media.duration(src) * fps)),
+                          "text": line.get("subtitle_text", line["text"]), "who": who,
+                          "label": cast.get(who, {}).get("label", who.replace("_", " ").title()),
+                          "fx": line.get("fx", ""), "src": f"{self.slug}/{src.name}"})
+        first = shots[0]["duration"] if shots else fps * 3
+        props = {"series": self.sb.get("series", "VOICE NOTES"), "episode": int(self.sb.get("episode", 1)),
+                 "title": self.sb.get("title", ""), "tagline": self.sb.get("tagline", ""),
+                 "handle": self.sb.get("handle", "@_babelground"), "fps": fps, "durationInFrames": total_frames,
+                 "storyFrames": story_frames, "audio": f"{self.slug}/{audio.name}", "shots": shots, "lines": lines,
+                 "titleFrom": 16, "titleDuration": max(36, min(80, first - 22))}
+        path = d / "props.json"
+        path.write_text(json.dumps(props, indent=1, ensure_ascii=False))
+        return path
 
     def trimmed_clips(self) -> list[str]:
         out = []
         for i, s in enumerate(self.shots):
-            clip = self.state[f"shot{i + 1}_clip"]
+            clip = self.state[self.clip_key(i)]
             if "trim" in s:
                 a, b = (float(v) for v in s["trim"])
                 t = self.out / f"shot{i + 1}_trim.mp4"
@@ -339,22 +519,22 @@ class Film:
         lines = self.sb.get("lines", [])
         line_at = self.line_starts() if lines else []
         if lines:  # the last line must finish on picture: hold the last frame if needed
-            need = line_at[-1] + media.duration(self.state[f"line{len(lines)}"]) + 0.7
+            need = line_at[-1] + media.duration(self.line_audio(len(lines) - 1)) + 0.7
             if need > dur:
                 picture = media.hold_last_frame(picture, need, self.out / "picture_hold.mp4")
                 dur = media.duration(picture)
         inputs, parts, labels = [], [], []
-        if "music" in self.state:
+        if self.sb.get("music") and self.music_key() in self.state:
             m = self.sb.get("music", {})
-            inputs.append(self.state["music"])
+            inputs.append(self.state[self.music_key()])
             ms = int(float(m.get("start", 0)) * 1000)
             parts.append(f"[{len(inputs) - 1}:a]volume={float(m.get('volume', 0.75))},afade=t=in:d={float(m.get('fade_in', 0.05))},"
                          f"adelay={ms}|{ms},apad,atrim=0:{dur:.2f}[m]")
             labels.append("[m]")
         starts = [sum(self.shot_lengths()[:i]) for i in range(len(self.shots))]
         for i, s in enumerate(self.shots):
-            if f"shot{i + 1}_sfx" in self.state:
-                inputs.append(self.state[f"shot{i + 1}_sfx"])
+            if s.get("sfx") and self.sfx_key(i) in self.state:
+                inputs.append(self.state[self.sfx_key(i)])
                 ms = int(starts[i] * 1000)
                 ln = self.shot_lengths()[i]
                 parts.append(f"[{len(inputs) - 1}:a]volume={float(s.get('sfx_volume', 0.6))},atrim=0:{ln + 0.4:.2f},"
@@ -362,14 +542,14 @@ class Film:
                              f"adelay={ms}|{ms},apad,atrim=0:{dur:.2f}[s{i}]")
                 labels.append(f"[s{i}]")
         for i, line in enumerate(lines):
-            inputs.append(self.state[f"line{i + 1}"])
+            inputs.append(self.line_audio(i))
             ms = int(line_at[i] * 1000)
             fx = VOICE_FX.get(line.get("fx", ""), "")
             parts.append(f"[{len(inputs) - 1}:a]{fx}volume={float(line.get('volume', 1.4))},adelay={ms}|{ms},"
                          f"apad,atrim=0:{dur:.2f}[l{i}]")
             labels.append(f"[l{i}]")
-        if "ambience" in self.state:
-            inputs.append(self.state["ambience"])
+        if self.sb.get("ambience") and self.ambience_key() in self.state:
+            inputs.append(self.state[self.ambience_key()])
             parts.append(f"[{len(inputs) - 1}:a]volume=0.4,apad,atrim=0:{dur:.2f},afade=t=out:st={max(0, dur - 4):.2f}:d=3[a]")
             labels.append("[a]")
         for i, line in enumerate((self.sb.get("voice") or {}).get("lines", [])):
@@ -394,7 +574,7 @@ class Film:
                 if line.get("subtitle", True):
                     a = line_at[i]
                     texts.append({"text": line.get("subtitle_text", line["text"]), "start": a, "style": "subtitle",
-                                  "end": min(dur, a + media.duration(self.state[f"line{i + 1}"]) + 0.15)})
+                                  "end": min(dur, a + media.duration(self.line_audio(i)) + 0.15)})
         args = ["ffmpeg", "-v", "error", "-y"]
         for p in inputs:
             args += ["-i", p]

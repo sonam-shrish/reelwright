@@ -1,4 +1,10 @@
 {
+ "episode": 9,
+ "story_seconds": 27.5,
+ "end_card_seconds": 2.5,
+ "series": "VOICE NOTES",
+ "tagline": "Ask a stranger how they are.",
+ "handle": "@_babelground",
  "title": "Stuck",
  "slug": "stuck",
  "look": "None",
@@ -20,14 +26,38 @@
  "cast": {
   "ines": {
    "voice": "a woman in her late twenties with a slight Portuguese accent, stressed then warm",
-   "sample": "No, no, no. Not today."
+   "sample": "No, no, no. Not today.",
+   "label": "Ines"
   },
   "ray": {
    "voice": "a Londoner in his sixties, calm, funny, kind",
-   "sample": "Happens twice a week, love."
+   "sample": "Happens twice a week, love.",
+   "label": "Ray"
   }
  },
  "shots": [
+  {
+   "still": "rushing through a busy office building lobby at 8am, squeezing into an elevator just as the doors close",
+   "motion": "handheld camera with slight natural sway, documentary feel, she rushes through the crowd and slips into the elevator",
+   "moves": [
+    "Tracking Shot"
+   ],
+   "seconds": 3.75,
+   "trim": [
+    0.3,
+    3.44
+   ],
+   "seed": 7921,
+   "with": [
+    "ines"
+   ],
+   "sfx": "busy lobby, footsteps, elevator ding",
+   "sfx_volume": 0.5,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
+  },
   {
    "still": "in a small old elevator pressing the button repeatedly, looking at her watch, stressed, harsh overhead light",
    "motion": "handheld camera with slight natural sway, documentary feel, she jabs the elevator button again and checks her watch",
@@ -37,14 +67,18 @@
    "seconds": 3.75,
    "trim": [
     0.3,
-    3.42
+    3.44
    ],
    "seed": 7911,
    "with": [
     "ines"
    ],
    "sfx": "elevator jolting to a stop, a clunk, faint hum",
-   "sfx_volume": 0.6
+   "sfx_volume": 0.6,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
   },
   {
    "still": "leaning calmly against the elevator wall holding a parcel, amused",
@@ -55,11 +89,15 @@
    "seconds": 3.75,
    "trim": [
     0.3,
-    3.42
+    3.44
    ],
    "seed": 7912,
    "with": [
     "ray"
+   ],
+   "planned_trim": [
+    0.3,
+    3.3
    ]
   },
   {
@@ -71,12 +109,16 @@
    "seconds": 3.75,
    "trim": [
     0.3,
-    3.42
+    3.44
    ],
    "seed": 7913,
    "with": [
     "ines",
     "ray"
+   ],
+   "planned_trim": [
+    0.3,
+    3.3
    ]
   },
   {
@@ -88,11 +130,37 @@
    "seconds": 2.75,
    "trim": [
     0.3,
-    2.48
+    2.5
    ],
    "seed": 7914,
    "sfx": "fluorescent light buzz and flicker",
-   "sfx_volume": 0.6
+   "sfx_volume": 0.6,
+   "planned_trim": [
+    0.3,
+    2.4
+   ]
+  },
+  {
+   "still": "sitting on the elevator floor unwrapping a sandwich and offering half across, kind grin",
+   "motion": "handheld camera with slight natural sway, documentary feel, he unwraps the sandwich and offers half",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.75,
+   "trim": [
+    0.3,
+    3.44
+   ],
+   "seed": 7922,
+   "with": [
+    "ray"
+   ],
+   "sfx": "paper wrapper crinkling",
+   "sfx_volume": 0.6,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
   },
   {
    "still": "sitting on the elevator floor laughing, her head tipped back against the wall",
@@ -103,11 +171,15 @@
    "seconds": 3.75,
    "trim": [
     0.3,
-    3.42
+    3.44
    ],
    "seed": 7915,
    "with": [
     "ines"
+   ],
+   "planned_trim": [
+    0.3,
+    3.3
    ]
   },
   {
@@ -119,7 +191,7 @@
    "seconds": 3.75,
    "trim": [
     0.2,
-    3.52
+    3.55
    ],
    "seed": 7916,
    "with": [
@@ -127,7 +199,33 @@
     "ray"
    ],
    "sfx": "elevator ding, doors sliding open",
-   "sfx_volume": 0.7
+   "sfx_volume": 0.7,
+   "planned_trim": [
+    0.2,
+    3.4
+   ]
+  },
+  {
+   "still": "walking out onto a sunny city street, pulling a small sketchbook out of her tote bag and smiling at it",
+   "motion": "handheld camera with slight natural sway, documentary feel, she walks out into the sun and opens a sketchbook",
+   "moves": [
+    "Handheld"
+   ],
+   "seconds": 3.75,
+   "trim": [
+    0.3,
+    3.44
+   ],
+   "seed": 7923,
+   "with": [
+    "ines"
+   ],
+   "sfx": "busy sunny street, traffic, birds",
+   "sfx_volume": 0.45,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
   }
  ],
  "lines": [
@@ -141,75 +239,107 @@
    },
    "fx": "room",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 0.15
   },
   {
    "who": "ray",
    "text": "Happens twice a week, love. Sit down.",
-   "at": 3.31,
+   "at": 3.46,
    "emotion": {
     "calm": 0.6,
     "happy": 0.2
    },
    "fx": "room",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 3.0
   },
   {
    "who": "ray",
    "text": "So what's the meeting? ...And what would you rather be doing?",
-   "at": 6.2,
+   "at": 6.4,
    "emotion": {
     "calm": 0.5,
     "happy": 0.2
    },
    "fx": "room",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 6.2
   },
   {
    "who": "ines",
    "text": "...Painting. I used to paint.",
-   "at": 9.6,
+   "at": 9.85,
    "emotion": {
     "melancholic": 0.4,
     "calm": 0.3
    },
    "fx": "room",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 9.6
+  },
+  {
+   "who": "ray",
+   "text": "Sandwich? Half. Cheese and pickle. Best in London.",
+   "at": 12.85,
+   "emotion": {
+    "happy": 0.45,
+    "calm": 0.2
+   },
+   "fx": "room",
+   "strength": 0.8,
+   "volume": 1.4,
+   "planned_at": 12.8
   },
   {
    "who": "ray",
    "text": "Then you've got two meetings today.",
-   "at": 13.1,
+   "at": 14.68,
    "emotion": {
     "happy": 0.45,
     "calm": 0.3
    },
    "fx": "room",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 13.1
   },
   {
    "who": "ines",
    "text": "I'm Ines.",
-   "at": 16.3,
+   "at": 16.51,
    "emotion": {
     "happy": 0.4
    },
    "fx": "room",
    "strength": 0.8,
-   "volume": 1.4
+   "volume": 1.4,
+   "planned_at": 16.3
+  },
+  {
+   "who": "ray",
+   "text": "Ray. Now go buy some paint.",
+   "at": 24.89,
+   "emotion": {
+    "happy": 0.45
+   },
+   "fx": "room",
+   "strength": 0.8,
+   "volume": 1.4,
+   "planned_at": 24.8
   }
  ],
  "ambience": "inside a small elevator, faint mechanical hum",
  "music": {
   "description": "minimal warm guitar arpeggio and soft synth pad, gentle, hopeful",
-  "start": 9.6,
+  "start": 9.63,
   "volume": 0.28,
   "fade_in": 1.5,
-  "seed": 7990
+  "seed": 7990,
+  "planned_start": 9.6
  },
  "post_caption": "Twenty minutes stuck with a stranger. 🛗\n\nHas a stranger ever changed your day?\n\n#VoiceNotes #HumanConnection #ShortFilm #Strangers #Kindness\nMade with AI"
 }
