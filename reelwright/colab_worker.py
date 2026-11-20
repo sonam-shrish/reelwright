@@ -97,7 +97,9 @@ def _setup_locked(model_id: str) -> dict:
             "gpu": torch.cuda.get_device_name(0), "download_s": round(t1 - t0), "load_s": round(time.time() - t1)}
 
 
-ATTENTION_BACKENDS = ["sage_hub", "sage"]  # tried in order; "native" (PyTorch SDPA) if none works
+# Tried in order; "native" (PyTorch SDPA) if none works. "sage_hub" = prebuilt SageAttention 2 kernel
+# from the Hugging Face kernels hub; "sage" needs sageattention>=2.1.1 (not on PyPI, build from source).
+ATTENTION_BACKENDS = ["sage_hub", "sage"]
 
 
 def _transformers(pipe):
@@ -110,7 +112,10 @@ def _set_attention(pipe) -> str:
     import torch
     for name in ATTENTION_BACKENDS:
         try:
+            import diffusers.models.attention_dispatch as ad
             from diffusers.models.attention_dispatch import AttentionBackendName, dispatch_attention_fn
+            if hasattr(ad, "_maybe_download_kernel_for_backend"):  # hub kernels are fetched on first use
+                ad._maybe_download_kernel_for_backend(AttentionBackendName(name))
             q = torch.randn(1, 512, 8, 128, device="cuda", dtype=torch.bfloat16)
             ref = dispatch_attention_fn(q, q, q, backend=AttentionBackendName("native"))
             out = dispatch_attention_fn(q, q, q, backend=AttentionBackendName(name))
