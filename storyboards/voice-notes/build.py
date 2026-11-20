@@ -105,9 +105,9 @@ EXTRA = {
                            {"happy": 0.3, "melancholic": 0.3}, "phone"))]},
     "listen-to-the-pan": {
         "shots": [(0, shot("Wide shot of a tiny city apartment kitchen at night, smoke drifting under a hanging bulb, "
-                           "a phone propped against a jar on the counter, nobody in frame", "smoke drifts across the "
-                           "small kitchen", None, seed=7321, moves=["Static"], sfx="extractor fan, sizzling pan, city "
-                           "outside", vol=0.45)),
+                           "a phone propped against a jar on the counter, nobody in frame", "smoke drifts slowly across the "
+                           "empty small kitchen" + EMPTY, None, seed=7324, moves=["Static"], sfx="extractor fan, "
+                           "sizzling pan, city outside", vol=0.45, handheld=False)),
                   (5, shot("in her kitchen stirring a big steel pot with one hand, laughing at her own story, steam "
                            "rising", "she stirs the pot and laughs", ["amma"], seed=7322)),
                   (8, shot("sitting on her small kitchen floor with a bowl of dal, phone to her ear, smiling and "
@@ -115,7 +115,7 @@ EXTRA = {
                            ["priya"], seed=7323))],
         "lines": [(3, line("amma", "Your nani never measured. I never measured. You will not measure.", 9.4,
                            {"happy": 0.4, "calm": 0.2}, "voicenote")),
-                  (6, line("priya", "Yes, I'm eating. Amma says hi.", 24.0, {"happy": 0.45}, "room"))]},
+                  (6, line("priya", "Yes, I'm eating. Amma says hi.", 24.4, {"happy": 0.45}, "room"))]},
     "last-cookie": {
         "shots": [(0, shot("Wide shot of a long empty hospital corridor at 3am under fluorescent lights, a nurse in blue "
                            "scrubs sitting alone on a chair at the far end", "the lights hum, the nurse sits still far "
@@ -144,7 +144,7 @@ EXTRA = {
                            "laughter", vol=0.5))],
         "lines": [(2, line("sam", "Remember the milkshake thing? We still owe that place a mop.", 8.0,
                            {"happy": 0.4, "melancholic": 0.2}, "voicenote")),
-                  (6, line("jonah", "Milkshakes are on you.", 24.6, {"happy": 0.5}, "room"))]},
+                  (6, line("jonah", "Milkshakes are on you.", 24.8, {"happy": 0.5}, "room"))]},
     "translator": {
         "shots": [(0, shot("Wide shot of a small warm apartment dining room in the evening, a low table crowded with "
                            "Korean dishes, an old woman and a young woman sitting across from each other in silence",
@@ -328,7 +328,7 @@ film(3, "listen-to-the-pan", "Listen to the pan",
       line("amma", "When the cumin talks back, it's ready.", 6.2, {"happy": 0.3, "calm": 0.4}, "voicenote"),
       line("amma", "And call your father. He thinks you're angry with him. Silly man.", 11.4,
            {"happy": 0.4, "melancholic": 0.2}, "voicenote"),
-      line("priya", "Hi, Appa. ...No, I'm not angry.", 15.9, {"happy": 0.4, "calm": 0.4}, "room")],
+      line("priya", "Hi, Appa. ...No, I'm not angry.", 21.8, {"happy": 0.4, "calm": 0.4}, "room")],
      "small apartment kitchen, extractor fan hum, city outside the window",
      {"description": "playful warm acoustic guitar with light tabla, cozy and homely",
       "start": 6.0, "volume": 0.3, "fade_in": 1.0, "seed": 7390},
@@ -401,8 +401,8 @@ film(5, "ten-years", "Ten years",
       line("sam", "I'm in town till Sunday. That diner on Fifth is still there.", 4.6,
            {"calm": 0.4, "melancholic": 0.2}, "voicenote"),
       line("sam", "No pressure. I just... I missed my friend.", 8.4, {"sad": 0.35, "calm": 0.3}, "voicenote"),
-      line("jonah", "You're late.", 15.3, {"happy": 0.4, "calm": 0.3}, "room"),
-      line("sam", "Ten years late.", 16.6, {"happy": 0.55}, "room")],
+      line("jonah", "You're late.", 21.8, {"happy": 0.4, "calm": 0.3}, "room"),
+      line("sam", "Ten years late.", 23.0, {"happy": 0.55}, "room")],
      "city evening, distant traffic",
      {"description": "slow melancholic Rhodes piano and soft upright bass, late night, warm",
       "start": 7.8, "volume": 0.3, "fade_in": 1.5, "seed": 7590},

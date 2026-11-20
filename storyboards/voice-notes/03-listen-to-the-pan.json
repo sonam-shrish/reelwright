@@ -38,7 +38,7 @@
  "shots": [
   {
    "still": "Wide shot of a tiny city apartment kitchen at night, smoke drifting under a hanging bulb, a phone propped against a jar on the counter, nobody in frame",
-   "motion": "handheld camera with slight natural sway, documentary feel, smoke drifts across the small kitchen",
+   "motion": "steady locked-off frame, smoke drifts slowly across the empty small kitchen, nobody else appears and nobody enters the frame",
    "moves": [
     "Static"
    ],
@@ -47,7 +47,7 @@
     0.3,
     3.41
    ],
-   "seed": 7321,
+   "seed": 7324,
    "sfx": "extractor fan, sizzling pan, city outside",
    "sfx_volume": 0.45,
    "planned_trim": [
@@ -237,7 +237,7 @@
   {
    "who": "amma",
    "text": "Recipe? What recipe? You don't measure. You listen to the pan.",
-   "at": 3.01,
+   "at": 3.0,
    "emotion": {
     "happy": 0.35,
     "surprised": 0.2,
@@ -251,7 +251,7 @@
   {
    "who": "amma",
    "text": "When the cumin talks back, it's ready.",
-   "at": 7.28,
+   "at": 7.27,
    "emotion": {
     "happy": 0.3,
     "calm": 0.4
@@ -264,7 +264,7 @@
   {
    "who": "amma",
    "text": "Your nani never measured. I never measured. You will not measure.",
-   "at": 9.59,
+   "at": 9.58,
    "emotion": {
     "happy": 0.4,
     "calm": 0.2
@@ -290,7 +290,7 @@
   {
    "who": "priya",
    "text": "Hi, Appa. ...No, I'm not angry.",
-   "at": 17.44,
+   "at": 21.56,
    "emotion": {
     "happy": 0.4,
     "calm": 0.4
@@ -298,7 +298,7 @@
    "fx": "room",
    "strength": 0.8,
    "volume": 1.4,
-   "planned_at": 15.9
+   "planned_at": 21.8
   },
   {
    "who": "priya",
@@ -310,13 +310,13 @@
    "fx": "room",
    "strength": 0.8,
    "volume": 1.4,
-   "planned_at": 24.0
+   "planned_at": 24.4
   }
  ],
  "ambience": "small apartment kitchen, extractor fan hum, city outside the window",
  "music": {
   "description": "playful warm acoustic guitar with light tabla, cozy and homely",
-  "start": 6.11,
+  "start": 5.93,
   "volume": 0.3,
   "fade_in": 1.0,
   "seed": 7390,

@@ -229,7 +229,7 @@
   {
    "who": "sam",
    "text": "Hey. It's Sam. ...Yeah. I know. Ten years.",
-   "at": 0.16,
+   "at": 0.15,
    "emotion": {
     "afraid": 0.2,
     "melancholic": 0.3,
@@ -256,7 +256,7 @@
   {
    "who": "sam",
    "text": "Remember the milkshake thing? We still owe that place a mop.",
-   "at": 9.7,
+   "at": 9.69,
    "emotion": {
     "happy": 0.4,
     "melancholic": 0.2
@@ -282,7 +282,7 @@
   {
    "who": "jonah",
    "text": "You're late.",
-   "at": 17.73,
+   "at": 22.31,
    "emotion": {
     "happy": 0.4,
     "calm": 0.3
@@ -290,19 +290,19 @@
    "fx": "room",
    "strength": 0.8,
    "volume": 1.4,
-   "planned_at": 15.3
+   "planned_at": 21.8
   },
   {
    "who": "sam",
    "text": "Ten years late.",
-   "at": 18.78,
+   "at": 23.54,
    "emotion": {
     "happy": 0.55
    },
    "fx": "room",
    "strength": 0.8,
    "volume": 1.4,
-   "planned_at": 16.6
+   "planned_at": 23.0
   },
   {
    "who": "jonah",
@@ -314,13 +314,13 @@
    "fx": "room",
    "strength": 0.8,
    "volume": 1.4,
-   "planned_at": 24.6
+   "planned_at": 24.8
   }
  ],
  "ambience": "city evening, distant traffic",
  "music": {
   "description": "slow melancholic Rhodes piano and soft upright bass, late night, warm",
-  "start": 8.08,
+  "start": 7.98,
   "volume": 0.3,
   "fade_in": 1.5,
   "seed": 7590,
