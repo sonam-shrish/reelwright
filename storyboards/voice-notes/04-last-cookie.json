@@ -136,7 +136,7 @@
   },
   {
    "still": "Close-up of a single chocolate chip cookie wrapped in a paper napkin hidden under a pillow, dim morning light",
-   "motion": "handheld camera with slight natural sway, documentary feel, dawn light slowly crosses the napkin-wrapped cookie",
+   "motion": "steady locked-off frame, dawn light slowly crosses the napkin-wrapped cookie, nobody else appears and nobody enters the frame",
    "moves": [
     "Static"
    ],
@@ -145,7 +145,7 @@
     0.3,
     2.69
    ],
-   "seed": 7414,
+   "seed": 7417,
    "planned_trim": [
     0.3,
     2.6
