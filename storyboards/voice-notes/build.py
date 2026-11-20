@@ -90,8 +90,9 @@ EXTRA = {
                   (5, shot("standing at her sunny kitchen window with the phone to her ear, looking out, a soft proud "
                            "smile", "she gazes out of the window, smiling softly", ["bev"], seed=7222)),
                   (8, shot("An office door with a frosted glass panel closing slowly in a plain corridor, an empty "
-                           "plastic chair beside it with a paper cup left on it", "the door slowly swings shut", None,
-                           seed=7223, moves=["Static"], sfx="office door closing softly, latch click", vol=0.6))],
+                           "plastic chair beside it with a paper cup left on it", "completely still locked-off shot of the closed door, "
+                           "nobody comes through it, only a faint shadow moves behind the frosted glass", None,
+                           seed=7224, moves=["Static"], sfx="office door closing softly, latch click", vol=0.6))],
         "lines": [(3, line("bev", "Your mama would be so proud of you. I'm proud of you.", 10.0,
                            {"happy": 0.3, "melancholic": 0.3}, "phone"))]},
     "listen-to-the-pan": {

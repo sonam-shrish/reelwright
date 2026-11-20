@@ -42,14 +42,18 @@
    "moves": [
     "Static"
    ],
-   "seconds": 3.5,
+   "seconds": 3.75,
    "trim": [
     0.3,
-    3.3
+    3.44
    ],
    "seed": 7821,
    "sfx": "quiet kitchen morning, clock ticking, birds",
-   "sfx_volume": 0.4
+   "sfx_volume": 0.4,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
   },
   {
    "still": "in a small morning kitchen sticking a yellow sticky note on the fridge door, arms then crossed, jaw set",
@@ -57,17 +61,21 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.5,
+   "seconds": 3.75,
    "trim": [
     0.3,
-    3.3
+    3.44
    ],
    "seed": 7811,
    "with": [
     "nadia"
    ],
    "sfx": "morning kitchen, kettle starting to boil",
-   "sfx_volume": 0.45
+   "sfx_volume": 0.45,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
   },
   {
    "still": "in pajamas in the same small kitchen reading a yellow sticky note on the fridge, rubbing the back of his neck",
@@ -75,14 +83,18 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.5,
+   "seconds": 3.75,
    "trim": [
     0.3,
-    3.3
+    3.44
    ],
    "seed": 7812,
    "with": [
     "tom"
+   ],
+   "planned_trim": [
+    0.3,
+    3.3
    ]
   },
   {
@@ -91,14 +103,18 @@
    "moves": [
     "Static"
    ],
-   "seconds": 3.5,
+   "seconds": 2.75,
    "trim": [
     0.3,
-    2.4
+    2.5
    ],
    "seed": 7813,
    "sfx": "paper sticky note pressed on a fridge door",
-   "sfx_volume": 0.7
+   "sfx_volume": 0.7,
+   "planned_trim": [
+    0.3,
+    2.4
+   ]
   },
   {
    "still": "writing on a yellow sticky note against the kitchen counter, tongue between his teeth, concentrating hard",
@@ -106,17 +122,21 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.5,
+   "seconds": 3.75,
    "trim": [
     0.3,
-    3.3
+    3.44
    ],
    "seed": 7822,
    "with": [
     "tom"
    ],
    "sfx": "pen scratching on paper",
-   "sfx_volume": 0.6
+   "sfx_volume": 0.6,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
   },
   {
    "still": "reading a new sticky note on the fridge, trying not to smile, failing",
@@ -124,14 +144,18 @@
    "moves": [
     "Push-in Close-up"
    ],
-   "seconds": 3.5,
+   "seconds": 3.75,
    "trim": [
     0.3,
-    3.3
+    3.44
    ],
    "seed": 7814,
    "with": [
     "nadia"
+   ],
+   "planned_trim": [
+    0.3,
+    3.3
    ]
   },
   {
@@ -140,15 +164,19 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.5,
+   "seconds": 3.75,
    "trim": [
     0.3,
-    3.3
+    3.44
    ],
    "seed": 7815,
    "with": [
     "nadia",
     "tom"
+   ],
+   "planned_trim": [
+    0.3,
+    3.3
    ]
   },
   {
@@ -157,10 +185,10 @@
    "moves": [
     "Handheld"
    ],
-   "seconds": 3.5,
+   "seconds": 3.75,
    "trim": [
     0.2,
-    3.4
+    3.55
    ],
    "seed": 7816,
    "with": [
@@ -168,7 +196,11 @@
     "tom"
    ],
    "sfx": "soft laughter, mug on counter, birds outside",
-   "sfx_volume": 0.4
+   "sfx_volume": 0.4,
+   "planned_trim": [
+    0.2,
+    3.4
+   ]
   },
   {
    "still": "Close-up of a fridge door covered in yellow sticky notes overlapping each other, warm morning sun, text not readable",
@@ -176,19 +208,23 @@
    "moves": [
     "Push-in Close-up"
    ],
-   "seconds": 3.5,
+   "seconds": 3.75,
    "trim": [
     0.3,
-    3.3
+    3.44
    ],
-   "seed": 7823
+   "seed": 7823,
+   "planned_trim": [
+    0.3,
+    3.3
+   ]
   }
  ],
  "lines": [
   {
    "who": "nadia",
    "text": "Coffee's made. ...That's all he gets.",
-   "at": 0.15,
+   "at": 0.22,
    "emotion": {
     "angry": 0.25,
     "calm": 0.4
@@ -196,12 +232,13 @@
    "fx": "",
    "strength": 0.8,
    "volume": 1.4,
-   "subtitle_text": "(note) Coffee's made."
+   "subtitle_text": "(note) Coffee's made.",
+   "planned_at": 0.15
   },
   {
    "who": "tom",
    "text": "Thanks. ...Wow. Okay. Still mad.",
-   "at": 3.1,
+   "at": 4.59,
    "emotion": {
     "sad": 0.25,
     "calm": 0.4
@@ -209,12 +246,13 @@
    "fx": "",
    "strength": 0.8,
    "volume": 1.4,
-   "subtitle_text": "(note) Thanks."
+   "subtitle_text": "(note) Thanks.",
+   "planned_at": 3.1
   },
   {
    "who": "nadia",
    "text": "He bought the good coffee. Coward.",
-   "at": 6.4,
+   "at": 9.48,
    "emotion": {
     "happy": 0.3,
     "angry": 0.15
@@ -222,12 +260,13 @@
    "fx": "",
    "strength": 0.8,
    "volume": 1.4,
-   "subtitle_text": "(note) Bought the good coffee."
+   "subtitle_text": "(note) Bought the good coffee.",
+   "planned_at": 6.4
   },
   {
    "who": "nadia",
    "text": "I hate that you're right about the thing.",
-   "at": 6.2,
+   "at": 12.48,
    "emotion": {
     "angry": 0.2,
     "sad": 0.25
@@ -235,12 +274,13 @@
    "fx": "",
    "strength": 0.8,
    "volume": 1.4,
-   "subtitle_text": "(note) You were right about the thing."
+   "subtitle_text": "(note) You were right about the thing.",
+   "planned_at": 6.2
   },
   {
    "who": "tom",
    "text": "Okay. Last note. Don't mess this up.",
-   "at": 12.0,
+   "at": 17.78,
    "emotion": {
     "afraid": 0.3,
     "calm": 0.3
@@ -248,12 +288,13 @@
    "fx": "",
    "strength": 0.8,
    "volume": 1.4,
-   "subtitle_text": "(thinking) Last note. Don't mess this up."
+   "subtitle_text": "(thinking) Last note. Don't mess this up.",
+   "planned_at": 12.0
   },
   {
    "who": "tom",
    "text": "I'm sorry I said it like that.",
-   "at": 9.4,
+   "at": 21.36,
    "emotion": {
     "sad": 0.35,
     "calm": 0.3
@@ -261,28 +302,31 @@
    "fx": "",
    "strength": 0.8,
    "volume": 1.4,
-   "subtitle_text": "(note) Sorry I said it like that."
+   "subtitle_text": "(note) Sorry I said it like that.",
+   "planned_at": 9.4
   },
   {
    "who": "nadia",
    "text": "...Idiot.",
-   "at": 13.6,
+   "at": 24.86,
    "emotion": {
     "happy": 0.5
    },
    "fx": "whisper",
    "strength": 0.8,
    "volume": 1.4,
-   "subtitle_text": "(note) Idiot. ♥"
+   "subtitle_text": "(note) Idiot. ♥",
+   "planned_at": 13.6
   }
  ],
  "ambience": "small apartment kitchen in the morning",
  "music": {
   "description": "light pizzicato strings and soft piano, quirky and warm, romantic comedy feel",
-  "start": 9.2,
+  "start": 13.63,
   "volume": 0.3,
   "fade_in": 1.0,
-  "seed": 7890
+  "seed": 7890,
+  "planned_start": 9.2
  },
  "post_caption": "Too proud to talk. Not too proud to write. 📝\n\nHow do you two make up after a fight?\n\n#VoiceNotes #HumanConnection #ShortFilm #Couples #Relationships\nMade with AI"
 }

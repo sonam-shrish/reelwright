@@ -210,7 +210,7 @@
   },
   {
    "still": "An office door with a frosted glass panel closing slowly in a plain corridor, an empty plastic chair beside it with a paper cup left on it",
-   "motion": "handheld camera with slight natural sway, documentary feel, the door slowly swings shut",
+   "motion": "handheld camera with slight natural sway, documentary feel, completely still locked-off shot of the closed door, nobody comes through it, only a faint shadow moves behind the frosted glass",
    "moves": [
     "Static"
    ],
@@ -219,7 +219,7 @@
     0.3,
     3.42
    ],
-   "seed": 7223,
+   "seed": 7224,
    "sfx": "office door closing softly, latch click",
    "sfx_volume": 0.6,
    "planned_trim": [
