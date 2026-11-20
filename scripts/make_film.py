@@ -162,6 +162,14 @@ class Film:
         s = self.shots[i]
         return f"clip_{self._h(self.still_key(i), s['motion'], s.get('moves', []), s.get('seed'))}"
 
+    def is_still_shot(self, i: int) -> bool:
+        """Empty inserts are animated from their still in the edit (a slow push), not by the video
+        model: Wan tends to invent people walking into empty frames."""
+        return self.shots[i].get("animate") == "still"
+
+    def shot_ready(self, i: int) -> bool:
+        return self.still_key(i) in self.state if self.is_still_shot(i) else self.clip_key(i) in self.state
+
     def _legacy_clip_keys(self, i: int) -> list[str]:
         s = self.shots[i]
         return [f"clip_{self._h(self.still_key(i), s['motion'], s.get('moves', []), secs / 4, s.get('seed'))}"
@@ -358,7 +366,7 @@ class Film:
     def clip_one(self, i: int, studio: Studio | None = None):
         """Render shot i's clip (used by make_series to spread shots over several Colab runtimes)."""
         key = self.clip_key(i)
-        if key in self.state:
+        if key in self.state or self.is_still_shot(i):
             return
         s = self.shots[i]
         q = "Standard" if self.draft else "High"
@@ -507,9 +515,15 @@ class Film:
         total_frames = story_frames + round(self.end_card() * fps)
         shots, frame = [], 0
         for i, (s, ln) in enumerate(zip(self.shots, self.shot_lengths())):
-            src = (clips[i] if clips else self.state[self.clip_key(i)])
-            a = float(s.get("trim", [0, ln])[0])
             n = round((sum(self.shot_lengths()[:i + 1])) * fps) - frame  # frame-exact, no drift
+            if self.is_still_shot(i) and not clips:  # hold the still; Remotion adds the slow push
+                src = str(d / f"still{i + 1:02d}_src.mp4")
+                subprocess.run(["ffmpeg", "-v", "error", "-y", "-loop", "1", "-framerate", str(fps), "-i",
+                                self.state[self.still_key(i)], "-t", f"{n / fps + 0.5:.3f}", "-c:v", "libx264",
+                                "-crf", "12", "-pix_fmt", "yuv420p", src], check=True)
+            else:
+                src = (clips[i] if clips else self.state[self.clip_key(i)])
+            a = 0.0 if self.is_still_shot(i) else float(s.get("trim", [0, ln])[0])
             have = media.duration(src)
             if a + n / fps > have:  # clip a little short for this trim: start earlier instead of freezing
                 a = max(0.0, have - n / fps)

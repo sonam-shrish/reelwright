@@ -222,6 +222,8 @@
    "seed": 7224,
    "sfx": "office door closing softly, latch click",
    "sfx_volume": 0.6,
+   "animate": "still",
+   "push": 0.06,
    "planned_trim": [
     0.3,
     3.3

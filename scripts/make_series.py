@@ -145,7 +145,7 @@ def main():
             snd.join()
         if a.only in ("", "clips"):
             jobs = [(f, i) for f in films for i in range(len(f.shots))
-                    if f.clip_key(i) not in f.state and f.still_key(i) in f.state]
+                    if not f.is_still_shot(i) and f.clip_key(i) not in f.state and f.still_key(i) in f.state]
             if jobs:
                 pool(jobs, "clip")
     finally:
@@ -161,7 +161,7 @@ def main():
     done = []
     if a.only in ("", "edit"):
         for f in films:
-            if all(f.clip_key(i) in f.state for i in range(len(f.shots))):
+            if all(f.shot_ready(i) for i in range(len(f.shots))):
                 guarded(f"{f.slug} edit", lambda f=f: done.append(f.edit()))
     for p in done:
         print("FILM", p, flush=True)

@@ -131,6 +131,8 @@
     3.42
    ],
    "seed": 7124,
+   "animate": "still",
+   "push": 0.06,
    "planned_trim": [
     0.3,
     3.3

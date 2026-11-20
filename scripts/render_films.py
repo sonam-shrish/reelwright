@@ -35,7 +35,7 @@ def main():
     for p in a.storyboards:
         sb = json.loads(Path(p).read_text())
         f = Film(sb, False, True, studio=_NoStudio())
-        missing = [i + 1 for i in range(len(f.shots)) if f.clip_key(i) not in f.state]
+        missing = [i + 1 for i in range(len(f.shots)) if not f.shot_ready(i)]
         if missing:
             print(f"{f.slug}: skipped, clips missing for shots {missing}", flush=True)
             continue

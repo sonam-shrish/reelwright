@@ -50,6 +50,8 @@
    "seed": 7324,
    "sfx": "extractor fan, sizzling pan, city outside",
    "sfx_volume": 0.45,
+   "animate": "still",
+   "push": 0.06,
    "planned_trim": [
     0.3,
     3.3

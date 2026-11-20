@@ -22,7 +22,7 @@ EMPTY = ", nobody else appears and nobody enters the frame"
 
 
 def shot(still, motion, with_=None, trim=(0.3, 3.3), seconds=3.5, moves=("Handheld",), seed=1, sfx=None, vol=0.6,
-         handheld=True):
+         handheld=True, animate=None, push=None):
     s = {"still": still, "motion": (HANDHELD if handheld else STEADY) + motion, "moves": list(moves),
          "seconds": seconds,
          "trim": list(trim), "seed": seed}
@@ -30,6 +30,10 @@ def shot(still, motion, with_=None, trim=(0.3, 3.3), seconds=3.5, moves=("Handhe
         s["with"] = with_
     if sfx:
         s["sfx"], s["sfx_volume"] = sfx, vol
+    if animate:
+        s["animate"] = animate
+    if push is not None:
+        s["push"] = push
     return s
 
 
@@ -86,7 +90,7 @@ EXTRA = {
                            "in a white lace dress and veil beside a young groom in a dark suit, both white, standing "
                            "outside a small church; the frame sits on a kitchen shelf next to a pair of reading "
                            "glasses, warm lamp light, dust in the air", "dust drifts slowly in the lamp light" + EMPTY,
-                           None, seed=7124, moves=["Push-in Close-up"], handheld=False)),
+                           None, seed=7124, animate="still", push=0.06, moves=["Push-in Close-up"], handheld=False)),
                   (8, shot("standing on the pavement at dawn as a city bus pulls away behind her, holding her phone to "
                            "her ear, smiling with tired happy eyes", "the bus pulls away behind her, she smiles and "
                            "walks off", ["maya"], seed=7123, sfx="bus pulling away, early morning birds", vol=0.45))],
@@ -101,14 +105,14 @@ EXTRA = {
                            "smile", "she gazes out of the window, smiling softly", ["bev"], seed=7222)),
                   (8, shot("An office door with a frosted glass panel closing slowly in a plain corridor, an empty "
                            "plastic chair beside it with a paper cup left on it", "the closed door stays closed, only a faint shadow moves "
-                           "behind the frosted glass" + EMPTY, None, seed=7224, moves=["Static"],
+                           "behind the frosted glass" + EMPTY, None, seed=7224, animate="still", push=0.06, moves=["Static"],
                            sfx="office door closing softly, latch click", vol=0.6, handheld=False))],
         "lines": [(3, line("bev", "Your mama would be so proud of you. I'm proud of you.", 10.0,
                            {"happy": 0.3, "melancholic": 0.3}, "phone"))]},
     "listen-to-the-pan": {
         "shots": [(0, shot("Wide shot of a tiny city apartment kitchen at night, smoke drifting under a hanging bulb, "
                            "a phone propped against a jar on the counter, nobody in frame", "smoke drifts slowly across the "
-                           "empty small kitchen" + EMPTY, None, seed=7324, moves=["Static"], sfx="extractor fan, "
+                           "empty small kitchen" + EMPTY, None, seed=7324, animate="still", push=0.06, moves=["Static"], sfx="extractor fan, "
                            "sizzling pan, city outside", vol=0.45, handheld=False)),
                   (5, shot("in her kitchen stirring a big steel pot with one hand, laughing at her own story, steam "
                            "rising", "she stirs the pot and laughs", ["amma"], seed=7322)),
@@ -178,14 +182,14 @@ EXTRA = {
     "fridge-notes": {
         "shots": [(0, shot("Wide shot of a small sunny kitchen in the morning, a fridge covered in old magnets and "
                            "photos, two coffee mugs on the counter, nobody there", "morning light moves slowly across the "
-                           "empty quiet kitchen" + EMPTY, None, seed=7824, moves=["Static"], sfx="quiet kitchen "
+                           "empty quiet kitchen" + EMPTY, None, seed=7824, animate="still", push=0.06, moves=["Static"], sfx="quiet kitchen "
                            "morning, clock ticking, birds", vol=0.4, handheld=False)),
                   (4, shot("writing on a yellow sticky note against the kitchen counter, tongue between his teeth, "
                            "concentrating hard", "he writes carefully, crosses something out, writes again", ["tom"],
                            seed=7822, sfx="pen scratching on paper", vol=0.6)),
                   (8, shot("Close-up of a fridge door covered in yellow sticky notes overlapping each other, warm "
                            "morning sun, text not readable", "sunlight slowly moves over the notes" + EMPTY, None,
-                           seed=7825, moves=["Push-in Close-up"], handheld=False))],
+                           seed=7825, animate="still", push=0.06, moves=["Push-in Close-up"], handheld=False))],
         "lines": [(2, line("nadia", "He bought the good coffee. Coward.", 6.4, {"happy": 0.3, "angry": 0.15},
                            "", "(note) Bought the good coffee.")),
                   (4, line("tom", "Okay. Last note. Don't mess this up.", 12.0, {"afraid": 0.3, "calm": 0.3}, "",
@@ -538,7 +542,7 @@ film(9, "stuck", "Stuck",
            "them, talking", "they sit on the elevator floor and talk, he gestures with his hands",
            ["ines", "ray"], seed=7913, moves=["Static"]),
       shot("Close-up of an elevator button panel with one button glowing, a single bulb flickering",
-           "the bulb flickers and then steadies" + EMPTY, None, seed=7917, trim=(0.3, 2.4), moves=["Static"],
+           "the bulb flickers and then steadies" + EMPTY, None, seed=7917, animate="still", push=0.06, trim=(0.3, 2.4), moves=["Static"],
            handheld=False,
            sfx="fluorescent light buzz and flicker", vol=0.6),
       shot("sitting on the elevator floor laughing, her head tipped back against the wall",
