@@ -385,8 +385,8 @@ film(5, "ten-years", "Ten years",
      [shot("standing on a small apartment balcony at dusk with a phone to his ear, frozen, a half-eaten sandwich "
            "in his other hand", "he freezes, listening, the sandwich forgotten", ["jonah"], seed=7511,
            sfx="city at dusk from a balcony, distant traffic, a dog barking far away", vol=0.45),
-      shot("sitting in a parked car in the rain recording a voice note, rubbing his forehead, rain on the "
-           "windshield", "he rubs his forehead and keeps talking into the phone, rain streaks down",
+      shot("sitting in a parked car in the rain holding his smartphone up near his mouth to speak a voice "
+           "message, no microphone, rubbing his forehead with his other hand, rain on the windshield", "he rubs his forehead and keeps talking into the phone, rain streaks down",
            ["sam"], seed=7512, sfx="rain on a car roof, wipers off", vol=0.55),
       shot("Close-up of an old instant photo of two teenage boys laughing in a diner booth, held between fingers, "
            "slightly faded", "fingers tilt the old photo toward the light", None, seed=7513, trim=(0.3, 2.6),
