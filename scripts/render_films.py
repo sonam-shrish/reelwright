@@ -46,10 +46,12 @@ def main():
         subprocess.run(["npx", "remotion", "render", "src/index.ts", "VoiceNote", str(raw), f"--props={props}",
                         "--log=error"], cwd=REMOTION, check=True)
         final = out_dir / f"{int(sb.get('episode', 0)):02d}-{f.slug}.mp4"
+        part = final.with_suffix(".part.mp4")  # renamed only when complete: no half-written deliverables
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(raw), "-c:v", "libx264", "-preset", "slow",
                         "-crf", "19", "-tune", "grain", "-profile:v", "high", "-pix_fmt", "yuv420p",
-                        "-c:a", "aac", "-b:a", "256k", "-ar", "48000", "-movflags", "+faststart", str(final)],
+                        "-c:a", "aac", "-b:a", "256k", "-ar", "48000", "-movflags", "+faststart", str(part)],
                        check=True)
+        part.replace(final)
         raw.unlink(missing_ok=True)
         print(f"FILM {final} ({final.stat().st_size / 1e6:.1f} MB, {time.time() - t0:.0f} s)", flush=True)
 
