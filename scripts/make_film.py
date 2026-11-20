@@ -492,6 +492,14 @@ class Film:
         """Write everything Remotion needs into public/<slug>/ and return the props JSON path.
         clips: optional stand-in clip per shot (for testing the template before real clips exist)."""
         import shutil
+        missing = [what for what, ok in [
+            ("music", not self.sb.get("music") or self.music_key() in self.state),
+            ("ambience", not self.sb.get("ambience") or self.ambience_key() in self.state),
+            ("sound effects", all(self.sfx_key(i) in self.state for i, s in enumerate(self.shots) if s.get("sfx"))),
+            ("voice lines", all(self.line_key(i) in self.state for i in range(len(self.sb.get("lines", [])))))]
+            if not ok]
+        if missing:  # never cut a film with a silent gap: make the sound first (make_series --only prep)
+            raise RuntimeError(f"{self.slug}: missing {', '.join(missing)}")
         d = public / self.slug
         d.mkdir(parents=True, exist_ok=True)
         story = self.cut_duration()
