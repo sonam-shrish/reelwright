@@ -38,7 +38,7 @@
  "shots": [
   {
    "still": "Wide shot of a small sunny kitchen in the morning, a fridge covered in old magnets and photos, two coffee mugs on the counter, nobody there",
-   "motion": "handheld camera with slight natural sway, documentary feel, morning light moves across the quiet kitchen",
+   "motion": "steady locked-off frame, morning light moves slowly across the empty quiet kitchen, nobody else appears and nobody enters the frame",
    "moves": [
     "Static"
    ],
@@ -47,7 +47,7 @@
     0.3,
     3.44
    ],
-   "seed": 7821,
+   "seed": 7824,
    "sfx": "quiet kitchen morning, clock ticking, birds",
    "sfx_volume": 0.4,
    "planned_trim": [
@@ -204,7 +204,7 @@
   },
   {
    "still": "Close-up of a fridge door covered in yellow sticky notes overlapping each other, warm morning sun, text not readable",
-   "motion": "handheld camera with slight natural sway, documentary feel, sunlight slowly moves over the notes",
+   "motion": "steady locked-off frame, sunlight slowly moves over the notes, nobody else appears and nobody enters the frame",
    "moves": [
     "Push-in Close-up"
    ],
@@ -213,7 +213,7 @@
     0.3,
     3.44
    ],
-   "seed": 7823,
+   "seed": 7825,
    "planned_trim": [
     0.3,
     3.3
