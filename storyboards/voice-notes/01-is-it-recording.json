@@ -120,8 +120,8 @@
    ]
   },
   {
-   "still": "Close-up of an old framed wedding photograph and a pair of reading glasses on a kitchen shelf, warm lamp light, dust in the air",
-   "motion": "handheld camera with slight natural sway, documentary feel, dust drifts slowly in the lamp light",
+   "still": "Close-up of an old framed black-and-white 1960s wedding photograph: a smiling young bride in a white lace dress and veil beside a young groom in a dark suit, both white, standing outside a small church; the frame sits on a kitchen shelf next to a pair of reading glasses, warm lamp light, dust in the air",
+   "motion": "steady locked-off frame, dust drifts slowly in the lamp light, nobody else appears and nobody enters the frame",
    "moves": [
     "Push-in Close-up"
    ],
@@ -130,7 +130,7 @@
     0.3,
     3.42
    ],
-   "seed": 7122,
+   "seed": 7124,
    "planned_trim": [
     0.3,
     3.3

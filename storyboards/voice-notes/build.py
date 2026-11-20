@@ -82,9 +82,11 @@ EXTRA = {
                            "warm interior lights glowing, reflections on the asphalt",
                            "the bus drives slowly through the empty wet street", None, seed=7121, moves=["Static"],
                            sfx="a city bus passing at night on a wet road", vol=0.5)),
-                  (4, shot("Close-up of an old framed wedding photograph and a pair of reading glasses on a kitchen "
-                           "shelf, warm lamp light, dust in the air", "dust drifts slowly in the lamp light", None,
-                           seed=7122, moves=["Push-in Close-up"])),
+                  (4, shot("Close-up of an old framed black-and-white 1960s wedding photograph: a smiling young bride "
+                           "in a white lace dress and veil beside a young groom in a dark suit, both white, standing "
+                           "outside a small church; the frame sits on a kitchen shelf next to a pair of reading "
+                           "glasses, warm lamp light, dust in the air", "dust drifts slowly in the lamp light" + EMPTY,
+                           None, seed=7124, moves=["Push-in Close-up"], handheld=False)),
                   (8, shot("standing on the pavement at dawn as a city bus pulls away behind her, holding her phone to "
                            "her ear, smiling with tired happy eyes", "the bus pulls away behind her, she smiles and "
                            "walks off", ["maya"], seed=7123, sfx="bus pulling away, early morning birds", vol=0.45))],
