@@ -206,8 +206,8 @@
    ]
   },
   {
-   "still": "Close-up of an old hand putting another piece of fish into a full rice bowl while a young hand lifts in mock surrender, both laughing out of frame",
-   "motion": "handheld camera with slight natural sway, documentary feel, the old hand adds more food, the young hand waves in surrender",
+   "still": "the grandmother leaning across the low table to put a piece of grilled fish into the young woman's rice bowl with her chopsticks, both laughing warmly, warm lamp light, dishes everywhere",
+   "motion": "handheld camera with slight natural sway, documentary feel, the grandmother puts the fish in the bowl with her chopsticks, both laugh and look at each other; slow natural movement, faces stay the same",
    "moves": [
     "Static"
    ],
@@ -216,7 +216,11 @@
     0.3,
     3.41
    ],
-   "seed": 7623,
+   "seed": 7624,
+   "with": [
+    "halmeoni",
+    "claire"
+   ],
    "sfx": "chopsticks on ceramic, two women laughing softly",
    "sfx_volume": 0.55,
    "planned_trim": [

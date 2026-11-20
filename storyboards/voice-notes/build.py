@@ -144,10 +144,11 @@ EXTRA = {
                            seed=7621, moves=["Static"])),
                   (4, shot("nodding slowly while chewing, studying the young woman across the table with narrowed eyes",
                            "she chews slowly and studies her guest", ["halmeoni"], seed=7622)),
-                  (8, shot("Close-up of an old hand putting another piece of fish into a full rice bowl while a young "
-                           "hand lifts in mock surrender, both laughing out of frame", "the old hand adds more food, "
-                           "the young hand waves in surrender", None, seed=7623, moves=["Static"],
-                           sfx="chopsticks on ceramic, two women laughing softly", vol=0.55))],
+                  (8, shot("the grandmother leaning across the low table to put a piece of grilled fish into the young "
+                           "woman's rice bowl with her chopsticks, both laughing warmly, warm lamp light, dishes everywhere",
+                           "the grandmother puts the fish in the bowl with her chopsticks, both laugh and look at each "
+                           "other; slow natural movement, faces stay the same", ["halmeoni", "claire"], seed=7624,
+                           moves=["Static"], sfx="chopsticks on ceramic, two women laughing softly", vol=0.55))],
         "lines": [(4, line("claire", "Oh. How do I say thank you?", 13.6, {"happy": 0.4, "calm": 0.2}, "room")),
                   (5, line("halmeoni", "고마워요.", 15.6, {"calm": 0.6}, "room", "(Korean) Thank you."))]},
     "on-the-air": {
