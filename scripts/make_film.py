@@ -130,6 +130,10 @@ class Film:
         self.t0 = time.time()
         self.errors: list[str] = []
         self._migrate_keys()
+        try:
+            self._migrate_clip_keys()
+        except KeyError:
+            pass
 
     # ---------------------------------------------------------------- asset keys
     # Assets are saved under a key made from what they depend on (not their position), so
@@ -153,8 +157,29 @@ class Film:
         return f"still_{self._h(s['still'], s.get('seed'), refs, self.sb.get('style', ''), self.aspect)}"
 
     def clip_key(self, i: int) -> str:
+        # Clip length is not part of the key: retiming a film changes it a little, and any clip
+        # that covers the shot's trim is usable (remotion_package checks and adapts).
         s = self.shots[i]
-        return f"clip_{self._h(self.still_key(i), s['motion'], s.get('moves', []), float(s.get('seconds', 5)), s.get('seed'))}"
+        return f"clip_{self._h(self.still_key(i), s['motion'], s.get('moves', []), s.get('seed'))}"
+
+    def _legacy_clip_keys(self, i: int) -> list[str]:
+        s = self.shots[i]
+        return [f"clip_{self._h(self.still_key(i), s['motion'], s.get('moves', []), secs / 4, s.get('seed'))}"
+                for secs in range(8, 21)]  # 2.0 .. 5.0 s in quarter seconds
+
+    def _migrate_clip_keys(self):
+        changed = False
+        for i in range(len(self.shots)):
+            new = self.clip_key(i)
+            if new in self.state:
+                continue
+            for old in self._legacy_clip_keys(i):
+                if old in self.state:
+                    self.state[new] = self.state[old]
+                    changed = True
+                    break
+        if changed:
+            self.progress.write_text(json.dumps(self.state, indent=1))
 
     def sfx_key(self, i: int) -> str:
         return f"sfx_{self._h(self.shots[i]['sfx'])}"
@@ -477,6 +502,9 @@ class Film:
             src = (clips[i] if clips else self.state[self.clip_key(i)])
             a = float(s.get("trim", [0, ln])[0])
             n = round((sum(self.shot_lengths()[:i + 1])) * fps) - frame  # frame-exact, no drift
+            have = media.duration(src)
+            if a + n / fps > have:  # clip a little short for this trim: start earlier instead of freezing
+                a = max(0.0, have - n / fps)
             out = d / f"shot{i + 1:02d}.mp4"
             subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{a:.3f}", "-i", src, "-t", f"{n / fps + 0.25:.3f}",
                             "-an", "-vf", FILM_LOOK, "-c:v", "libx264", "-crf", "14", "-preset", "medium",
