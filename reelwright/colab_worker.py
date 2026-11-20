@@ -60,7 +60,9 @@ def _setup_locked(model_id: str) -> dict:
     import importlib.util
     # Check without importing: diffusers decides at import time whether ftfy exists,
     # so missing packages must be installed before diffusers is imported.
+    # SageAttention too: diffusers only sees it if it is installed before diffusers is imported.
     missing = [pkg for module, pkg in [("ftfy", "ftfy"), ("imageio_ffmpeg", "imageio-ffmpeg"),
+                                       ("sageattention", "sageattention"), ("kernels", "kernels"),
                                        ("diffusers", "diffusers>=0.35")]
                if importlib.util.find_spec(module) is None]
     if missing:
@@ -108,11 +110,6 @@ def _set_attention(pipe) -> str:
     import torch
     for name in ATTENTION_BACKENDS:
         try:
-            if name == "sage_hub":
-                if importlib.util.find_spec("kernels") is None:
-                    _pip("kernels")
-            elif importlib.util.find_spec("sageattention") is None:
-                _pip("sageattention")
             from diffusers.models.attention_dispatch import AttentionBackendName, dispatch_attention_fn
             q = torch.randn(1, 512, 8, 128, device="cuda", dtype=torch.bfloat16)
             ref = dispatch_attention_fn(q, q, q, backend=AttentionBackendName("native"))
